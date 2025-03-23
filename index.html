@@ -184,7 +184,13 @@
                 number: { value: 250 },
                 size: { value: 4, random: true },
                 move: { speed: 1.5, random: true, direction: 'none', out_mode: 'out' },
-                line_linked: { enable: false },
+                line_linked: {
+                    enable: true, // Enable the lines
+                    distance: 150, // Distance at which particles will be connected
+                    color: '#00a0ff', // Color of the lines
+                    opacity: 0.6, // Opacity of the lines
+                    width: 1 // Width of the lines
+                },
                 color: { value: '#007bff' },
                 opacity: { value: 0.6, random: true }
             }
