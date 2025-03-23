@@ -8,7 +8,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #1a1a1a;
+            background-color: #0c0e10;
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             height: 100vh;
@@ -55,7 +55,7 @@
         .wave:hover { 
             cursor: none; 
             transform: translateY(-10px) translateX(5px); 
-            animation: wave 1s infinite; 
+            animation: wave 0.7s infinite;
         }
 
         @keyframes wave {
@@ -70,17 +70,14 @@
             z-index: -1;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
         .highlight {
             background-color: rgba(9, 31, 53, 0.8);
             border-radius: 12px;
-            padding: 0 8px;
+            padding: 0 5px;
             color: #00a0ff;
             font-weight: bold;
+            display: inline-block;
+            transition: width 1.5s ease-in-out, opacity 1.5s ease-in-out; /* Transition for both width and opacity */
         }
 
         .button-container {
@@ -132,22 +129,31 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
+
+        .rotating-text {
+            display: inline-block;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out; /* Longer fade-in transition */
+        }
+
+        .text-container {
+            display: inline-block;
+            position: relative;
+        }
     </style>
 </head>
 <body>
     <div class="cursor" id="cursor"></div>
     <div id="particles-js"></div>
-    <h1>Hey <span class="wave">👋</span> I'm zixy, a <span class="highlight">developer</span></h1>
-  	<h2>My Current Projects:</h2>
+    <h1>Hey <span class="wave">👋</span> I'm zixy, a <span class="highlight"><span id="rotatingText" class="rotating-text">developer</span></span></h1>
+    <h2>My Current Projects:</h2>
 
     <div class="button-container buttons">
-	<a href="https://discord.gg/reticence" class="button" target="_blank">Reticence Discord</a>
-    <a href="https://reticence.lol" class="button" target="_blank">Reticence Shop</a>
-
+        <a href="https://discord.gg/reticence" class="button" target="_blank">Reticence Discord</a>
+        <a href="https://reticence.lol" class="button" target="_blank">Reticence Shop</a>
     </div>
 
-    <p>
-    </p>
+    <p></p>
 
     <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
     <script>
@@ -181,6 +187,32 @@
                 opacity: { value: 0.6, random: true }
             }
         });
+
+        const words = ["developer", "coder", "seller", "creator"];
+        let currentIndex = 0;
+        const rotatingText = document.getElementById("rotatingText");
+        const highlight = document.querySelector(".highlight");
+
+        function rotateText() {
+            rotatingText.style.opacity = 0;
+            setTimeout(() => {
+                rotatingText.textContent = words[currentIndex];
+                highlight.style.width = `${rotatingText.offsetWidth + 12}px`;
+                rotatingText.style.opacity = 1;
+                currentIndex = (currentIndex + 1) % words.length;
+            }, 1500);
+        }
+
+
+        rotatingText.textContent = words[0]; 
+        rotatingText.style.opacity = 1;
+        highlight.style.width = `${rotatingText.offsetWidth + 12}px`;
+
+        setTimeout(() => {
+            setInterval(rotateText, 5000); // Change word every 5 seconds
+        }, 1000);
+
     </script>
+
 </body>
 </html>
