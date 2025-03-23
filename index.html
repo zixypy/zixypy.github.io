@@ -76,7 +76,7 @@
         }
 
         .highlight {
-            background-color: rgba(9, 31, 53, 0.8); /* Adjust the last value (0.8) to control transparency */
+            background-color: rgba(9, 31, 53, 0.8);
             border-radius: 12px;
             padding: 0 8px;
             color: #00a0ff;
@@ -120,7 +120,6 @@
             text-decoration: underline;
         }
 
-        /* Text Selection Cursor */
         .text-cursor {
             width: 3px;
             height: 25px;
@@ -141,14 +140,12 @@
     <h1>Hey <span class="wave">👋</span> I'm zixy, a <span class="highlight">developer</span></h1>
   	<h2>My Current Projects:</h2>
 
-    <!-- Button Container -->
     <div class="button-container buttons">
 	<a href="https://discord.gg/reticence" class="button" target="_blank">Reticence Discord</a>
     <a href="https://reticence.lol" class="button" target="_blank">Reticence Shop</a>
 
     </div>
 
-    <!-- Optional Social Links -->
     <p>
     </p>
 
@@ -161,7 +158,6 @@
             cursor.style.top = `${e.clientY}px`;
         });
 
-        // Detect text selection
         function checkTextSelection() {
             const selection = window.getSelection();
             if (selection && selection.toString().length > 0) {
