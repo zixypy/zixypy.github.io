@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MyRadar Enhanced</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    html, body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: #f0f0f0; }
+    #map { height: 93vh; margin: 10px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    #controls { padding: 10px; margin: 0 10px; background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+
+    .leaflet-tile {
+      image-rendering: pixelated !important;
+      image-rendering: crisp-edges !important;
+    }
+
+    img.leaflet-tile {
+      image-rendering: pixelated !important;
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      max-width: 320px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .popup-header {
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .popup-header.storm {
+      background-color: #fffae6;
+      color: #ff9900;
+      border: 2px solid #ff9900;
+    }
+
+    .popup-header.tornado {
+      background-color: #fff0f0;
+      color: #c62828;
+      border: 2px solid #c62828;
+    }
+
+    .popup-body {
+      padding: 10px;
+      background: #fff;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .popup-body .label {
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    .warning-button {
+      display: inline-block;
+      margin-top: 8px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .warning-button:hover {
+      background: #0056b3;
+    }
+
+    .full-text {
+      display: none;
+      margin-top: 8px;
+      background: #f8f9fa;
+      border-radius: 5px;
+      padding: 10px;
+      white-space: pre-wrap;
+      max-height: 160px;
+      overflow-y: auto;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <label><input type="checkbox" id="toggleRadar" checked> Radar</label>
+    <label><input type="checkbox" id="toggleStorm" checked> Storm Warnings</label>
+    <label><input type="checkbox" id="toggleTornado" checked> Tornado Warnings</label>
+  </div>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet"></script>
+  <script>
+    const map = L.map('map').setView([38, -97], 5);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+    const radarLayer = L.layerGroup().addTo(map);
+    const alertLayer = L.layerGroup().addTo(map);
+
+    function updateRadar() {
+      fetch("https://api.rainviewer.com/public/weather-maps.json")
+        .then(res => res.json())
+        .then(json => {
+          const latest = json.radar.past.at(-1).time;
+          const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
+          const tiles = L.tileLayer(url, {
+            opacity: 0.8,
+            zIndex: 10,
+            tileSize: 256,
+            noWrap: true,
+            updateWhenIdle: true,
+            className: 'pixelated-tiles'
+          });
+          radarLayer.clearLayers().addLayer(tiles);
+        });
+    }
+
+    function updateWarnings() {
+      const activeFetches = [
+        { event: 'Severe Thunderstorm Warning', visible: document.getElementById('toggleStorm').checked },
+        { event: 'Tornado Warning', visible: document.getElementById('toggleTornado').checked }
+      ];
+
+      const fetches = activeFetches.filter(f => f.visible).map(f =>
+        fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(f.event)}`, {
+          headers: { "Accept": "application/geo+json" }
+        }).then(r => r.json())
+      );
+
+      Promise.all(fetches).then(results => {
+        const features = results.flatMap(r => r.features || []);
+        alertLayer.clearLayers();
+        L.geoJSON({ type: "FeatureCollection", features }, {
+          style: f => {
+            const type = f.properties.event;
+            let color = '#888888';
+            if (type.includes('Tornado Warning')) color = '#c62828';
+            else if (type.includes('Severe Thunderstorm Warning')) color = '#ff9900';
+            return {
+              color,
+              weight: 2.5,
+              fillColor: color,
+              fillOpacity: 0.25,
+              opacity: 1
+            };
+          },
+          onEachFeature: (feature, layer) => {
+            const p = feature.properties;
+            const id = `id-${Math.random().toString(36).slice(2)}`;
+            const isTornado = p.event.includes("Tornado");
+
+            let strength = "RADAR INDICATED";
+            if (p.description) {
+              const d = p.description.toLowerCase();
+              if (d.includes("confirmed")) strength = "CONFIRMED";
+              else if (d.includes("funnel")) strength = "FUNNEL CLOUD";
+            }
+
+            let wind = "N/A", hail = "N/A";
+            const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
+            if (hazardMatch && hazardMatch[1]) {
+              const hazard = hazardMatch[1];
+              const windMatch = hazard.match(/(\d+)\s?mph/i);
+              const hailMatch = hazard.match(/(quarter|half|golf ball|ping pong ball|[\d.]+)\s?(inch|in)?\s?(hail)?/i);
+              if (windMatch) wind = `${windMatch[1]} mph`;
+              if (hailMatch) hail = hailMatch[0].replace(/\s+hail/i, '').trim();
+            }
+
+            const popup = `
+              <div class="popup-header ${isTornado ? 'tornado' : 'storm'}">${p.event}</div>
+              <div class="popup-body">
+                <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
+                <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
+                <div><span class="label">Area:</span> ${p.areaDesc}</div>
+                <div><span class="label">Windspeed:</span> ${wind}</div>
+                <div><span class="label">Hail Size:</span> ${hail}</div>
+                ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
+                <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">show me the full warning text</button>
+                <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g,'<br>')}</div>
+              </div>`;
+            layer.bindPopup(popup);
+            alertLayer.addLayer(layer);
+          }
+        });
+      });
+    }
+
+    updateRadar();
+    updateWarnings();
+
+    document.getElementById('toggleRadar').addEventListener('change', e => {
+      e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer);
+    });
+    [
+      'toggleStorm',
+      'toggleTornado'
+    ].forEach(id => document.getElementById(id).addEventListener('change', updateWarnings));
+  </script>
+</body>
+</html>
