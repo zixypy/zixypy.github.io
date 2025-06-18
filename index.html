@@ -172,6 +172,24 @@
       font-size: 13px;
       color: #374151;
     }
+
+    #infoPanel {
+      padding: 16px;
+      text-align: center;
+      font-size: 15px;
+      color: #1f2937;
+    }
+
+    #fullscreenButton {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      background: #1f2937;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -185,6 +203,16 @@
       <label class="control-label"><input type="checkbox" id="toggleMarine" checked> Special Marine Warning</label>
     </div>
   </div>
+
+  <div id="infoPanel">
+    <button id="fullscreenButton" onclick="openFullscreen()">Open Fullscreen</button>
+    <div style="margin-top: 12px;">
+      Severe Thunderstorm Warnings: <span id="storm-count">0</span><br>
+      Tornado Warnings: <span id="tornado-count">0</span><br>
+      Special Marine Warnings: <span id="marine-count">0</span>
+    </div>
+  </div>
+
   <div id="legend">
     <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
     <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
@@ -231,23 +259,30 @@
       const features = responses.flatMap(r => r.features || []);
       alertLayer.clearLayers();
 
+      let stormCount = 0, tornadoCount = 0, marineCount = 0;
+
       features.forEach(feature => {
         const p = feature.properties;
         const id = `id-${Math.random().toString(36).slice(2)}`;
         const isTornado = p.event.includes("Tornado");
         const isMarine = p.event.includes("Marine");
+        const isStorm = p.event.includes("Severe Thunderstorm");
 
-        let strength = isTornado ? "Radar Indicated Rotation" : "N/A";
+        if (isStorm) stormCount++;
+        if (isTornado) tornadoCount++;
+        if (isMarine) marineCount++;
+
+        let strength = isTornado ? "Rotation, not confirmed yet" : "N/A";
         if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado Confirmed!";
-
-
-        let wind = "Unkown";
+        if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado Forming!";
+        let wind = "Unknown";
         let hail = "Unknown";
         const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
         if (hazardMatch && hazardMatch[1]) {
           const hazard = hazardMatch[1].toLowerCase();
           const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
-          if (windMatch) wind = `${windMatch[1]} mph`;
+          if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
+
           const hailMatch = hazard.match(/quarter|half|golf ball|ping pong ball|penny/i);
           if (hailMatch) {
             let size = hailMatch[0];
@@ -263,7 +298,7 @@
             <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
             <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
             <div><span class="label">Area:</span> ${p.areaDesc}</div>
-            <div><span class="label">Windspeed:</span> ${wind}</div>
+            <div><span class="label">Max Windspeed:</span> ${wind}</div>
             ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
             ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
             <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
@@ -271,9 +306,9 @@
           </div>`;
 
         const fillColor = isTornado
-          ? (strength === "CONFIRMED" ? "#6a1b9a" : "#c62828")
-          : p.event.includes("Severe Thunderstorm") ? "#ff9900"
-          : p.event.includes("Marine") ? "#0288d1"
+          ? (strength === "Tornado Confirmed!" ? "#6a1b9a" : "#c62828")
+          : isStorm ? "#ff9900"
+          : isMarine ? "#0288d1"
           : "#888";
 
         const layer = L.geoJSON(feature, {
@@ -290,10 +325,29 @@
         });
         alertLayer.addLayer(layer);
       });
+
+      document.getElementById('storm-count').textContent = stormCount;
+      document.getElementById('tornado-count').textContent = tornadoCount;
+      document.getElementById('marine-count').textContent = marineCount;
+    }
+
+    function openFullscreen() {
+      const mapContainer = document.getElementById("map");
+      if (mapContainer.requestFullscreen) {
+        mapContainer.requestFullscreen();
+      } else if (mapContainer.webkitRequestFullscreen) {
+        mapContainer.webkitRequestFullscreen();
+      } else if (mapContainer.msRequestFullscreen) {
+        mapContainer.msRequestFullscreen();
+      }
     }
 
     updateRadar();
     updateWarnings();
+    setInterval(() => {
+      updateRadar();
+      updateWarnings();
+    }, 15000);
 
     document.getElementById('toggleRadar').addEventListener('change', e => {
       e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer);
@@ -308,3 +362,4 @@
   </script>
 </body>
 </html>
+F
