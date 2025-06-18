@@ -273,8 +273,10 @@
         if (isMarine) marineCount++;
 
         let strength = isTornado ? "Rotation, not confirmed yet" : "N/A";
-        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado Confirmed!";
-        if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado Forming!";
+        if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado forming!";
+        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado confirmed!";
+        let waterspout = isMarine ? "Waterspout not possible" : "N/A";
+        if (isMarine && p.description?.toLowerCase().includes("waterspout")) waterspout = "Waterspout possible!";
         let wind = "Unknown";
         let hail = "Unknown";
         const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
@@ -298,8 +300,9 @@
             <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
             <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
             <div><span class="label">Area:</span> ${p.areaDesc}</div>
-            <div><span class="label">Max Windspeed:</span> ${wind}</div>
+            <div><span class="label">Windspeed:</span> ${wind}</div>
             ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
+            ${isMarine ? `<div><span class="label">Waterspout:</span> ${waterspout}</div>` : ''}
             ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
             <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
             <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g,'<br>')}</div>
@@ -362,4 +365,3 @@
   </script>
 </body>
 </html>
-F
