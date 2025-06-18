@@ -2,36 +2,114 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>MyRadar Enhanced</title>
+  <title>MyRadar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
-    html, body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: #f0f0f0; }
-    #map { height: 93vh; margin: 10px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
-    #controls { padding: 10px; margin: 0 10px; background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-
-    .leaflet-tile {
-      image-rendering: pixelated !important;
-      image-rendering: crisp-edges !important;
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: #e5e7eb;
     }
 
-    img.leaflet-tile {
+    #map {
+      height: 90vh;
+      margin: 16px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    #controls {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 1000;
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      max-width: 500px;
+      transition: opacity 0.3s, visibility 0s linear;
+    }
+
+    #controls.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #toggle-controls {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 1001;
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #374151;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    #legend {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      z-index: 1000;
+      background: white;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      border-radius: 4px;
+      border: 1px solid #666;
+    }
+
+    .control-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .leaflet-tile {
       image-rendering: pixelated !important;
     }
 
     .leaflet-popup-content-wrapper {
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      max-width: 320px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      max-width: 340px;
       font-size: 14px;
-      line-height: 1.4;
     }
 
     .popup-header {
-      font-weight: bold;
+      font-weight: 600;
       text-transform: uppercase;
-      padding: 6px 10px;
-      border-radius: 10px 10px 0 0;
+      padding: 8px 12px;
+      border-radius: 12px 12px 0 0;
+      font-size: 13px;
     }
 
     .popup-header.storm {
@@ -46,53 +124,73 @@
       border: 2px solid #c62828;
     }
 
+    .popup-header.tornado-confirmed {
+      background-color: #f3e5f5;
+      color: #6a1b9a;
+      border: 2px solid #6a1b9a;
+    }
+
+    .popup-header.marine {
+      background-color: #e6f3ff;
+      color: #0288d1;
+      border: 2px solid #0288d1;
+    }
+
     .popup-body {
-      padding: 10px;
+      padding: 12px;
       background: #fff;
-      border-radius: 0 0 10px 10px;
+      border-radius: 0 0 12px 12px;
     }
 
     .popup-body .label {
-      font-weight: bold;
+      font-weight: 600;
       display: inline-block;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      color: #374151;
     }
 
     .warning-button {
-      display: inline-block;
-      margin-top: 8px;
-      background: #007bff;
+      margin-top: 10px;
+      background: #2563eb;
       color: white;
       border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
+      border-radius: 6px;
+      padding: 8px 12px;
       cursor: pointer;
-    }
-
-    .warning-button:hover {
-      background: #0056b3;
+      font-size: 13px;
     }
 
     .full-text {
       display: none;
-      margin-top: 8px;
+      margin-top: 10px;
       background: #f8f9fa;
-      border-radius: 5px;
-      padding: 10px;
+      border-radius: 6px;
+      padding: 12px;
       white-space: pre-wrap;
-      max-height: 160px;
+      max-height: 180px;
       overflow-y: auto;
       font-size: 13px;
+      color: #374151;
     }
   </style>
 </head>
 <body>
-  <div id="controls">
-    <label><input type="checkbox" id="toggleRadar" checked> Radar</label>
-    <label><input type="checkbox" id="toggleStorm" checked> Severe Thunderstorm Warnings</label>
-    <label><input type="checkbox" id="toggleTornado" checked> Tornado Warnings</label>
+  <div id="map">
+    <div id="loading">Loading weather data...</div>
+    <button id="toggle-controls">Toggle Filters</button>
+    <div id="controls">
+      <label class="control-label"><input type="checkbox" id="toggleRadar" checked> Radar</label>
+      <label class="control-label"><input type="checkbox" id="toggleStorm" checked> Storm</label>
+      <label class="control-label"><input type="checkbox" id="toggleTornado" checked> Tornado</label>
+      <label class="control-label"><input type="checkbox" id="toggleMarine" checked> Marine</label>
+    </div>
   </div>
-  <div id="map"></div>
+  <div id="legend">
+    <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
+    <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
+    <div class="legend-item"><span class="legend-color" style="background: #ff9900"></span>Storm Warning</div>
+    <div class="legend-item"><span class="legend-color" style="background: #0288d1"></span>Marine Warning</div>
+  </div>
 
   <script src="https://unpkg.com/leaflet"></script>
   <script>
@@ -102,91 +200,94 @@
     const radarLayer = L.layerGroup().addTo(map);
     const alertLayer = L.layerGroup().addTo(map);
 
-    function updateRadar() {
-      fetch("https://api.rainviewer.com/public/weather-maps.json")
-        .then(res => res.json())
-        .then(json => {
-          const latest = json.radar.past.at(-1).time;
-          const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
-          const tiles = L.tileLayer(url, {
-            opacity: 0.8,
-            zIndex: 10,
-            tileSize: 256,
-            noWrap: true,
-            updateWhenIdle: true,
-            className: 'pixelated-tiles'
-          });
-          radarLayer.clearLayers().addLayer(tiles);
-        });
+    async function updateRadar() {
+      const res = await fetch("https://api.rainviewer.com/public/weather-maps.json");
+      const json = await res.json();
+      const latest = json.radar.past.at(-1).time;
+      const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
+      const tiles = L.tileLayer(url, { opacity: 0.8 });
+      radarLayer.clearLayers().addLayer(tiles);
     }
 
-    function updateWarnings() {
-      const activeFetches = [
-        { event: 'Severe Thunderstorm Warning', visible: document.getElementById('toggleStorm').checked },
-        { event: 'Tornado Warning', visible: document.getElementById('toggleTornado').checked }
-      ];
+    async function updateWarnings() {
+      const types = {
+        storm: document.getElementById('toggleStorm').checked,
+        tornado: document.getElementById('toggleTornado').checked,
+        marine: document.getElementById('toggleMarine').checked
+      };
 
-      const fetches = activeFetches.filter(f => f.visible).map(f =>
-        fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(f.event)}`, {
+      const urls = [];
+      if (types.storm) urls.push("Severe Thunderstorm Warning");
+      if (types.tornado) urls.push("Tornado Warning");
+      if (types.marine) urls.push("Special Marine Warning");
+
+      const requests = urls.map(event =>
+        fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(event)}`, {
           headers: { "Accept": "application/geo+json" }
         }).then(r => r.json())
       );
 
-      Promise.all(fetches).then(results => {
-        const features = results.flatMap(r => r.features || []);
-        alertLayer.clearLayers();
-        L.geoJSON({ type: "FeatureCollection", features }, {
-          style: f => {
-            const type = f.properties.event;
-            let color = '#888888';
-            if (type.includes('Tornado Warning')) color = '#c62828';
-            else if (type.includes('Severe Thunderstorm Warning')) color = '#ff9900';
-            return {
-              color,
-              weight: 2.5,
-              fillColor: color,
-              fillOpacity: 0.25,
-              opacity: 1
-            };
+      const responses = await Promise.all(requests);
+      const features = responses.flatMap(r => r.features || []);
+      alertLayer.clearLayers();
+
+      features.forEach(feature => {
+        const p = feature.properties;
+        const id = `id-${Math.random().toString(36).slice(2)}`;
+        const isTornado = p.event.includes("Tornado");
+        const isMarine = p.event.includes("Marine");
+
+        let strength = isTornado ? "RADAR INDICATED" : "N/A";
+        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "CONFIRMED";
+
+        let wind = "N/A";
+        let hail = "Unknown";
+        const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
+        if (hazardMatch && hazardMatch[1]) {
+          const hazard = hazardMatch[1].toLowerCase();
+          const windMatch = hazard.match(/(\d+)\s?mph/i);
+          if (windMatch) wind = `${windMatch[1]} mph`;
+          const hailMatch = hazard.match(/quarter|half|golf ball|ping pong ball/i);
+          if (hailMatch) {
+            let size = hailMatch[0];
+            size = size.match(/quarter|half/) ? `${size} inch` : `${size}s`;
+            hail = size;
+          }
+        }
+
+        const headerClass = isTornado && strength === "CONFIRMED" ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
+        const popup = `
+          <div class="popup-header ${headerClass}">${p.event}</div>
+          <div class="popup-body">
+            <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
+            <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
+            <div><span class="label">Area:</span> ${p.areaDesc}</div>
+            <div><span class="label">Windspeed:</span> ${wind}</div>
+            ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
+            ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
+            <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
+            <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g,'<br>')}</div>
+          </div>`;
+
+        const fillColor = isTornado
+          ? (strength === "CONFIRMED" ? "#6a1b9a" : "#c62828")
+          : p.event.includes("Severe Thunderstorm") ? "#ff9900"
+          : p.event.includes("Marine") ? "#0288d1"
+          : "#888";
+
+        const layer = L.geoJSON(feature, {
+          style: {
+            color: fillColor,
+            weight: 4.5,
+            fillColor: fillColor,
+            fillOpacity: 0.5,
+            opacity: 1
           },
-          onEachFeature: (feature, layer) => {
-            const p = feature.properties;
-            const id = `id-${Math.random().toString(36).slice(2)}`;
-            const isTornado = p.event.includes("Tornado");
-
-            let strength = "RADAR INDICATED";
-            if (p.description) {
-              const d = p.description.toLowerCase();
-              if (d.includes("confirmed")) strength = "CONFIRMED";
-              else if (d.includes("funnel")) strength = "FUNNEL CLOUD";
-            }
-
-            let wind = "N/A", hail = "N/A";
-            const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
-            if (hazardMatch && hazardMatch[1]) {
-              const hazard = hazardMatch[1];
-              const windMatch = hazard.match(/(\d+)\s?mph/i);
-              const hailMatch = hazard.match(/(quarter|half|golf ball|ping pong ball|[\d.]+)\s?(inch|in)?\s?(hail)?/i);
-              if (windMatch) wind = `${windMatch[1]} mph`;
-              if (hailMatch) hail = hailMatch[0].replace(/\s+hail/i, '').trim();
-            }
-
-            const popup = `
-              <div class="popup-header ${isTornado ? 'tornado' : 'storm'}">${p.event}</div>
-              <div class="popup-body">
-                <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
-                <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
-                <div><span class="label">Area:</span> ${p.areaDesc}</div>
-                <div><span class="label">Windspeed:</span> ${wind}</div>
-                <div><span class="label">Hail Size:</span> ${hail}</div>
-                ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
-                <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">show me the full warning text</button>
-                <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g,'<br>')}</div>
-              </div>`;
+          onEachFeature: (f, layer) => {
             layer.bindPopup(popup);
-            alertLayer.addLayer(layer);
           }
         });
+        alertLayer.addLayer(layer);
       });
     }
 
@@ -196,10 +297,13 @@
     document.getElementById('toggleRadar').addEventListener('change', e => {
       e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer);
     });
-    [
-      'toggleStorm',
-      'toggleTornado'
-    ].forEach(id => document.getElementById(id).addEventListener('change', updateWarnings));
+
+    ['toggleStorm', 'toggleTornado', 'toggleMarine'].forEach(id =>
+      document.getElementById(id).addEventListener('change', updateWarnings));
+
+    document.getElementById('toggle-controls').addEventListener('click', () => {
+      document.getElementById('controls').classList.toggle('hidden');
+    });
   </script>
 </body>
 </html>
