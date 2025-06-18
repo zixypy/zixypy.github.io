@@ -276,7 +276,7 @@
         if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado forming!";
         if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado confirmed!";
         let waterspout = isMarine ? "Waterspout not possible" : "N/A";
-        if (isMarine && p.description?.toLowerCase().includes("waterspout")) waterspout = "Waterspout possible!";
+        if (isMarine && p.description?.toLowerCase().includes("waterspout")) waterspout = "Waterspouts possible!";
         let wind = "Unknown";
         let hail = "Unknown";
         const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
