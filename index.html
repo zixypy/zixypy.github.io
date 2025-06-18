@@ -5,12 +5,64 @@
   <title>RadarHQ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="icon" href="https://sdmntprwestus2.oaiusercontent.com/files/00000000-65e0-61f8-a093-1edcdf847c22/raw?se=2025-06-18T22%3A06%3A15Z&sp=r&sv=2024-08-04&sr=b&scid=06921668-397a-5f6b-b3ab-90fc227c371f&skoid=04233560-0ad7-493e-8bf0-1347c317d021&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-18T20%3A37%3A40Z&ske=2025-06-19T20%3A37%3A40Z&sks=b&skv=2024-08-04&sig=IcI9awCTQJqVCtEV/muN%2BStN26YKmOxQ6u6vgvE3d2U%3D" type="image/png" />
   <style>
     html, body {
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
       background: #e5e7eb;
+    }
+
+    nav {
+      background: #1f2937;
+      color: white;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 2000;
+    }
+
+  nav img {
+    height: 32px;
+    width: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+    nav .nav-item {
+      position: relative;
+    }
+
+    nav .nav-item:hover .dropdown {
+      display: block;
+    }
+
+    nav .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      color: black;
+      padding: 8px;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    #fullscreenButton {
+      margin: 12px auto;
+      display: block;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      background: #1f2937;
+      color: white;
+      border: none;
+      cursor: pointer;
     }
 
     #map {
@@ -97,7 +149,6 @@
       image-rendering: auto !important;
     }
 
-
     .leaflet-popup-content-wrapper {
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -180,20 +231,10 @@
       font-size: 15px;
       color: #1f2937;
     }
-
-    #fullscreenButton {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      background: #1f2937;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
+  <button id="fullscreenButton" onclick="openFullscreen()">Open Fullscreen</button>
   <div id="map">
     <div id="loading">Loading weather data...</div>
     <button id="toggle-controls">Toggle Filters</button>
@@ -206,14 +247,11 @@
   </div>
 
   <div id="infoPanel">
-    <button id="fullscreenButton" onclick="openFullscreen()">Open Fullscreen</button>
-    <div style="margin-top: 12px;">
-      <h2>Current severe weather:</h2>
-      <div style="margin-bottom: 10px;">
-        Severe Thunderstorm Warnings: <span id="storm-count">0</span><br>
-        Tornado Warnings: <span id="tornado-count">0</span><br>
-        Special Marine Warnings: <span id="marine-count">0</span>
-      </div>
+    <h2>Current severe weather:</h2>
+    <div style="margin-bottom: 10px;">
+      Severe Thunderstorm Warnings: <span id="storm-count">0</span><br>
+      Tornado Warnings: <span id="tornado-count">0</span><br>
+      Special Marine Warnings: <span id="marine-count">0</span>
     </div>
   </div>
 
@@ -278,7 +316,7 @@
 
         let strength = isTornado ? "Rotation, not confirmed yet" : "N/A";
         if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado forming!";
-        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado confirmed!";
+        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado Confirmed!";
         let waterspout = isMarine ? "Waterspout not possible" : "N/A";
         if (isMarine && p.description?.toLowerCase().includes("waterspout")) waterspout = "Waterspouts possible!";
         let wind = "Unknown";
@@ -288,16 +326,15 @@
           const hazard = hazardMatch[1].toLowerCase();
           const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
           if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
-
           const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny/i);
           if (hailMatch) {
             let size = hailMatch[0];
-            size = size.match(/quarter|half/) ? `${size} inch` : `${size}s`;
+            size = size.match(/quarter|half/i) ? `${size} inch` : `${size}s`;
             hail = size;
           }
         }
 
-        const headerClass = isTornado && strength === "CONFIRMED" ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
+        const headerClass = isTornado && strength === "Tornado Confirmed!" ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
         const popup = `
           <div class="popup-header ${headerClass}">${p.event}</div>
           <div class="popup-body">
@@ -346,6 +383,8 @@
         mapContainer.webkitRequestFullscreen();
       } else if (mapContainer.msRequestFullscreen) {
         mapContainer.msRequestFullscreen();
+      } else if (mapContainer.webkitEnterFullscreen) {
+        mapContainer.webkitEnterFullscreen();
       }
     }
 
@@ -370,6 +409,5 @@
   <footer style="text-align: center; padding: 20px; background: #1a1a1a;">
     <p style="color: #ccc; font-size: 14px; margin-top: 8px;">Made by Hayden</p>
   </footer>
-
 </body>
 </html>
