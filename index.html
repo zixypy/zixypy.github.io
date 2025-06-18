@@ -245,9 +245,9 @@
         const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
         if (hazardMatch && hazardMatch[1]) {
           const hazard = hazardMatch[1].toLowerCase();
-          const windMatch = hazard.match(/(\d+)\s?mph/i);
+          const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
           if (windMatch) wind = `${windMatch[1]} mph`;
-          const hailMatch = hazard.match(/quarter|half|golf ball|ping pong ball/i);
+          const hailMatch = hazard.match(/quarter|half|golf ball|ping pong ball|penny/i);
           if (hailMatch) {
             let size = hailMatch[0];
             size = size.match(/quarter|half/) ? `${size} inch` : `${size}s`;
