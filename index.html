@@ -351,7 +351,7 @@
     setInterval(() => {
       updateRadar();
       updateWarnings();
-    }, 30000);
+    }, 60000);
 
     document.getElementById('toggleRadar').addEventListener('change', e => {
       e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer);
