@@ -237,8 +237,9 @@
         const isTornado = p.event.includes("Tornado");
         const isMarine = p.event.includes("Marine");
 
-        let strength = isTornado ? "RADAR INDICATED" : "N/A";
-        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "CONFIRMED";
+        let strength = isTornado ? "Radar Indicated Rotation" : "N/A";
+        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado Confirmed!";
+
 
         let wind = "Unkown";
         let hail = "Unknown";
