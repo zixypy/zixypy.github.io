@@ -7,6 +7,20 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="icon" href="https://sdmntprwestus2.oaiusercontent.com/files/00000000-65e0-61f8-a093-1edcdf847c22/raw?se=2025-06-18T22%3A06%3A15Z&sp=r&sv=2024-08-04&sr=b&scid=06921668-397a-5f6b-b3ab-90fc227c371f&skoid=04233560-0ad7-493e-8bf0-1347c317d021&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-18T20%3A37%3A40Z&ske=2025-06-19T20%3A37%3A40Z&sks=b&skv=2024-08-04&sig=IcI9awCTQJqVCtEV/muN%2BStN26YKmOxQ6u6vgvE3d2U%3D" type="image/png" />
   <style>
+    body.map-only nav,
+    body.map-only #fullscreenButton,
+    body.map-only #infoPanel,
+    body.map-only footer {
+      display: none !important;
+    }
+    
+    body.map-only #map {
+      margin: 0 !important;
+      height: 100vh !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -329,7 +343,7 @@
           const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny/i);
           if (hailMatch) {
             let size = hailMatch[0];
-            size = size.match(/quarter|half/i) ? `${size} inch` : `${size}s`;
+            size = size.match(/Quarter|Half Dollar/i) ? `${size} inch` : `${size}s`;
             hail = size;
           }
         }
@@ -376,17 +390,9 @@
     }
 
     function openFullscreen() {
-      const mapContainer = document.getElementById("map");
-      if (mapContainer.requestFullscreen) {
-        mapContainer.requestFullscreen();
-      } else if (mapContainer.webkitRequestFullscreen) {
-        mapContainer.webkitRequestFullscreen();
-      } else if (mapContainer.msRequestFullscreen) {
-        mapContainer.msRequestFullscreen();
-      } else if (mapContainer.webkitEnterFullscreen) {
-        mapContainer.webkitEnterFullscreen();
-      }
+      document.body.classList.toggle('map-only');
     }
+
 
     updateRadar();
     updateWarnings();
