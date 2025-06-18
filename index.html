@@ -240,7 +240,7 @@
         let strength = isTornado ? "RADAR INDICATED" : "N/A";
         if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "CONFIRMED";
 
-        let wind = "N/A";
+        let wind = "Unkown";
         let hail = "Unknown";
         const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
         if (hazardMatch && hazardMatch[1]) {
