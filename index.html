@@ -301,7 +301,7 @@
             <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
             <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
             <div><span class="label">Area:</span> ${p.areaDesc}</div>
-            <div><span class="label">Windspeed:</span> ${wind}</div>
+            <div><span class="label">Max Windspeed:</span> ${wind}</div>
             ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
             ${isMarine ? `<div><span class="label">Waterspout:</span> ${waterspout}</div>` : ''}
             ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
