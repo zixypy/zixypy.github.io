@@ -352,10 +352,10 @@
           const hazard = hazardMatch[1].toLowerCase();
           const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
           if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
-          const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel/i);
+          const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel|Baseball|Tennis Ball/i);
           if (hailMatch) {
             let size = hailMatch[0];
-            size = size.match(/Quarter|Half Dollar|Nickel|Penny/i) ? `${size} sized` : `${size}s`;
+            size = size.match(/Quarter|Half Dollar|Nickel|Penny|Baseball|Tennis Ball/i) ? `${size} sized` : `${size}s`;
             hail = size;
           }
         }
