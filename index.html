@@ -1,19 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>RadarHQ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="icon" href="https://files.catbox.moe/nnvzas.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body.map-only nav,
-    body.map-only #fullscreenButton,
-    body.map-only #infoPanel,
-    body.map-only footer {
+    :root {
+      --primary: #2563eb;
+      --secondary: #1f2937;
+      --background: #f3f4f6;
+      --surface: #ffffff;
+      --text-primary: #111827;
+      --text-secondary: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text-primary);
+      overflow: hidden;
+    }
+
+    body.map-only nav, body.map-only #sidebar, body.map-only #fullscreenButton, body.map-only footer {
       display: none !important;
     }
-    
+
     body.map-only #map {
       margin: 0 !important;
       height: 100vh !important;
@@ -21,17 +43,10 @@
       box-shadow: none !important;
     }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      background: #e5e7eb;
-    }
-
     nav {
-      background: #1f2937;
+      background: var(--secondary);
       color: white;
-      padding: 10px 16px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       gap: 16px;
@@ -40,87 +55,142 @@
       z-index: 2000;
     }
 
-  nav img {
-    height: 32px;
-    width: 40px;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-
-    nav .nav-item {
-      position: relative;
+    nav img {
+      height: 36px;
+      width: 36px;
+      border-radius: 8px;
+      object-fit: cover;
     }
 
-    nav .nav-item:hover .dropdown {
-      display: block;
-    }
-
-    nav .dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      color: black;
+    nav .user-profile {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
       padding: 8px;
       border-radius: 6px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
-    #fullscreenButton {
-      margin: 12px auto;
-      display: block;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      background: #1f2937;
-      color: white;
-      border: none;
-      cursor: pointer;
+    nav .user-profile:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    #app {
+      display: flex;
+      height: calc(100vh - 60px);
     }
 
     #map {
-      height: 90vh;
+      flex: 1;
+      height: 100%;
+      border-radius: 8px;
       margin: 16px;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       position: relative;
+      z-index: 100;
     }
 
-    #controls {
+    #sidebar {
+      width: 360px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+    }
+
+    #chat-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #chat-select {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: var(--background);
+    }
+
+    .chat-message {
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      max-width: 70%;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .chat-message.sent {
+      background: var(--primary);
+      color: white;
+      margin-left: auto;
+    }
+
+    .chat-message.received {
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .chat-message .sender {
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .chat-message .time {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    #chat-input-container {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    #chat-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      resize: none;
+    }
+
+    #controls-panel {
       position: absolute;
       top: 16px;
       left: 16px;
       z-index: 1000;
-      background: white;
+      background: var(--surface);
       border-radius: 12px;
       padding: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      max-width: 500px;
-      transition: opacity 0.3s, visibility 0s linear;
+      width: 280px;
     }
 
-    #controls.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    #toggle-controls {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 1001;
-      background: white;
-      border: 1px solid #d1d5db;
+    .control-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      background: var(--background);
       border-radius: 8px;
-      padding: 8px 12px;
+      margin-bottom: 8px;
       cursor: pointer;
-      font-weight: 500;
-      color: #374151;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-size: 14px;
     }
 
     #legend {
@@ -128,7 +198,7 @@
       bottom: 16px;
       right: 16px;
       z-index: 1000;
-      background: white;
+      background: var(--surface);
       border-radius: 12px;
       padding: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -138,7 +208,7 @@
     .legend-item {
       display: flex;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .legend-color {
@@ -149,25 +219,9 @@
       border: 1px solid #666;
     }
 
-    .control-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .leaflet-tile {
-      image-rendering: auto !important;
-    }
-
     .leaflet-popup-content-wrapper {
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      max-width: 340px;
-      font-size: 14px;
     }
 
     .popup-header {
@@ -204,20 +258,20 @@
 
     .popup-body {
       padding: 12px;
-      background: #fff;
+      background: var(--surface);
       border-radius: 0 0 12px 12px;
+      font-size: 14px;
     }
 
     .popup-body .label {
       font-weight: 600;
-      display: inline-block;
       margin-bottom: 6px;
-      color: #374151;
+      color: var(--text-primary);
     }
 
     .warning-button {
-      margin-top: 10px;
-      background: #2563eb;
+      margin-top: 8px;
+      background: var(--primary);
       color: white;
       border: none;
       border-radius: 6px;
@@ -229,204 +283,532 @@
     .full-text {
       display: none;
       margin-top: 10px;
-      background: #f8f9fa;
+      background: var(--background);
       border-radius: 6px;
       padding: 12px;
-      white-space: pre-wrap;
-      max-height: 180px;
+      max-height: 200px;
       overflow-y: auto;
       font-size: 13px;
-      color: #374151;
     }
 
-    #infoPanel {
+    #friends-panel {
       padding: 16px;
-      text-align: center;
-      font-size: 15px;
-      color: #1f2937;
-    }
-    .ad-container {
-      margin: 16px auto;
-      text-align: center;
-      max-width: 100%;
-      padding: 0 16px;
+      border-top: 1px solid var(--border);
     }
 
-    body.map-only .ad-container {
-      display: none !important;
+    .friend-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: var(--background);
+    }
+
+    .friend-item button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    #invite-section {
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--background);
+      border-radius: 8px;
+    }
+
+    #invite-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    #submit-invite {
+      width: 100%;
+      padding: 8px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      background: var(--secondary);
+      color: #d1d5db;
+      font-size: 14px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      justify-content: center;
+    }
+
+    .action-button {
+      padding: 10px 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
-  <button id="fullscreenButton" onclick="openFullscreen()">Open Fullscreen</button>
-  <div id="map">
-    <div id="loading">Loading weather data...</div>
-    <button id="toggle-controls">Toggle Filters</button>
-    <div id="controls" class="hidden">
-      <label class="control-label"><input type="checkbox" id="toggleRadar" checked> Radar</label>
-      <label class="control-label"><input type="checkbox" id="toggleStorm" checked> Severe Thunderstorm Warning</label>
-      <label class="control-label"><input type="checkbox" id="toggleTornado" checked> Tornado Warning</label>
-      <label class="control-label"><input type="checkbox" id="toggleMarine" checked> Special Marine Warning</label>
+  <nav>
+    <img src="https://files.catbox.moe/nnvzas.png" alt="RadarHQ Logo">
+    <h1 style="font-size: 20px; font-weight: 600;">RadarHQ</h1>
+    <div class="user-profile" onclick="editProfile()">
+      <span id="user-name">User</span>
+    </div>
+  </nav>
+  <div class="button-group">
+    <button class="action-button" id="fullscreenButton" onclick="openFullscreen()">Fullscreen Map</button>
+    <button class="action-button" id="generateInviteButton" onclick="generateInviteCode()">Generate Invite</button>
+    <button class="action-button" id="addFriendButton" onclick="showInviteInput()">Add Friend</button>
+  </div>
+  <div id="app">
+    <div id="map">
+      <div id="controls-panel">
+        <label class="control-label"><input type="checkbox" id="toggleRadar" checked> Radar</label>
+        <label class="control-label"><input type="checkbox" id="toggleStorm" checked> Severe Thunderstorm</label>
+        <label class="control-label"><input type="checkbox" id="toggleTornado" checked> Tornado Warning</label>
+        <label class="control-label"><input type="checkbox" id="toggleMarine" checked> Marine Warning</label>
+        <label class="control-label"><input type="checkbox" id="toggleFriends" checked> Friends Locations</label>
+      </div>
+      <div id="legend">
+        <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
+        <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
+        <div class="legend-item"><span class="legend-color" style="background: #ff9900"></span>Severe Thunderstorm</div>
+        <div class="legend-item"><span class="legend-color" style="background: #0288d1"></span>Marine Warning</div>
+        <div class="legend-item"><span class="legend-color" style="background: #00ff00"></span>Friend Location</div>
+      </div>
+    </div>
+    <div id="sidebar">
+      <div id="chat-header">
+        <h3 style="margin: 0; font-size: 16px; font-weight: 600;">Weather Chat</h3>
+        <select id="chat-select">
+          <option value="group">Group Chat</option>
+        </select>
+      </div>
+      <div id="chat-messages"></div>
+      <div id="chat-input-container">
+        <textarea id="chat-input" placeholder="Type a message..." rows="2"></textarea>
+      </div>
+      <div id="friends-panel">
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Friends</h3>
+        <div id="friends-list"></div>
+        <div id="invite-section" style="display: none;">
+          <input id="invite-input" type="text" placeholder="Enter invite code">
+          <button id="submit-invite" onclick="submitInviteCode()">Join Group</button>
+        </div>
+      </div>
     </div>
   </div>
+  <footer>
+    <p>Made by Hayden | RadarHQ &copy; 2025</p>
+  </footer>
 
-  <div id="infoPanel">
-    <h2>Current severe weather:</h2>
-    <div style="margin-bottom: 10px;">
-      Severe Thunderstorm Warnings: <span id="storm-count">0</span><br>
-      Tornado Warnings: <span id="tornado-count">0</span><br>
-      Special Marine Warnings: <span id="marine-count">0</span>
-    </div>
-  </div>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412927597506706"
-     crossorigin="anonymous"></script>
-  <div id="legend">
-    <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
-    <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
-    <div class="legend-item"><span class="legend-color" style="background: #ff9900"></span>Severe Thunderstorm Warning</div>
-    <div class="legend-item"><span class="legend-color" style="background: #0288d1"></span>Special Marine Warning</div>
-  </div>
-
-  <script src="https://unpkg.com/leaflet"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
+    // State Management
+    const state = {
+      userId: localStorage.getItem('userId') || Math.random().toString(36).slice(2),
+      userName: localStorage.getItem('userName') || null,
+      locationEnabled: false,
+      friends: {},
+      currentGroupId: null,
+      currentChatTarget: 'group',
+    };
+
+    // Map Initialization
     const map = L.map('map').setView([38, -97], 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-
     const radarLayer = L.layerGroup().addTo(map);
     const alertLayer = L.layerGroup().addTo(map);
+    const friendsLayer = L.layerGroup().addTo(map);
 
-    async function updateRadar() {
-      const res = await fetch("https://api.rainviewer.com/public/weather-maps.json");
-      const json = await res.json();
-      const latest = json.radar.past.at(-1).time;
-      const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
-      const tiles = L.tileLayer(url, { opacity: 0.8 });
-      radarLayer.clearLayers().addLayer(tiles);
+    // WebSocket Setup
+    const ws = new WebSocket('ws://prem-eu1.bot-hosting.net:20531');
+    localStorage.setItem('userId', state.userId);
+
+    // Initialize User
+    function initializeUser() {
+      if (!state.userName) {
+        state.userName = prompt('Enter your name') || `Anonymous${Math.random().toString(36).slice(2, 6)}`;
+        localStorage.setItem('userName', state.userName);
+      }
+      document.getElementById('user-name').textContent = state.userName;
     }
 
+    // WebSocket Message Handler
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      switch (data.type) {
+        case 'message':
+          handleMessage(data);
+          break;
+        case 'location':
+          updateFriendLocation(data);
+          break;
+        case 'friends':
+          updateFriendsList(data.friends);
+          updateChatSelect(data.friends);
+          break;
+        case 'inviteCode':
+          alert(`Your invite code: ${data.code}`);
+          break;
+        case 'joined':
+          state.currentGroupId = data.groupId;
+          updateFriendsList(data.friends);
+          updateChatSelect(data.friends);
+          break;
+        case 'error':
+          alert(data.message);
+          break;
+      }
+    };
+
+    // Update Radar Data
+    async function updateRadar() {
+      try {
+        const res = await fetch('https://api.rainviewer.com/public/weather-maps.json');
+        const json = await res.json();
+        const latest = json.radar.past.at(-1).time;
+        const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
+        radarLayer.clearLayers().addLayer(L.tileLayer(url, { opacity: 0.8 }));
+      } catch (error) {
+        console.error('Radar update failed:', error);
+      }
+    }
+
+    // Update Weather Warnings
     async function updateWarnings() {
       const types = {
         storm: document.getElementById('toggleStorm').checked,
         tornado: document.getElementById('toggleTornado').checked,
-        marine: document.getElementById('toggleMarine').checked
+        marine: document.getElementById('toggleMarine').checked,
       };
 
       const urls = [];
-      if (types.storm) urls.push("Severe Thunderstorm Warning");
-      if (types.tornado) urls.push("Tornado Warning");
-      if (types.marine) urls.push("Special Marine Warning");
+      if (types.storm) urls.push('Severe Thunderstorm Warning');
+      if (types.tornado) urls.push('Tornado Warning');
+      if (types.marine) urls.push('Special Marine Warning');
 
-      const requests = urls.map(event =>
-        fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(event)}`, {
-          headers: { "Accept": "application/geo+json" }
-        }).then(r => r.json())
-      );
+      try {
+        const responses = await Promise.all(
+          urls.map(event =>
+            fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(event)}`, {
+              headers: { Accept: 'application/geo+json' },
+            }).then(r => r.json())
+          )
+        );
 
-      const responses = await Promise.all(requests);
-      const features = responses.flatMap(r => r.features || []);
-      alertLayer.clearLayers();
+        alertLayer.clearLayers();
+        let stormCount = 0, tornadoCount = 0, marineCount = 0;
 
-      let stormCount = 0, tornadoCount = 0, marineCount = 0;
+        responses.flatMap(r => r.features || []).forEach(feature => {
+          const p = feature.properties;
+          const id = `id-${Math.random().toString(36).slice(2)}`;
+          const isTornado = p.event.includes('Tornado');
+          const isMarine = p.event.includes('Marine');
+          const isStorm = p.event.includes('Severe Thunderstorm');
 
-      features.forEach(feature => {
-        const p = feature.properties;
-        const id = `id-${Math.random().toString(36).slice(2)}`;
-        const isTornado = p.event.includes("Tornado");
-        const isMarine = p.event.includes("Marine");
-        const isStorm = p.event.includes("Severe Thunderstorm");
+          if (isStorm) stormCount++;
+          if (isTornado) tornadoCount++;
+          if (isMarine) marineCount++;
 
-        if (isStorm) stormCount++;
-        if (isTornado) tornadoCount++;
-        if (isMarine) marineCount++;
-        let possible = isStorm ? "Tornado not possible" : "N/A";
-        if (isStorm && p.description?.toLowerCase().includes("possible tornado")) possible = "Tornado possible!";
-        let strength = isTornado ? "Rotation, not confirmed yet" : "N/A";
-        if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado forming!";
-        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado Confirmed!";
-        let waterspout = isMarine ? "Waterspout not possible" : "N/A";
-        if (isMarine && p.description?.toLowerCase().includes("waterspout")) waterspout = "Waterspouts possible!";
-        let wind = "Unknown";
-        let hail = "Unknown";
-        const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
-        if (hazardMatch && hazardMatch[1]) {
-          const hazard = hazardMatch[1].toLowerCase();
-          const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
-          if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
-          const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel|Baseball|Tennis Ball/i);
-          if (hailMatch) {
-            let size = hailMatch[0];
-            size = size.match(/Quarter|Half Dollar|Nickel|Penny|Baseball|Tennis Ball/i) ? `${size} sized` : `${size}s`;
-            hail = size;
+          let possible = isStorm ? 'Tornado not possible' : 'N/A';
+          if (isStorm && p.description?.toLowerCase().includes('possible tornado')) possible = 'Tornado possible!';
+          let strength = isTornado ? 'Rotation, not confirmed yet' : 'N/A';
+          if (isTornado && p.description?.toLowerCase().includes('funnel')) strength = 'Tornado forming!';
+          if (isTornado && p.description?.toLowerCase().includes('confirmed')) strength = 'Tornado Confirmed!';
+          let waterspout = isMarine ? 'Waterspout not possible' : 'N/A';
+          if (isMarine && p.description?.toLowerCase().includes('waterspout')) waterspout = 'Waterspouts possible!';
+          let wind = 'Unknown';
+          let hail = 'Unknown';
+          const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
+          if (hazardMatch && hazardMatch[1]) {
+            const hazard = hazardMatch[1].toLowerCase();
+            const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
+            if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
+            const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel|Baseball|Tennis Ball/i);
+            if (hailMatch) {
+              let size = hailMatch[0];
+              size = size.match(/Quarter|Half Dollar|Nickel|Penny|Baseball|Tennis Ball/i) ? `${size} sized` : `${size}s`;
+              hail = size;
+            }
           }
-        }
 
-        const headerClass = isTornado && strength === "Tornado Confirmed!" ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
-        const popup = `
-          <div class="popup-header ${headerClass}">${p.event}</div>
-          <div class="popup-body">
-            <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
-            <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
-            <div><span class="label">Area:</span> ${p.areaDesc}</div>
-            <div><span class="label">Max Windspeed:</span> ${wind}</div>
-            ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
-            ${isMarine ? `<div><span class="label">Waterspout:</span> ${waterspout}</div>` : ''}
-            ${isStorm ? `<div><span class="label">Tornado:</span> ${possible}</div>` : ''}
-            ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
-            <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
-            <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g,'<br>')}</div>
-          </div>`;
+          const headerClass = isTornado && strength === 'Tornado Confirmed!' ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
+          const popup = `
+            <div class="popup-header ${headerClass}">${p.event}</div>
+            <div class="popup-body">
+              <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
+              <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
+              <div><span class="label">Area:</span> ${p.areaDesc}</div>
+              <div><span class="label">Max Windspeed:</span> ${wind}</div>
+              ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
+              ${isMarine ? `<div><span class="label">Waterspout:</span> ${waterspout}</div>` : ''}
+              ${isStorm ? `<div><span class="label">Tornado:</span> ${possible}</div>` : ''}
+              ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ''}
+              <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
+              <button class="warning-button" onclick="shareWarning('${id}', '${p.event}', '${p.areaDesc}', '${p.description}')">Share Warning</button>
+              <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g, '<br>')}</div>
+            </div>`;
 
-        const fillColor = isTornado
-          ? (strength === "Tornado Confirmed!" ? "#6a1b9a" : "#c62828")
-          : isStorm ? "#ff9900"
-          : isMarine ? "#0288d1"
-          : "#888";
+          const fillColor = isTornado
+            ? strength === 'Tornado Confirmed!' ? '#6a1b9a' : '#c62828'
+            : isStorm ? '#ff9900'
+            : isMarine ? '#0288d1'
+            : '#888';
 
-        const layer = L.geoJSON(feature, {
-          style: {
-            color: fillColor,
-            weight: 5,
-            fillColor: fillColor,
-            fillOpacity: 0.5,
-            opacity: 1
-          },
-          onEachFeature: (f, layer) => {
-            layer.bindPopup(popup);
-          }
+          alertLayer.addLayer(L.geoJSON(feature, {
+            style: { color: fillColor, weight: 5, fillColor, fillOpacity: 0.5, opacity: 1 },
+            onEachFeature: (f, layer) => layer.bindPopup(popup),
+          }));
         });
-        alertLayer.addLayer(layer);
-      });
 
-      document.getElementById('storm-count').textContent = stormCount;
-      document.getElementById('tornado-count').textContent = tornadoCount;
-      document.getElementById('marine-count').textContent = marineCount;
+        // Update warning counts in friends panel
+        const friendsPanel = document.getElementById('friends-panel');
+        friendsPanel.innerHTML = `
+          <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Weather Alerts</h3>
+          <div style="margin-bottom: 12px;">
+            Severe Thunderstorm Warnings: <span>${stormCount}</span><br>
+            Tornado Warnings: <span>${tornadoCount}</span><br>
+            Special Marine Warnings: <span>${marineCount}</span>
+          </div>
+          <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Friends</h3>
+          <div id="friends-list"></div>
+          <div id="invite-section" style="display: none;">
+            <input id="invite-input" type="text" placeholder="Enter invite code">
+            <button id="submit-invite" onclick="submitInviteCode()">Join Group</button>
+          </div>
+        `;
+      } catch (error) {
+        console.error('Warnings update failed:', error);
+      }
     }
 
+    // Handle Incoming Messages
+    function handleMessage(data) {
+      const isPrivate = data.target && data.target !== 'group';
+      if ((isPrivate && (data.senderId === state.currentChatTarget || data.target === state.userId)) ||
+          (!isPrivate && state.currentChatTarget === 'group')) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-message ${data.senderId === state.userId ? 'sent' : 'received'}`;
+        msgDiv.innerHTML = `
+          <div class="sender">${data.sender}</div>
+          <div>${data.message}</div>
+          <div class="time">${new Date().toLocaleTimeString()}</div>`;
+        document.getElementById('chat-messages').appendChild(msgDiv);
+        document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+      }
+    }
+
+    // Update Friend Location
+    function updateFriendLocation(data) {
+      if (!document.getElementById('toggleFriends').checked || !state.friends[data.userId]?.shareLocation) return;
+      if (state.friends[data.userId]?.marker) friendsLayer.removeLayer(state.friends[data.userId].marker);
+      const marker = L.circleMarker([data.lat, data.lng], {
+        radius: 8,
+        fillColor: '#00ff00',
+        color: '#00ff00',
+        weight: 2,
+        fillOpacity: 0.6,
+      }).bindPopup(`<strong>${data.sender}</strong><br>Last updated: ${new Date().toLocaleString()}`);
+      state.friends[data.userId].marker = marker;
+      friendsLayer.addLayer(marker);
+    }
+
+    // Update Friends List
+    function updateFriendsList(friendsData) {
+      state.friends = friendsData.reduce((acc, friend) => ({
+        ...acc,
+        [friend.userId]: {
+          ...friend,
+          shareLocation: friend.userId === state.userId ? state.locationEnabled : friend.shareLocation,
+        },
+      }), {});
+      const friendsListDiv = document.getElementById('friends-list');
+      friendsListDiv.innerHTML = '';
+      Object.values(state.friends).forEach(friend => {
+        if (friend.userId !== state.userId) {
+          const friendDiv = document.createElement('div');
+          friendDiv.className = 'friend-item';
+          friendDiv.innerHTML = `
+            ${friend.sender}
+            <div>
+              <button onclick="toggleLocationShare('${friend.userId}', ${!friend.shareLocation})">
+                ${friend.shareLocation ? 'Disable' : 'Enable'} Location
+              </button>
+            </div>`;
+          friendsListDiv.appendChild(friendDiv);
+        }
+      });
+    }
+
+    // Update Chat Select Options
+    function updateChatSelect(friends) {
+      const select = document.getElementById('chat-select');
+      select.innerHTML = '<option value="group">Group Chat</option>';
+      friends.forEach(friend => {
+        if (friend.userId !== state.userId) {
+          const option = document.createElement('option');
+          option.value = friend.userId;
+          option.text = friend.sender;
+          select.appendChild(option);
+        }
+      });
+    }
+
+    // Toggle Location Sharing
+    function toggleLocationShare(friendId, enable) {
+      state.friends[friendId].shareLocation = enable;
+      ws.send(JSON.stringify({
+        type: 'updateFriend',
+        userId: friendId,
+        shareLocation: enable,
+        groupId: state.currentGroupId,
+      }));
+      updateFriendsList(Object.values(state.friends));
+    }
+
+    // Share Weather Warning
+    function shareWarning(id, event, area, description) {
+      const message = `⚠️ ${event} in ${area}\n${description.substring(0, 200)}...`;
+      ws.send(JSON.stringify({
+        type: 'message',
+        sender: state.userName,
+        senderId: state.userId,
+        message,
+        groupId: state.currentGroupId,
+        target: state.currentChatTarget,
+      }));
+    }
+
+    // Generate Invite Code
+    function generateInviteCode() {
+      ws.send(JSON.stringify({
+        type: 'generateInvite',
+        userId: state.userId,
+        groupId: state.currentGroupId || Math.random().toString(36).slice(2),
+      }));
+    }
+
+    // Show Invite Input
+    function showInviteInput() {
+      document.getElementById('invite-section').style.display = 'block';
+    }
+
+    // Submit Invite Code
+    function submitInviteCode() {
+      const code = document.getElementById('invite-input').value;
+      ws.send(JSON.stringify({
+        type: 'joinGroup',
+        userId: state.userId,
+        code,
+        sender: state.userName,
+      }));
+      document.getElementById('invite-section').style.display = 'none';
+    }
+
+    // Edit Profile
+    function editProfile() {
+      const newName = prompt('Enter new name', state.userName);
+      if (newName) {
+        state.userName = newName;
+        localStorage.setItem('userName', newName);
+        document.getElementById('user-name').textContent = newName;
+      }
+    }
+
+    // Update User Location
+    function updateLocation() {
+      if (!state.locationEnabled || !state.currentGroupId) return;
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          ws.send(JSON.stringify({
+            type: 'location',
+            userId: state.userId,
+            sender: state.userName,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            groupId: state.currentGroupId,
+          }));
+        },
+        err => console.error('Location error:', err),
+        { enableHighAccuracy: true }
+      );
+    }
+
+    // Open Fullscreen Map
     function openFullscreen() {
       document.body.classList.toggle('map-only');
     }
 
+    // Initialize Location
+    navigator.geolocation.getCurrentPosition(
+      () => {
+        state.locationEnabled = true;
+        setInterval(updateLocation, 30000);
+        updateLocation();
+      },
+      () => alert('Location access denied. Enable it in browser settings.'),
+      { enableHighAccuracy: true }
+    );
 
+    // Event Listeners
+    document.getElementById('toggleRadar').addEventListener('change', e =>
+      e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer));
+    document.getElementById('toggleFriends').addEventListener('change', e =>
+      e.target.checked ? map.addLayer(friendsLayer) : map.removeLayer(friendsLayer));
+    ['toggleStorm', 'toggleTornado', 'toggleMarine'].forEach(id =>
+      document.getElementById(id).addEventListener('change', updateWarnings));
+    document.getElementById('chat-select').addEventListener('change', e => {
+      state.currentChatTarget = e.target.value;
+      document.getElementById('chat-messages').innerHTML = '';
+    });
+    document.getElementById('chat-input').addEventListener('keypress', e => {
+      if (e.key === 'Enter' && !e.shiftKey && state.currentGroupId) {
+        e.preventDefault();
+        const message = e.target.value.trim();
+        if (message) {
+          ws.send(JSON.stringify({
+            type: 'message',
+            sender: state.userName,
+            senderId: state.userId,
+            message,
+            groupId: state.currentGroupId,
+            target: state.currentChatTarget,
+          }));
+          e.target.value = '';
+        }
+      }
+    });
+
+    // Initialize App
+    initializeUser();
     updateRadar();
     updateWarnings();
     setInterval(() => {
       updateRadar();
       updateWarnings();
     }, 60000);
-
-    document.getElementById('toggleRadar').addEventListener('change', e => {
-      e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer);
-    });
-
-    ['toggleStorm', 'toggleTornado', 'toggleMarine'].forEach(id =>
-      document.getElementById(id).addEventListener('change', updateWarnings));
-
-    document.getElementById('toggle-controls').addEventListener('click', () => {
-      document.getElementById('controls').classList.toggle('hidden');
-    });
   </script>
-  <footer style="text-align: center; padding: 20px; background: #1a1a1a;">
-    <p style="color: #ccc; font-size: 14px; margin-top: 8px;">Made by Hayden | RadarHQ</p>
-  </footer>
 </body>
 </html>
