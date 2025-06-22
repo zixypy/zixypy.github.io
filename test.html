@@ -443,7 +443,7 @@
     const friendsLayer = L.layerGroup().addTo(map);
 
     // WebSocket Setup
-    const ws = new WebSocket('ws://prem-eu1.bot-hosting.net:20531');
+    const ws = new WebSocket('wss://api.radarhq.pro');
     localStorage.setItem('userId', state.userId);
 
     // Initialize User
