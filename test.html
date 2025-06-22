@@ -158,15 +158,32 @@
     #chat-input-container {
       padding: 16px;
       border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
     }
 
     #chat-input {
-      width: 100%;
+      flex: 1;
       padding: 10px;
       border: 1px solid var(--border);
       border-radius: 6px;
       font-size: 14px;
       resize: none;
+    }
+
+    #send-button {
+      padding: 10px 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    #send-button:hover {
+      background: #1d4ed8;
     }
 
     #controls-panel {
@@ -321,6 +338,7 @@
       padding: 12px;
       background: var(--background);
       border-radius: 8px;
+      display: none;
     }
 
     #invite-input {
@@ -329,6 +347,7 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       margin-bottom: 8px;
+      font-size: 14px;
     }
 
     #submit-invite {
@@ -339,6 +358,12 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    #submit-invite:hover {
+      background: #1d4ed8;
     }
 
     footer {
@@ -408,8 +433,15 @@
       <div id="chat-messages"></div>
       <div id="chat-input-container">
         <textarea id="chat-input" placeholder="Type a message..." rows="2"></textarea>
+        <button id="send-button" onclick="sendMessage()">Send</button>
       </div>
       <div id="friends-panel">
+        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Weather Alerts</h3>
+        <div id="warning-counts">
+          Severe Thunderstorm Warnings: <span>0</span><br>
+          Tornado Warnings: <span>0</span><br>
+          Special Marine Warnings: <span>0</span>
+        </div>
         <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Friends</h3>
         <div id="friends-list"></div>
         <div id="invite-section" style="display: none;">
@@ -420,7 +452,7 @@
     </div>
   </div>
   <footer>
-    <p>Made by Hayden | RadarHQ &copy; 2025</p>
+    <p>Made by Hayden | RadarHQ © 2025</p>
   </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -542,7 +574,7 @@
           let wind = 'Unknown';
           let hail = 'Unknown';
           const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
-          if (hazardMatch && hazardMatch[1]) {
+          if (hazardSadmatch && hazardMatch[1]) {
             const hazard = hazardMatch[1].toLowerCase();
             const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
             if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
@@ -584,20 +616,10 @@
         });
 
         // Update warning counts in friends panel
-        const friendsPanel = document.getElementById('friends-panel');
-        friendsPanel.innerHTML = `
-          <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Weather Alerts</h3>
-          <div style="margin-bottom: 12px;">
-            Severe Thunderstorm Warnings: <span>${stormCount}</span><br>
-            Tornado Warnings: <span>${tornadoCount}</span><br>
-            Special Marine Warnings: <span>${marineCount}</span>
-          </div>
-          <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Friends</h3>
-          <div id="friends-list"></div>
-          <div id="invite-section" style="display: none;">
-            <input id="invite-input" type="text" placeholder="Enter invite code">
-            <button id="submit-invite" onclick="submitInviteCode()">Join Group</button>
-          </div>
+        document.getElementById('warning-counts').innerHTML = `
+          Severe Thunderstorm Warnings: <span>${stormCount}</span><br>
+          Tornado Warnings: <span>${tornadoCount}</span><br>
+          Special Marine Warnings: <span>${marineCount}</span>
         `;
       } catch (error) {
         console.error('Warnings update failed:', error);
@@ -701,6 +723,25 @@
       }));
     }
 
+    // Send Message
+    function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      if (message && state.currentGroupId) {
+        ws.send(JSON.stringify({
+          type: 'message',
+          sender: state.userName,
+          senderId: state.userId,
+          message,
+          groupId: state.currentGroupId,
+          target: state.currentChatTarget,
+        }));
+        input.value = '';
+      } else if (!state.currentGroupId) {
+        alert('Please join a group before sending messages.');
+      }
+    }
+
     // Generate Invite Code
     function generateInviteCode() {
       ws.send(JSON.stringify({
@@ -712,19 +753,27 @@
 
     // Show Invite Input
     function showInviteInput() {
-      document.getElementById('invite-section').style.display = 'block';
+      const inviteSection = document.getElementById('invite-section');
+      inviteSection.style.display = 'block';
+      document.getElementById('invite-input').focus();
     }
 
     // Submit Invite Code
     function submitInviteCode() {
-      const code = document.getElementById('invite-input').value;
+      const code = document.getElementById('invite-input').value.trim();
+      if (!code) {
+        alert('Please enter a valid invite code.');
+        return;
+      }
       ws.send(JSON.stringify({
         type: 'joinGroup',
         userId: state.userId,
         code,
         sender: state.userName,
       }));
+      document.getElementById('invite-input').value = '';
       document.getElementById('invite-section').style.display = 'none';
+      alert('Invite code submitted! Waiting for server response...');
     }
 
     // Edit Profile
@@ -784,20 +833,9 @@
       document.getElementById('chat-messages').innerHTML = '';
     });
     document.getElementById('chat-input').addEventListener('keypress', e => {
-      if (e.key === 'Enter' && !e.shiftKey && state.currentGroupId) {
+      if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        const message = e.target.value.trim();
-        if (message) {
-          ws.send(JSON.stringify({
-            type: 'message',
-            sender: state.userName,
-            senderId: state.userId,
-            message,
-            groupId: state.currentGroupId,
-            target: state.currentChatTarget,
-          }));
-          e.target.value = '';
-        }
+        sendMessage();
       }
     });
 
