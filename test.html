@@ -16,6 +16,7 @@
       --text-primary: #111827;
       --text-secondary: #6b7280;
       --border: #e5e7eb;
+      --error: #dc2626;
     }
 
     *, *::before, *::after {
@@ -24,15 +25,20 @@
       padding: 0;
     }
 
-    html, body {
+    html {
       height: 100%;
       font-family: 'Inter', sans-serif;
-      background: var(--background);
-      color: var(--text-primary);
-      overflow: hidden;
     }
 
-    body.map-only nav, body.map-only #sidebar, body.map-only #fullscreenButton, body.map-only footer {
+    body {
+      min-height: 100%;
+      background: var(--background);
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.map-only nav, body.map-only #sidebar, body.map-only #fullscreenButton, body.map-only footer, body.map-only .button-group {
       display: none !important;
     }
 
@@ -78,12 +84,13 @@
 
     #app {
       display: flex;
-      height: calc(100vh - 60px);
+      flex: 1;
+      min-height: 0;
     }
 
     #map {
       flex: 1;
-      height: 100%;
+      height: calc(100vh - 120px);
       border-radius: 8px;
       margin: 16px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -98,6 +105,7 @@
       display: flex;
       flex-direction: column;
       z-index: 200;
+      overflow-y: auto;
     }
 
     #chat-header {
@@ -110,91 +118,6 @@
 
     #chat-select {
       flex: 1;
-      padding: 8px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 14px;
-    }
-
-    #chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-      background: var(--background);
-    }
-
-    .chat-message {
-      margin-bottom: 12px;
-      padding: 12px;
-      border-radius: 8px;
-      max-width: 70%;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .chat-message.sent {
-      background: var(--primary);
-      color: white;
-      margin-left: auto;
-    }
-
-    .chat-message.received {
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
-
-    .chat-message .sender {
-      font-weight: 600;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .chat-message .time {
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-
-    #chat-input-container {
-      padding: 16px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 8px;
-    }
-
-    #chat-input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 14px;
-      resize: none;
-    }
-
-    #send-button {
-      padding: 10px 16px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s;
-    }
-
-    #send-button:hover {
-      background: #1d4ed8;
-    }
-
-    #controls-panel {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 1000;
-      background: var(--surface);
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       width: 280px;
     }
 
@@ -295,6 +218,7 @@
       padding: 8px 12px;
       cursor: pointer;
       font-size: 13px;
+      margin-right: 8px;
     }
 
     .full-text {
@@ -331,6 +255,11 @@
       color: white;
       cursor: pointer;
       font-size: 12px;
+      margin-left: 8px;
+    }
+
+    .friend-item button.unfriend {
+      background: var(--error);
     }
 
     #invite-section {
@@ -391,6 +320,10 @@
       font-size: 14px;
       font-weight: 500;
     }
+
+    .action-button:hover {
+      background: #1d4ed8;
+    }
   </style>
 </head>
 <body>
@@ -404,6 +337,8 @@
   <div class="button-group">
     <button class="action-button" id="fullscreenButton" onclick="openFullscreen()">Fullscreen Map</button>
     <button class="action-button" id="generateInviteButton" onclick="generateInviteCode()">Generate Invite</button>
+    <button class="action-button" id="showInviteButton" onclick="showInviteCode()">Show Your Invites</button>
+    <button class="action-button" id="showFriendsButton" onclick="showFriendsPanel()">Show Friends</button>
     <button class="action-button" id="addFriendButton" onclick="showInviteInput()">Add Friend</button>
   </div>
   <div id="app">
@@ -465,6 +400,8 @@
       friends: {},
       currentGroupId: null,
       currentChatTarget: 'group',
+      inviteCode: localStorage.getItem('inviteCode') || null,
+      warnings: [],
     };
 
     // Map Initialization
@@ -502,10 +439,16 @@
           updateChatSelect(data.friends);
           break;
         case 'inviteCode':
+          state.inviteCode = data.code;
+          localStorage.setItem('inviteCode', data.code);
           alert(`Your invite code: ${data.code}`);
           break;
         case 'joined':
           state.currentGroupId = data.groupId;
+          updateFriendsList(data.friends);
+          updateChatSelect(data.friends);
+          break;
+        case 'unfriend':
           updateFriendsList(data.friends);
           updateChatSelect(data.friends);
           break;
@@ -528,6 +471,19 @@
       }
     }
 
+    // Check if Point is in Polygon
+    function isPointInPolygon(point, polygon) {
+      const x = point[0], y = point[1];
+      let inside = false;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i][0], yi = polygon[i][1];
+        const xj = polygon[j][0], yj = polygon[j][1];
+        const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
     // Update Weather Warnings
     async function updateWarnings() {
       const types = {
@@ -545,12 +501,13 @@
         const responses = await Promise.all(
           urls.map(event =>
             fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(event)}`, {
-              headers: { Accept: 'application/geo+json' },
+              headers: { 'User-Agent': 'RadarHQ/1.0', 'Accept': 'application/geo+json' },
             }).then(r => r.json())
           )
         );
 
         alertLayer.clearLayers();
+        state.warnings = [];
         let stormCount = 0, tornadoCount = 0, marineCount = 0;
 
         responses.flatMap(r => r.features || []).forEach(feature => {
@@ -574,7 +531,7 @@
           let wind = 'Unknown';
           let hail = 'Unknown';
           const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
-          if (hazardSadmatch && hazardMatch[1]) {
+          if (hazardMatch && hazardMatch[1]) {
             const hazard = hazardMatch[1].toLowerCase();
             const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
             if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
@@ -609,13 +566,17 @@
             : isMarine ? '#0288d1'
             : '#888';
 
-          alertLayer.addLayer(L.geoJSON(feature, {
-            style: { color: fillColor, weight: 5, fillColor, fillOpacity: 0.5, opacity: 1 },
-            onEachFeature: (f, layer) => layer.bindPopup(popup),
-          }));
+          const coords = feature.geometry?.coordinates;
+          if (coords) {
+            state.warnings.push({ coords, type: p.event, description: p.description });
+            alertLayer.addLayer(L.geoJSON(feature, {
+              style: { color: fillColor, weight: 5, fillColor, fillOpacity: 0.5, opacity: 1 },
+              onEachFeature: (f, layer) => layer.bindPopup(popup),
+            }));
+          }
         });
 
-        // Update warning counts in friends panel
+        // Update warning counts
         document.getElementById('warning-counts').innerHTML = `
           Severe Thunderstorm Warnings: <span>${stormCount}</span><br>
           Tornado Warnings: <span>${tornadoCount}</span><br>
@@ -642,17 +603,38 @@
       }
     }
 
+    // Get Friend Warning Status
+    function getFriendWarningStatus(lat, lng) {
+      const point = [lat, lng];
+      const warnings = state.warnings.filter(warning => {
+        if (!warning.coords) return false;
+        if (warning.coords[0][0].length) {
+          return warning.coords.some(polygon => isPointInPolygon(point, polygon[0]));
+        }
+        return isPointInPolygon(point, warning.coords[0]);
+      });
+      return warnings.length > 0
+        ? warnings.map(w => `<div><strong>${w.type}</strong>: ${w.description.substring(0, 100)}...</div>`).join('')
+        : 'No active warnings';
+    }
+
     // Update Friend Location
     function updateFriendLocation(data) {
       if (!document.getElementById('toggleFriends').checked || !state.friends[data.userId]?.shareLocation) return;
       if (state.friends[data.userId]?.marker) friendsLayer.removeLayer(state.friends[data.userId].marker);
+      const warningStatus = getFriendWarningStatus(data.lat, data.lng);
       const marker = L.circleMarker([data.lat, data.lng], {
         radius: 8,
         fillColor: '#00ff00',
         color: '#00ff00',
         weight: 2,
         fillOpacity: 0.6,
-      }).bindPopup(`<strong>${data.sender}</strong><br>Last updated: ${new Date().toLocaleString()}`);
+      }).bindPopup(`
+        <strong>${data.sender}</strong><br>
+        Last updated: ${new Date().toLocaleString()}<br>
+        <strong>Weather Status:</strong><br>
+        ${warningStatus}
+      `);
       state.friends[data.userId].marker = marker;
       friendsLayer.addLayer(marker);
     }
@@ -676,8 +658,9 @@
             ${friend.sender}
             <div>
               <button onclick="toggleLocationShare('${friend.userId}', ${!friend.shareLocation})">
-                ${friend.shareLocation ? 'Disable' : 'Enable'} Location
+                ${friend.shareLocation ? 'Unshare' : 'Share'} Location
               </button>
+              <button class="unfriend" onclick="unfriend('${friend.userId}')">Unfriend</button>
             </div>`;
           friendsListDiv.appendChild(friendDiv);
         }
@@ -708,6 +691,18 @@
         groupId: state.currentGroupId,
       }));
       updateFriendsList(Object.values(state.friends));
+    }
+
+    // Unfriend
+    function unfriend(friendId) {
+      if (confirm(`Are you sure you want to unfriend ${state.friends[friendId].sender}?`)) {
+        ws.send(JSON.stringify({
+          type: 'unfriend',
+          userId: state.userId,
+          friendId,
+          groupId: state.currentGroupId,
+        }));
+      }
     }
 
     // Share Weather Warning
@@ -744,11 +739,29 @@
 
     // Generate Invite Code
     function generateInviteCode() {
+      if (state.inviteCode) {
+        alert('You have already generated an invite code.');
+        return;
+      }
       ws.send(JSON.stringify({
         type: 'generateInvite',
         userId: state.userId,
         groupId: state.currentGroupId || Math.random().toString(36).slice(2),
       }));
+    }
+
+    // Show Invite Code
+    function showInviteCode() {
+      if (state.inviteCode) {
+        alert(`Your invite code: ${state.inviteCode}`);
+      } else {
+        alert('You have not generated an invite code yet.');
+      }
+    }
+
+    // Show Friends Panel
+    function showFriendsPanel() {
+      document.getElementById('friends-panel').scrollIntoView({ behavior: 'smooth' });
     }
 
     // Show Invite Input
