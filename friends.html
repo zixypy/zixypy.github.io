@@ -617,6 +617,7 @@
     }
 
     function generateInviteCode() {
+      console.log('Generate Invite button clicked, token:', state.token);
       if (!state.currentGroupId) {
         state.currentGroupId = Math.random().toString(36).slice(2);
         saveState();
@@ -625,26 +626,33 @@
         alert('Please log in to generate an invite code.');
         return;
       }
-      ws.send(JSON.stringify({
+      const message = {
         type: 'generateInvite',
         userId: state.userId,
         groupId: state.currentGroupId,
         regenerate: false,
-      }));
+        token: state.token // Add token to the message
+      };
+      console.log('Sending WebSocket message:', message);
+      ws.send(JSON.stringify(message));
     }
-
+    
     function regenerateInviteCode() {
+      console.log('Regenerate Invite button clicked, token:', state.token);
       if (!state.currentGroupId) {
         alert('No group exists. Please generate an invite first.');
         return;
       }
       if (confirm('Are you sure you want to regenerate the invite code? The current code will be invalidated.')) {
-        ws.send(JSON.stringify({
+        const message = {
           type: 'generateInvite',
           userId: state.userId,
           groupId: state.currentGroupId,
           regenerate: true,
-        }));
+          token: state.token // Add token to the message
+        };
+        console.log('Sending WebSocket message:', message);
+        ws.send(JSON.stringify(message));
       }
     }
 
