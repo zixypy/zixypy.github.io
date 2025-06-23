@@ -1039,9 +1039,9 @@
       updateRadar();
       updateWarnings();
     }, 60000);
-    // Periodic sync with server
+    // Periodic sync with server only if in a group with friends
     setInterval(() => {
-      if (state.currentGroupId) {
+      if (state.currentGroupId && Object.keys(state.friends).length > 0) {
         ws.send(JSON.stringify({
           type: 'syncFriends',
           userId: state.userId,
