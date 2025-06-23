@@ -620,6 +620,10 @@
         state.currentGroupId = Math.random().toString(36).slice(2);
         saveState();
       }
+      if (!state.token) {
+        alert('Please log in to generate an invite code.');
+        return;
+      }
       ws.send(JSON.stringify({
         type: 'generateInvite',
         userId: state.userId,
