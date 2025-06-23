@@ -508,6 +508,7 @@
               lat: position.coords.latitude,
               lng: position.coords.longitude,
               groupId: state.currentGroupId,
+              token: state.token
             }));
           },
           (error) => console.error('Geolocation error:', error),
