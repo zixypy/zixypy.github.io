@@ -80,11 +80,79 @@
       background: rgba(255,255,255,0.1);
     }
 
+    #auth-container {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #auth-container h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    #auth-container input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    #auth-container button {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    #auth-container button:hover {
+      background: #1d4ed8;
+    }
+
+    #auth-toggle {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    #auth-toggle a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    #auth-toggle a:hover {
+      text-decoration: underline;
+    }
+
+    #auth-error {
+      color: var(--error);
+      font-size: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+      display: none;
+    }
+
     #app {
       flex: 1;
       display: flex;
       flex-direction: column;
       padding: 16px;
+      display: none;
     }
 
     #sidebar {
@@ -283,11 +351,22 @@
     <img src="https://files.catbox.moe/nnvzas.png" alt="RadarHQ Logo">
     <h1 style="font-size: 20px; font-weight: 600;">RadarHQ</h1>
     <a href="index.html">Weather Map</a>
-    <div class="user-profile" onclick="editProfile()">
+    <div class="user-profile" id="user-profile" onclick="editProfile()">
       <span id="user-name">User</span>
     </div>
   </nav>
-  <div class="button-group">
+  <div id="auth-container">
+    <h2 id="auth-title">Sign Up</h2>
+    <div id="auth-error"></div>
+    <input type="text" id="first-name" placeholder="First Name" style="display: none;">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="auth-button" onclick="handleAuth()">Sign Up</button>
+    <div id="auth-toggle">
+      Already have an account? <a href="#" onclick="toggleAuthMode()">Login</a>
+    </div>
+  </div>
+  <div class="button-group" style="display: none;">
     <button class="action-button" id="generateInviteButton" onclick="generateInviteCode()">Generate Invite</button>
     <button class="action-button" id="regenerateInviteButton" onclick="regenerateInviteCode()">Regenerate Invite</button>
     <button class="action-button" id="showInviteButton" onclick="showInviteCode()">Show Your Invites</button>
@@ -323,35 +402,26 @@
   </footer>
   <script>
     const state = {
-      userId: localStorage.getItem('userId') || Math.random().toString(36).slice(2),
+      userId: localStorage.getItem('userId') || null,
       userName: localStorage.getItem('userName') || null,
       friends: JSON.parse(localStorage.getItem('friends')) || {},
       currentGroupId: localStorage.getItem('currentGroupId') || null,
       currentChatTarget: 'group',
       inviteCode: localStorage.getItem('inviteCode') || null,
+      token: localStorage.getItem('token') || null,
+      authMode: 'signup',
     };
 
     const ws = new WebSocket('wss://api.radarhq.pro');
-    localStorage.setItem('userId', state.userId);
 
-    function saveState() {
-      localStorage.setItem('friends', JSON.stringify(state.friends));
-      localStorage.setItem('currentGroupId', state.currentGroupId);
-      localStorage.setItem('inviteCode', state.inviteCode);
-      localStorage.setItem('userName', state.userName);
-    }
-
-    function initializeUser() {
-      if (!state.userName) {
-        state.userName = prompt('Enter your name') || `Anonymous${Math.random().toString(36).slice(2, 6)}`;
-        localStorage.setItem('userName', state.userName);
+    ws.onopen = () => {
+      if (state.token) {
+        ws.send(JSON.stringify({
+          type: 'authenticate',
+          token: state.token,
+        }));
       }
-      document.getElementById('user-name').textContent = state.userName;
-      if (!state.currentGroupId) {
-        state.currentGroupId = Math.random().toString(36).slice(2);
-        saveState();
-      }
-    }
+    };
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -389,8 +459,81 @@
         case 'error':
           alert(data.message);
           break;
+        case 'auth':
+          if (data.success) {
+            state.userId = data.userId;
+            state.userName = data.userName;
+            state.token = data.token;
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('userName', data.userName);
+            localStorage.setItem('token', data.token);
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('app').style.display = 'flex';
+            document.querySelector('.button-group').style.display = 'flex';
+            document.getElementById('user-name').textContent = state.userName;
+            document.getElementById('user-profile').style.display = 'flex';
+            updateLocation();
+          } else {
+            document.getElementById('auth-error').textContent = data.message;
+            document.getElementById('auth-error').style.display = 'block';
+          }
+          break;
       }
     };
+
+    function saveState() {
+      localStorage.setItem('friends', JSON.stringify(state.friends));
+      localStorage.setItem('currentGroupId', state.currentGroupId);
+      localStorage.setItem('inviteCode', state.inviteCode);
+      localStorage.setItem('userName', state.userName);
+      localStorage.setItem('token', state.token);
+    }
+
+    function toggleAuthMode() {
+      state.authMode = state.authMode === 'signup' ? 'login' : 'signup';
+      document.getElementById('auth-title').textContent = state.authMode === 'signup' ? 'Sign Up' : 'Login';
+      document.getElementById('first-name').style.display = state.authMode === 'signup' ? 'block' : 'none';
+      document.getElementById('auth-button').textContent = state.authMode === 'signup' ? 'Sign Up' : 'Login';
+      document.getElementById('auth-toggle').innerHTML = 
+        state.authMode === 'signup' 
+          ? 'Already have an account? <a href="#" onclick="toggleAuthMode()">Login</a>'
+          : 'Need an account? <a href="#" onclick="toggleAuthMode()">Sign Up</a>';
+      document.getElementById('auth-error').style.display = 'none';
+    }
+
+    function handleAuth() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const firstName = state.authMode === 'signup' ? document.getElementById('first-name').value.trim() : '';
+      
+      const validDomains = ['gmail.com', 'outlook.com', 'hotmail.com', 'live.com'];
+      const emailDomain = email.split('@')[1];
+      
+      if (state.authMode === 'signup' && (!firstName || firstName.length < 2)) {
+        document.getElementById('auth-error').textContent = 'Please enter a valid first name';
+        document.getElementById('auth-error').style.display = 'block';
+        return;
+      }
+      
+      if (!email || !validDomains.includes(emailDomain)) {
+        document.getElementById('auth-error').textContent = 'Please use a valid Gmail, Outlook, Hotmail, or Live email address';
+        document.getElementById('auth-error').style.display = 'block';
+        return;
+      }
+      
+      if (!password || password.length < 6) {
+        document.getElementById('auth-error').textContent = 'Password must be at least 6 characters';
+        document.getElementById('auth-error').style.display = 'block';
+        return;
+      }
+
+      ws.send(JSON.stringify({
+        type: state.authMode,
+        email,
+        password,
+        firstName: state.authMode === 'signup' ? firstName : undefined,
+      }));
+    }
 
     function handleMessage(data) {
       const isPrivate = data.target && data.target !== 'group';
@@ -575,6 +718,25 @@
       }
     }
 
+    function updateLocation() {
+      if (navigator.geolocation && state.currentGroupId && state.token) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            ws.send(JSON.stringify({
+              type: 'location',
+              userId: state.userId,
+              sender: state.userName,
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              groupId: state.currentGroupId,
+            }));
+          },
+          (error) => console.error('Geolocation error:', error),
+          { enableHighAccuracy: true }
+        );
+      }
+    }
+
     document.getElementById('chat-select').addEventListener('change', e => {
       state.currentChatTarget = e.target.value;
       document.getElementById('chat-messages').innerHTML = '';
@@ -587,16 +749,20 @@
       }
     });
 
-    initializeUser();
-    setInterval(() => {
-      if (state.currentGroupId && Object.keys(state.friends).length > 0) {
-        ws.send(JSON.stringify({
-          type: 'syncFriends',
-          userId: state.userId,
-          groupId: state.currentGroupId,
-        }));
+    document.getElementById('password').addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        handleAuth();
       }
-    }, 10000);
+    });
+
+    if (state.token) {
+      document.getElementById('auth-container').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+      document.querySelector('.button-group').style.display = 'flex';
+      document.getElementById('user-name').textContent = state.userName;
+      document.getElementById('user-profile').style.display = 'flex';
+      updateLocation();
+    }
   </script>
 </body>
 </html>
