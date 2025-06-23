@@ -422,6 +422,7 @@
   <div class="button-group">
     <button class="action-button" id="fullscreenButton" onclick="openFullscreen()">Fullscreen Map</button>
     <button class="action-button" id="generateInviteButton" onclick="generateInviteCode()">Generate Invite</button>
+    <button class="action-button" id="regenerateInviteButton" onclick="regenerateInviteCode()">Regenerate Invite</button>
     <button class="action-button" id="showInviteButton" onclick="showInviteCode()">Show Your Invites</button>
     <button class="action-button" id="showFriendsButton" onclick="showFriendsPanel()">Show Friends</button>
     <button class="action-button" id="addFriendButton" onclick="showInviteInput()">Add Friend</button>
@@ -887,22 +888,33 @@
       }
     }
     
-    // Generate Invite Code
-    function generateInviteCode() {
-      if (!state.currentGroupId) {
-        state.currentGroupId = Math.random().toString(36).slice(2);
-        saveState();
-      }
-      if (state.inviteCode) {
-        alert(`Your invite code: ${state.inviteCode}`);
-        return;
-      }
+  function generateInviteCode() {
+    if (!state.currentGroupId) {
+      state.currentGroupId = Math.random().toString(36).slice(2);
+      saveState();
+    }
+    ws.send(JSON.stringify({
+      type: 'generateInvite',
+      userId: state.userId,
+      groupId: state.currentGroupId,
+      regenerate: false,
+    }));
+  }
+  
+  function regenerateInviteCode() {
+    if (!state.currentGroupId) {
+      alert('No group exists. Please generate an invite first.');
+      return;
+    }
+    if (confirm('Are you sure you want to regenerate the invite code? The current code will be invalidated.')) {
       ws.send(JSON.stringify({
         type: 'generateInvite',
         userId: state.userId,
         groupId: state.currentGroupId,
+        regenerate: true,
       }));
     }
+  }
     
     // Show Invite Code
     function showInviteCode() {
