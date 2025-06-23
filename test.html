@@ -477,7 +477,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // State Management
     const state = {
       userId: localStorage.getItem('userId') || Math.random().toString(36).slice(2),
       userName: localStorage.getItem('userName') || null,
@@ -488,18 +487,18 @@
       inviteCode: localStorage.getItem('inviteCode') || null,
       warnings: [],
     };
-
+    
     // Map Initialization
     const map = L.map('map').setView([38, -97], 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
     const radarLayer = L.layerGroup().addTo(map);
     const alertLayer = L.layerGroup().addTo(map);
     const friendsLayer = L.layerGroup().addTo(map);
-
+    
     // WebSocket Setup
     const ws = new WebSocket('wss://api.radarhq.pro');
     localStorage.setItem('userId', state.userId);
-
+    
     // Save State to Local Storage
     function saveState() {
       localStorage.setItem('friends', JSON.stringify(state.friends));
@@ -507,7 +506,7 @@
       localStorage.setItem('inviteCode', state.inviteCode);
       localStorage.setItem('userName', state.userName);
     }
-
+    
     // Initialize User
     function initializeUser() {
       if (!state.userName) {
@@ -515,8 +514,13 @@
         localStorage.setItem('userName', state.userName);
       }
       document.getElementById('user-name').textContent = state.userName;
+      // Initialize group if none exists
+      if (!state.currentGroupId) {
+        state.currentGroupId = Math.random().toString(36).slice(2);
+        saveState();
+      }
     }
-
+    
     // WebSocket Message Handler
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -540,13 +544,18 @@
           break;
         case 'joined':
           state.currentGroupId = data.groupId;
+          state.friends = data.friends.reduce((acc, friend) => ({
+            ...acc,
+            [friend.userId]: { ...friend, marker: null },
+          }), {});
           updateFriendsList(data.friends);
           updateChatSelect(data.friends);
           saveState();
           break;
         case 'unfriend':
-          updateFriendsList(data.friends);
-          updateChatSelect(data.friends);
+          delete state.friends[friendId];
+          updateFriendsList(Object.values(state.friends));
+          updateChatSelect(Object.values(state.friends));
           saveState();
           break;
         case 'error':
@@ -554,7 +563,7 @@
           break;
       }
     };
-
+    
     // Update Radar Data
     async function updateRadar() {
       try {
@@ -567,7 +576,7 @@
         console.error('Radar update failed:', error);
       }
     }
-
+    
     // Check if Point is in Polygon
     function isPointInPolygon(point, polygon) {
       const x = point[0], y = point[1];
@@ -580,7 +589,7 @@
       }
       return inside;
     }
-
+    
     // Update Weather Warnings
     async function updateWarnings() {
       const types = {
@@ -588,12 +597,12 @@
         tornado: document.getElementById('toggleTornado').checked,
         marine: document.getElementById('toggleMarine').checked,
       };
-
+    
       const urls = [];
       if (types.storm) urls.push('Severe Thunderstorm Warning');
       if (types.tornado) urls.push('Tornado Warning');
       if (types.marine) urls.push('Special Marine Warning');
-
+    
       try {
         const responses = await Promise.all(
           urls.map(event =>
@@ -602,22 +611,22 @@
             }).then(r => r.json())
           )
         );
-
+    
         alertLayer.clearLayers();
         state.warnings = [];
         let stormCount = 0, tornadoCount = 0, marineCount = 0;
-
+    
         responses.flatMap(r => r.features || []).forEach(feature => {
           const p = feature.properties;
           const id = `id-${Math.random().toString(36).slice(2)}`;
           const isTornado = p.event.includes('Tornado');
           const isMarine = p.event.includes('Marine');
           const isStorm = p.event.includes('Severe Thunderstorm');
-
+    
           if (isStorm) stormCount++;
           if (isTornado) tornadoCount++;
           if (isMarine) marineCount++;
-
+    
           let possible = isStorm ? 'Tornado not possible' : 'N/A';
           if (isStorm && p.description?.toLowerCase().includes('possible tornado')) possible = 'Tornado possible!';
           let strength = isTornado ? 'Rotation, not confirmed yet' : 'N/A';
@@ -639,7 +648,7 @@
               hail = size;
             }
           }
-
+    
           const headerClass = isTornado && strength === 'Tornado Confirmed!' ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
           const popup = `
             <div class="popup-header ${headerClass}">${p.event}</div>
@@ -656,13 +665,13 @@
               <button class="warning-button" onclick="shareWarning('${id}', '${p.event}', '${p.areaDesc}', '${p.description}')">Share Warning</button>
               <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g, '<br>')}</div>
             </div>`;
-
+    
           const fillColor = isTornado
             ? strength === 'Tornado Confirmed!' ? '#6a1b9a' : '#c62828'
             : isStorm ? '#ff9900'
             : isMarine ? '#0288d1'
             : '#888';
-
+    
           const coords = feature.geometry?.coordinates;
           if (coords) {
             state.warnings.push({ coords, type: p.event, description: p.description });
@@ -672,7 +681,7 @@
             }));
           }
         });
-
+    
         // Update warning counts
         document.getElementById('warning-counts').innerHTML = `
           Severe Thunderstorm Warnings: <span>${stormCount}</span><br>
@@ -683,26 +692,26 @@
         console.error('Warnings update failed:', error);
       }
     }
-
+    
     // Handle Incoming Messages
     function handleMessage(data) {
       const isPrivate = data.target && data.target !== 'group';
       if ((isPrivate && (data.senderId === state.currentChatTarget || data.target === state.userId)) ||
-          (!isPrivate && state.currentChatTarget === 'group')) {
+          (!isPrivate && state.currentChatTarget === 'group' && data.groupId === state.currentGroupId)) {
         const msgDiv = document.createElement('div');
         msgDiv.className = `chat-message ${data.senderId === state.userId ? 'sent' : 'received'}`;
         msgDiv.innerHTML = `
           <div class="sender">${data.sender}</div>
           <div>${data.message}</div>
-          <div class="time">${new Date().toLocaleTimeString()}</div>`;
+          <div class="time">${new Date(data.timestamp || Date.now()).toLocaleTimeString()}</div>`;
         document.getElementById('chat-messages').appendChild(msgDiv);
         document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
       }
     }
-
+    
     // Get Friend Warning Status
     function getFriendWarningStatus(lat, lng) {
-      const point = [lat, lng];
+      const point = [lng, lat]; // Note: GeoJSON uses [lng, lat]
       const warnings = state.warnings.filter(warning => {
         if (!warning.coords) return false;
         if (warning.coords[0][0].length) {
@@ -714,7 +723,7 @@
         ? warnings.map(w => `<div><strong>${w.type}</strong>: ${w.description.substring(0, 100)}...</div>`).join('')
         : 'No active warnings';
     }
-
+    
     // Update Friend Location
     function updateFriendLocation(data) {
       if (!document.getElementById('toggleFriends').checked || !state.friends[data.userId]?.shareLocation) return;
@@ -732,17 +741,24 @@
         <strong>Weather Status:</strong><br>
         ${warningStatus}
       `);
-      state.friends[data.userId].marker = marker;
+      state.friends[data.userId] = {
+        ...state.friends[data.userId],
+        marker,
+        lat: data.lat,
+        lng: data.lng,
+      };
       friendsLayer.addLayer(marker);
     }
-
+    
     // Update Friends List
     function updateFriendsList(friendsData) {
+      friendsLayer.clearLayers();
       state.friends = friendsData.reduce((acc, friend) => ({
         ...acc,
         [friend.userId]: {
           ...friend,
           shareLocation: friend.userId === state.userId ? state.locationEnabled : friend.shareLocation,
+          marker: null,
         },
       }), {});
       const friendsListDiv = document.getElementById('friends-list');
@@ -760,11 +776,28 @@
               <button class="unfriend" onclick="unfriend('${friend.userId}')">Unfriend</button>
             </div>`;
           friendsListDiv.appendChild(friendDiv);
+          // Restore friend marker if location exists
+          if (friend.shareLocation && friend.lat && friend.lng) {
+            const marker = L.circleMarker([friend.lat, friend.lng], {
+              radius: 8,
+              fillColor: '#00ff00',
+              color: '#00ff00',
+              weight: 2,
+              fillOpacity: 0.6,
+            }).bindPopup(`
+              <strong>${friend.sender}</strong><br>
+              Last updated: ${new Date().toLocaleString()}<br>
+              <strong>Weather Status:</strong><br>
+              ${getFriendWarningStatus(friend.lat, friend.lng)}
+            `);
+            friend.marker = marker;
+            friendsLayer.addLayer(marker);
+          }
         }
       });
       saveState();
     }
-
+    
     // Update Chat Select Options
     function updateChatSelect(friends) {
       const select = document.getElementById('chat-select');
@@ -778,7 +811,7 @@
         }
       });
     }
-
+    
     // Toggle Location Sharing
     function toggleLocationShare(friendId, enable) {
       state.friends[friendId].shareLocation = enable;
@@ -790,7 +823,7 @@
       }));
       updateFriendsList(Object.values(state.friends));
     }
-
+    
     // Unfriend
     function unfriend(friendId) {
       if (confirm(`Are you sure you want to unfriend ${state.friends[friendId].sender}?`)) {
@@ -800,9 +833,15 @@
           friendId,
           groupId: state.currentGroupId,
         }));
+        if (state.friends[friendId]?.marker) {
+          friendsLayer.removeLayer(state.friends[friendId].marker);
+        }
+        delete state.friends[friendId];
+        updateFriendsList(Object.values(state.friends));
+        updateChatSelect(Object.values(state.friends));
       }
     }
-
+    
     // Share Weather Warning
     function shareWarning(id, event, area, description) {
       const message = `⚠️ ${event} in ${area}\n${description.substring(0, 200)}...`;
@@ -815,7 +854,7 @@
         target: state.currentChatTarget,
       }));
     }
-
+    
     // Send Message
     function sendMessage() {
       const input = document.getElementById('chat-input');
@@ -828,47 +867,52 @@
           message,
           groupId: state.currentGroupId,
           target: state.currentChatTarget,
+          timestamp: Date.now(),
         }));
         input.value = '';
       } else if (!state.currentGroupId) {
         alert('Please join a group before sending messages.');
       }
     }
-
+    
     // Generate Invite Code
     function generateInviteCode() {
+      if (!state.currentGroupId) {
+        state.currentGroupId = Math.random().toString(36).slice(2);
+        saveState();
+      }
       if (state.inviteCode) {
-        alert('You have already generated an invite code.');
+        alert(`Your invite code: ${state.inviteCode}`);
         return;
       }
       ws.send(JSON.stringify({
         type: 'generateInvite',
         userId: state.userId,
-        groupId: state.currentGroupId || Math.random().toString(36).slice(2),
+        groupId: state.currentGroupId,
       }));
     }
-
+    
     // Show Invite Code
     function showInviteCode() {
       if (state.inviteCode) {
         alert(`Your invite code: ${state.inviteCode}`);
       } else {
-        alert('You have not generated an invite code yet.');
+        alert('You have not generated an invite code yet. Click "Generate Invite" first.');
       }
     }
-
+    
     // Show Friends Panel
     function showFriendsPanel() {
       document.getElementById('friends-panel').scrollIntoView({ behavior: 'smooth' });
     }
-
+    
     // Show Invite Input
     function showInviteInput() {
       const inviteSection = document.getElementById('invite-section');
       inviteSection.style.display = 'block';
       document.getElementById('invite-input').focus();
     }
-
+    
     // Submit Invite Code
     function submitInviteCode() {
       const code = document.getElementById('invite-input').value.trim();
@@ -884,9 +928,8 @@
       }));
       document.getElementById('invite-input').value = '';
       document.getElementById('invite-section').style.display = 'none';
-      alert('Invite code submitted! Waiting for server response...');
     }
-
+    
     // Edit Profile
     function editProfile() {
       const newName = prompt('Enter new name', state.userName);
@@ -894,9 +937,16 @@
         state.userName = newName;
         localStorage.setItem('userName', newName);
         document.getElementById('user-name').textContent = newName;
+        // Update friends list with new name
+        ws.send(JSON.stringify({
+          type: 'updateFriend',
+          userId: state.userId,
+          sender: state.userName,
+          groupId: state.currentGroupId,
+        }));
       }
     }
-
+    
     // Update User Location
     function updateLocation() {
       if (!state.locationEnabled || !state.currentGroupId) return;
@@ -910,28 +960,59 @@
             lng: pos.coords.longitude,
             groupId: state.currentGroupId,
           }));
+          // Update own marker
+          if (state.friends[state.userId]?.marker) {
+            friendsLayer.removeLayer(state.friends[state.userId].marker);
+          }
+          const warningStatus = getFriendWarningStatus(pos.coords.latitude, pos.coords.longitude);
+          const marker = L.circleMarker([pos.coords.latitude, pos.coords.longitude], {
+            radius: 8,
+            fillColor: '#00ff00',
+            color: '#00ff00',
+            weight: 2,
+            fillOpacity: 0.6,
+          }).bindPopup(`
+            <strong>${state.userName}</strong><br>
+            Last updated: ${new Date().toLocaleString()}<br>
+            <strong>Weather Status:</strong><br>
+            ${warningStatus}
+          `);
+          state.friends[state.userId] = {
+            ...state.friends[state.userId],
+            marker,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            shareLocation: true,
+            sender: state.userName,
+          };
+          friendsLayer.addLayer(marker);
         },
         err => console.error('Location error:', err),
         { enableHighAccuracy: true }
       );
     }
-
+    
     // Open Fullscreen Map
     function openFullscreen() {
       document.body.classList.toggle('map-only');
     }
-
+    
     // Initialize Location
     navigator.geolocation.getCurrentPosition(
       () => {
         state.locationEnabled = true;
-        setInterval(updateLocation, 30000);
+        state.friends[state.userId] = {
+          userId: state.userId,
+          sender: state.userName,
+          shareLocation: true,
+        };
         updateLocation();
+        setInterval(updateLocation, 10000); // Update every 10 seconds
       },
       () => alert('Location access denied. Enable it in browser settings.'),
       { enableHighAccuracy: true }
     );
-
+    
     // Event Listeners
     document.getElementById('toggleRadar').addEventListener('change', e =>
       e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer));
@@ -949,7 +1030,7 @@
         sendMessage();
       }
     });
-
+    
     // Initialize App
     initializeUser();
     updateRadar();
@@ -958,10 +1039,16 @@
       updateRadar();
       updateWarnings();
     }, 60000);
+    // Periodic sync with server
     setInterval(() => {
-      updateFriendLocation();
-      updateFriendsList();
-    }, 15000);
+      if (state.currentGroupId) {
+        ws.send(JSON.stringify({
+          type: 'syncFriends',
+          userId: state.userId,
+          groupId: state.currentGroupId,
+        }));
+      }
+    }, 10000);
   </script>
 </body>
 </html>
