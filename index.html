@@ -358,10 +358,13 @@
     };
 
     function updateFriendMarkers() {
+      console.log('Friends:', state.friends); // Debug friend data
       friendsLayer.clearLayers();
       if (document.getElementById('toggleFriends').checked) {
         Object.values(state.friends).forEach(friend => {
+          console.log('Processing friend:', friend); // Debug each friend
           if (friend.userId !== state.userId && friend.shareLocation && friend.lat && friend.lng) {
+            console.log('Adding marker for:', friend.sender, friend.lat, friend.lng); // Debug marker addition
             const marker = L.circleMarker([friend.lat, friend.lng], {
               radius: 8,
               fillColor: '#2563eb',
