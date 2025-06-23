@@ -724,30 +724,42 @@
         : 'No active warnings';
     }
     
-    // Update Friend Location
     function updateFriendLocation(data) {
       if (!document.getElementById('toggleFriends').checked || !state.friends[data.userId]?.shareLocation) return;
-      if (state.friends[data.userId]?.marker) friendsLayer.removeLayer(state.friends[data.userId].marker);
+      const friend = state.friends[data.userId];
       const warningStatus = getFriendWarningStatus(data.lat, data.lng);
-      const marker = L.circleMarker([data.lat, data.lng], {
-        radius: 8,
-        fillColor: '#00ff00',
-        color: '#00ff00',
-        weight: 2,
-        fillOpacity: 0.6,
-      }).bindPopup(`
-        <strong>${data.sender}</strong><br>
-        Last updated: ${new Date().toLocaleString()}<br>
-        <strong>Weather Status:</strong><br>
-        ${warningStatus}
-      `);
+      
+      if (friend.marker) {
+        friend.marker.setLatLng([data.lat, data.lng]);
+        friend.marker.setPopupContent(`
+          <strong>${data.sender}</strong><br>
+          Last updated: ${new Date().toLocaleString()}<br>
+          <strong>Weather Status:</strong><br>
+          ${warningStatus}
+        `);
+      } else {
+        const marker = L.circleMarker([data.lat, data.lng], {
+          radius: 8,
+          fillColor: '#00ff00',
+          color: '#00ff00',
+          weight: 2,
+          fillOpacity: 0.6,
+        }).bindPopup(`
+          <strong>${data.sender}</strong><br>
+          Last updated: ${new Date().toLocaleString()}<br>
+          <strong>Weather Status:</strong><br>
+          ${warningStatus}
+        `);
+        friend.marker = marker;
+        friendsLayer.addLayer(marker);
+      }
+      
       state.friends[data.userId] = {
-        ...state.friends[data.userId],
-        marker,
+        ...friend,
         lat: data.lat,
         lng: data.lng,
+        sender: data.sender,
       };
-      friendsLayer.addLayer(marker);
     }
     
     // Update Friends List
