@@ -246,6 +246,13 @@
       color: #ccc;
       font-size: 14px;
     }
+
+    .friend-marker {
+      background: #2563eb;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    }
   </style>
 </head>
 <body>
@@ -263,12 +270,14 @@
       <label class="control-label"><input type="checkbox" id="toggleStorm" checked> Severe Thunderstorm Warning</label>
       <label class="control-label"><input type="checkbox" id="toggleTornado" checked> Tornado Warning</label>
       <label class="control-label"><input type="checkbox" id="toggleMarine" checked> Special Marine Warning</label>
+      <label class="control-label"><input type="checkbox" id="toggleFriends" checked> Friend Locations</label>
     </div>
     <div id="legend">
       <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
       <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
       <div class="legend-item"><span class="legend-color" style="background: #ff9900"></span>Severe Thunderstorm Warning</div>
       <div class="legend-item"><span class="legend-color" style="background: #0288d1"></span>Special Marine Warning</div>
+      <div class="legend-item"><span class="legend-color" style="background: #2563eb"></span>Friend Location</div>
     </div>
   </div>
   <div id="infoPanel">
@@ -289,6 +298,80 @@
 
     const radarLayer = L.layerGroup().addTo(map);
     const alertLayer = L.layerGroup().addTo(map);
+    const friendsLayer = L.layerGroup().addTo(map);
+
+    const state = {
+      userId: localStorage.getItem('userId') || null,
+      userName: localStorage.getItem('userName') || null,
+      currentGroupId: localStorage.getItem('currentGroupId') || null,
+      friends: JSON.parse(localStorage.getItem('friends')) || {},
+      token: localStorage.getItem('token') || null,
+    };
+
+    const ws = new WebSocket('wss://api.radarhq.pro');
+
+    ws.onopen = () => {
+      if (state.token) {
+        ws.send(JSON.stringify({
+          type: 'authenticate',
+          token: state.token,
+        }));
+      }
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      switch (data.type) {
+        case 'location':
+          if (data.groupId === state.currentGroupId && state.friends[data.userId]) {
+            state.friends[data.userId].lat = data.lat;
+            state.friends[data.userId].lng = data.lng;
+            updateFriendMarkers();
+          }
+          break;
+        case 'friends':
+          state.friends = data.friends.reduce((acc, friend) => ({
+            ...acc,
+            [friend.userId]: { ...friend, marker: null },
+          }), {});
+          updateFriendMarkers();
+          localStorage.setItem('friends', JSON.stringify(state.friends));
+          break;
+        case 'auth':
+          if (data.success) {
+            state.userId = data.userId;
+            state.userName = data.userName;
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('userName', data.userName);
+            localStorage.setItem('token', data.token);
+          } else {
+            localStorage.removeItem('token');
+            state.token = null;
+            window.location.href = 'friends.html';
+          }
+          break;
+      }
+    };
+
+    function updateFriendMarkers() {
+      friendsLayer.clearLayers();
+      if (document.getElementById('toggleFriends').checked) {
+        Object.values(state.friends).forEach(friend => {
+          if (friend.userId !== state.userId && friend.shareLocation && friend.lat && friend.lng) {
+            const marker = L.circleMarker([friend.lat, friend.lng], {
+              radius: 8,
+              fillColor: '#2563eb',
+              color: '#fff',
+              weight: 2,
+              fillOpacity: 0.8,
+              className: 'friend-marker'
+            }).bindPopup(`${friend.sender}'s Location`);
+            friendsLayer.addLayer(marker);
+            state.friends[friend.userId].marker = marker;
+          }
+        });
+      }
+    }
 
     async function updateRadar() {
       try {
@@ -410,16 +493,38 @@
       document.body.classList.toggle('map-only');
     }
 
+    function updateLocation() {
+      if (navigator.geolocation && state.currentGroupId && state.token) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            ws.send(JSON.stringify({
+              type: 'location',
+              userId: state.userId,
+              sender: state.userName,
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+              groupId: state.currentGroupId,
+            }));
+          },
+          (error) => console.error('Geolocation error:', error),
+          { enableHighAccuracy: true }
+        );
+      }
+    }
+
     updateRadar();
     updateWarnings();
     setInterval(() => {
       updateRadar();
       updateWarnings();
+      updateLocation();
     }, 60000);
 
     document.getElementById('toggleRadar').addEventListener('change', e => {
       e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer);
     });
+
+    document.getElementById('toggleFriends').addEventListener('change', updateFriendMarkers);
 
     ['toggleStorm', 'toggleTornado', 'toggleMarine'].forEach(id =>
       document.getElementById(id).addEventListener('change', updateWarnings));
@@ -427,6 +532,12 @@
     document.getElementById('toggle-controls').addEventListener('click', () => {
       document.getElementById('controls').classList.toggle('hidden');
     });
+
+    if (state.token) {
+      updateLocation();
+    } else {
+      window.location.href = 'friends.html';
+    }
   </script>
 </body>
 </html>
