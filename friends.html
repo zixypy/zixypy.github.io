@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>RadarHQ</title>
+  <title>RadarHQ - Friends & Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="icon" href="https://files.catbox.moe/nnvzas.png" type="image/png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -38,17 +37,6 @@
       flex-direction: column;
     }
 
-    body.map-only nav, body.map-only #sidebar, body.map-only #fullscreenButton, body.map-only footer, body.map-only .button-group {
-      display: none !important;
-    }
-
-    body.map-only #map {
-      margin: 0 !important;
-      height: 100vh !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-    }
-
     nav {
       background: var(--secondary);
       color: white;
@@ -68,6 +56,16 @@
       object-fit: cover;
     }
 
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
     nav .user-profile {
       margin-left: auto;
       display: flex;
@@ -83,28 +81,19 @@
     }
 
     #app {
+      flex: 1;
       display: flex;
-      flex: 1;
-      min-height: 0;
-    }
-
-    #map {
-      flex: 1;
-      height: calc(100vh - 120px);
-      border-radius: 8px;
-      margin: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 100;
+      flex-direction: column;
+      padding: 16px;
     }
 
     #sidebar {
-      width: 360px;
+      flex: 1;
       background: var(--surface);
-      border-left: 1px solid var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
-      z-index: 200;
       overflow-y: auto;
     }
 
@@ -194,129 +183,6 @@
       background: #1d4ed8;
     }
 
-    #controls-panel {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 1000;
-      background: var(--surface);
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 280px;
-    }
-
-    .control-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px;
-      background: var(--background);
-      border-radius: 8px;
-      margin-bottom: 8px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    #legend {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      z-index: 1000;
-      background: var(--surface);
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      font-size: 12px;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .legend-color {
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
-      border-radius: 4px;
-      border: 1px solid #666;
-    }
-
-    .leaflet-popup-content-wrapper {
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-
-    .popup-header {
-      font-weight: 600;
-      text-transform: uppercase;
-      padding: 8px 12px;
-      border-radius: 12px 12px 0 0;
-      font-size: 13px;
-    }
-
-    .popup-header.storm {
-      background-color: #fffae6;
-      color: #ff9900;
-      border: 2px solid #ff9900;
-    }
-
-    .popup-header.tornado {
-      background-color: #fff0f0;
-      color: #c62828;
-      border: 2px solid #c62828;
-    }
-
-    .popup-header.tornado-confirmed {
-      background-color: #f3e5f5;
-      color: #6a1b9a;
-      border: 2px solid #6a1b9a;
-    }
-
-    .popup-header.marine {
-      background-color: #e6f3ff;
-      color: #0288d1;
-      border: 2px solid #0288d1;
-    }
-
-    .popup-body {
-      padding: 12px;
-      background: var(--surface);
-      border-radius: 0 0 12px 12px;
-      font-size: 14px;
-    }
-
-    .popup-body .label {
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text-primary);
-    }
-
-    .warning-button {
-      margin-top: 8px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 13px;
-      margin-right: 8px;
-    }
-
-    .full-text {
-      display: none;
-      margin-top: 10px;
-      background: var(--background);
-      border-radius: 6px;
-      padding: 12px;
-      max-height: 200px;
-      overflow-y: auto;
-      font-size: 13px;
-    }
-
     #friends-panel {
       padding: 16px;
       border-top: 1px solid var(--border);
@@ -352,7 +218,6 @@
       padding: 12px;
       background: var(--background);
       border-radius: 8px;
-      display: none;
     }
 
     #invite-input {
@@ -364,7 +229,7 @@
       font-size: 14px;
     }
 
-    #submit-invite {
+    #submit-invite, #invite-contacts {
       width: 100%;
       padding: 8px;
       background: var(--primary);
@@ -373,23 +238,17 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
+      margin-bottom: 8px;
       transition: background 0.2s;
     }
 
-    #submit-invite:hover {
+    #submit-invite:hover, #invite-contacts:hover {
       background: #1d4ed8;
-    }
-
-    footer {
-      text-align: center;
-      padding: 16px;
-      background: var(--secondary);
-      color: #d1d5db;
-      font-size: 14px;
     }
 
     .button-group {
       display: flex;
+      flex-wrap: wrap;
       gap: 12px;
       padding: 16px;
       justify-content: center;
@@ -409,18 +268,26 @@
     .action-button:hover {
       background: #1d4ed8;
     }
+
+    footer {
+      text-align: center;
+      padding: 16px;
+      background: var(--secondary);
+      color: #d1d5db;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <nav>
     <img src="https://files.catbox.moe/nnvzas.png" alt="RadarHQ Logo">
     <h1 style="font-size: 20px; font-weight: 600;">RadarHQ</h1>
+    <a href="index.html">Weather Map</a>
     <div class="user-profile" onclick="editProfile()">
       <span id="user-name">User</span>
     </div>
   </nav>
   <div class="button-group">
-    <button class="action-button" id="fullscreenButton" onclick="openFullscreen()">Fullscreen Map</button>
     <button class="action-button" id="generateInviteButton" onclick="generateInviteCode()">Generate Invite</button>
     <button class="action-button" id="regenerateInviteButton" onclick="regenerateInviteCode()">Regenerate Invite</button>
     <button class="action-button" id="showInviteButton" onclick="showInviteCode()">Show Your Invites</button>
@@ -428,22 +295,6 @@
     <button class="action-button" id="addFriendButton" onclick="showInviteInput()">Add Friend</button>
   </div>
   <div id="app">
-    <div id="map">
-      <div id="controls-panel">
-        <label class="control-label"><input type="checkbox" id="toggleRadar" checked> Radar</label>
-        <label class="control-label"><input type="checkbox" id="toggleStorm" checked> Severe Thunderstorm</label>
-        <label class="control-label"><input type="checkbox" id="toggleTornado" checked> Tornado Warning</label>
-        <label class="control-label"><input type="checkbox" id="toggleMarine" checked> Marine Warning</label>
-        <label class="control-label"><input type="checkbox" id="toggleFriends" checked> Friends Locations</label>
-      </div>
-      <div id="legend">
-        <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
-        <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
-        <div class="legend-item"><span class="legend-color" style="background: #ff9900"></span>Severe Thunderstorm</div>
-        <div class="legend-item"><span class="legend-color" style="background: #0288d1"></span>Marine Warning</div>
-        <div class="legend-item"><span class="legend-color" style="background: #00ff00"></span>Friend Location</div>
-      </div>
-    </div>
     <div id="sidebar">
       <div id="chat-header">
         <h3 style="margin: 0; font-size: 16px; font-weight: 600;">Weather Chat</h3>
@@ -457,17 +308,12 @@
         <button id="send-button" onclick="sendMessage()">Send</button>
       </div>
       <div id="friends-panel">
-        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Weather Alerts</h3>
-        <div id="warning-counts">
-          Severe Thunderstorm Warnings: <span>0</span><br>
-          Tornado Warnings: <span>0</span><br>
-          Special Marine Warnings: <span>0</span>
-        </div>
         <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Friends</h3>
         <div id="friends-list"></div>
-        <div id="invite-section" style="display: none;">
+        <div id="invite-section">
           <input id="invite-input" type="text" placeholder="Enter invite code">
           <button id="submit-invite" onclick="submitInviteCode()">Join Group</button>
+          <button id="invite-contacts" onclick="inviteViaContacts()">Invite via Contacts</button>
         </div>
       </div>
     </div>
@@ -475,62 +321,43 @@
   <footer>
     <p>Made by Hayden | RadarHQ © 2025</p>
   </footer>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const state = {
       userId: localStorage.getItem('userId') || Math.random().toString(36).slice(2),
       userName: localStorage.getItem('userName') || null,
-      locationEnabled: false,
       friends: JSON.parse(localStorage.getItem('friends')) || {},
       currentGroupId: localStorage.getItem('currentGroupId') || null,
       currentChatTarget: 'group',
       inviteCode: localStorage.getItem('inviteCode') || null,
-      warnings: [],
     };
-    
-    // Map Initialization
-    const map = L.map('map').setView([38, -97], 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-    const radarLayer = L.layerGroup().addTo(map);
-    const alertLayer = L.layerGroup().addTo(map);
-    const friendsLayer = L.layerGroup().addTo(map);
-    
-    // WebSocket Setup
+
     const ws = new WebSocket('wss://api.radarhq.pro');
     localStorage.setItem('userId', state.userId);
-    
-    // Save State to Local Storage
+
     function saveState() {
       localStorage.setItem('friends', JSON.stringify(state.friends));
       localStorage.setItem('currentGroupId', state.currentGroupId);
       localStorage.setItem('inviteCode', state.inviteCode);
       localStorage.setItem('userName', state.userName);
     }
-    
-    // Initialize User
+
     function initializeUser() {
       if (!state.userName) {
         state.userName = prompt('Enter your name') || `Anonymous${Math.random().toString(36).slice(2, 6)}`;
         localStorage.setItem('userName', state.userName);
       }
       document.getElementById('user-name').textContent = state.userName;
-      // Initialize group if none exists
       if (!state.currentGroupId) {
         state.currentGroupId = Math.random().toString(36).slice(2);
         saveState();
       }
     }
-    
-    // WebSocket Message Handler
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
       switch (data.type) {
         case 'message':
           handleMessage(data);
-          break;
-        case 'location':
-          updateFriendLocation(data);
           break;
         case 'friends':
           updateFriendsList(data.friends);
@@ -554,7 +381,7 @@
           saveState();
           break;
         case 'unfriend':
-          delete state.friends[friendId];
+          delete state.friends[data.friendId];
           updateFriendsList(Object.values(state.friends));
           updateChatSelect(Object.values(state.friends));
           saveState();
@@ -564,137 +391,7 @@
           break;
       }
     };
-    
-    // Update Radar Data
-    async function updateRadar() {
-      try {
-        const res = await fetch('https://api.rainviewer.com/public/weather-maps.json');
-        const json = await res.json();
-        const latest = json.radar.past.at(-1).time;
-        const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
-        radarLayer.clearLayers().addLayer(L.tileLayer(url, { opacity: 0.8 }));
-      } catch (error) {
-        console.error('Radar update failed:', error);
-      }
-    }
-    
-    // Check if Point is in Polygon
-    function isPointInPolygon(point, polygon) {
-      const x = point[0], y = point[1];
-      let inside = false;
-      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        const xi = polygon[i][0], yi = polygon[i][1];
-        const xj = polygon[j][0], yj = polygon[j][1];
-        const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
-      }
-      return inside;
-    }
-    
-    // Update Weather Warnings
-    async function updateWarnings() {
-      const types = {
-        storm: document.getElementById('toggleStorm').checked,
-        tornado: document.getElementById('toggleTornado').checked,
-        marine: document.getElementById('toggleMarine').checked,
-      };
-    
-      const urls = [];
-      if (types.storm) urls.push('Severe Thunderstorm Warning');
-      if (types.tornado) urls.push('Tornado Warning');
-      if (types.marine) urls.push('Special Marine Warning');
-    
-      try {
-        const responses = await Promise.all(
-          urls.map(event =>
-            fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(event)}`, {
-              headers: { 'User-Agent': 'RadarHQ/1.0', 'Accept': 'application/geo+json' },
-            }).then(r => r.json())
-          )
-        );
-    
-        alertLayer.clearLayers();
-        state.warnings = [];
-        let stormCount = 0, tornadoCount = 0, marineCount = 0;
-    
-        responses.flatMap(r => r.features || []).forEach(feature => {
-          const p = feature.properties;
-          const id = `id-${Math.random().toString(36).slice(2)}`;
-          const isTornado = p.event.includes('Tornado');
-          const isMarine = p.event.includes('Marine');
-          const isStorm = p.event.includes('Severe Thunderstorm');
-    
-          if (isStorm) stormCount++;
-          if (isTornado) tornadoCount++;
-          if (isMarine) marineCount++;
-    
-          let possible = isStorm ? 'Tornado not possible' : 'N/A';
-          if (isStorm && p.description?.toLowerCase().includes('possible tornado')) possible = 'Tornado possible!';
-          let strength = isTornado ? 'Rotation, not confirmed yet' : 'N/A';
-          if (isTornado && p.description?.toLowerCase().includes('funnel')) strength = 'Tornado forming!';
-          if (isTornado && p.description?.toLowerCase().includes('confirmed')) strength = 'Tornado Confirmed!';
-          let waterspout = isMarine ? 'Waterspout not possible' : 'N/A';
-          if (isMarine && p.description?.toLowerCase().includes('waterspout')) waterspout = 'Waterspouts possible!';
-          let wind = 'Unknown';
-          let hail = 'Unknown';
-          const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
-          if (hazardMatch && hazardMatch[1]) {
-            const hazard = hazardMatch[1].toLowerCase();
-            const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
-            if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
-            const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel|Baseball|Tennis Ball/i);
-            if (hailMatch) {
-              let size = hailMatch[0];
-              size = size.match(/Quarter|Half Dollar|Nickel|Penny|Baseball|Tennis Ball/i) ? `${size} sized` : `${size}s`;
-              hail = size;
-            }
-          }
-    
-          const headerClass = isTornado && strength === 'Tornado Confirmed!' ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
-          const popup = `
-            <div class="popup-header ${headerClass}">${p.event}</div>
-            <div class="popup-body">
-              <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
-              <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
-              <div><span class="label">Area:</span> ${p.areaDesc}</div>
-              <div><span class="label">Max Windspeed:</span> ${wind}</div>
-              ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
-              ${isMarine ? `<div><span class="label">Waterspout:</span> ${waterspout}</div>` : ''}
-              ${isStorm ? `<div><span class="label">Tornado:</span> ${possible}</div>` : ''}
-              ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ''}
-              <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
-              <button class="warning-button" onclick="shareWarning('${id}', '${p.event}', '${p.areaDesc}', '${p.description}')">Share Warning</button>
-              <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g, '<br>')}</div>
-            </div>`;
-    
-          const fillColor = isTornado
-            ? strength === 'Tornado Confirmed!' ? '#6a1b9a' : '#c62828'
-            : isStorm ? '#ff9900'
-            : isMarine ? '#0288d1'
-            : '#888';
-    
-          const coords = feature.geometry?.coordinates;
-          if (coords) {
-            state.warnings.push({ coords, type: p.event, description: p.description });
-            alertLayer.addLayer(L.geoJSON(feature, {
-              style: { color: fillColor, weight: 5, fillColor, fillOpacity: 0.5, opacity: 1 },
-              onEachFeature: (f, layer) => layer.bindPopup(popup),
-            }));
-          }
-        });
-    
-        // Update warning counts
-        document.getElementById('warning-counts').innerHTML = `
-          Severe Thunderstorm Warnings: <span>${stormCount}</span><br>
-          Tornado Warnings: <span>${tornadoCount}</span><br>
-          Special Marine Warnings: <span>${marineCount}</span>
-        `;
-      } catch (error) {
-        console.error('Warnings update failed:', error);
-      }
-    }
-    
-    // Handle Incoming Messages
+
     function handleMessage(data) {
       const isPrivate = data.target && data.target !== 'group';
       if ((isPrivate && (data.senderId === state.currentChatTarget || data.target === state.userId)) ||
@@ -709,70 +406,11 @@
         document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
       }
     }
-    
-    // Get Friend Warning Status
-    function getFriendWarningStatus(lat, lng) {
-      const point = [lng, lat]; // Note: GeoJSON uses [lng, lat]
-      const warnings = state.warnings.filter(warning => {
-        if (!warning.coords) return false;
-        if (warning.coords[0][0].length) {
-          return warning.coords.some(polygon => isPointInPolygon(point, polygon[0]));
-        }
-        return isPointInPolygon(point, warning.coords[0]);
-      });
-      return warnings.length > 0
-        ? warnings.map(w => `<div><strong>${w.type}</strong>: ${w.description.substring(0, 100)}...</div>`).join('')
-        : 'No active warnings';
-    }
-    
-    function updateFriendLocation(data) {
-      if (!document.getElementById('toggleFriends').checked || !state.friends[data.userId]?.shareLocation) return;
-      const friend = state.friends[data.userId];
-      const warningStatus = getFriendWarningStatus(data.lat, data.lng);
-      
-      if (friend.marker) {
-        friend.marker.setLatLng([data.lat, data.lng]);
-        friend.marker.setPopupContent(`
-          <strong>${data.sender}</strong><br>
-          Last updated: ${new Date().toLocaleString()}<br>
-          <strong>Weather Status:</strong><br>
-          ${warningStatus}
-        `);
-      } else {
-        const marker = L.circleMarker([data.lat, data.lng], {
-          radius: 8,
-          fillColor: '#00ff00',
-          color: '#00ff00',
-          weight: 2,
-          fillOpacity: 0.6,
-        }).bindPopup(`
-          <strong>${data.sender}</strong><br>
-          Last updated: ${new Date().toLocaleString()}<br>
-          <strong>Weather Status:</strong><br>
-          ${warningStatus}
-        `);
-        friend.marker = marker;
-        friendsLayer.addLayer(marker);
-      }
-      
-      state.friends[data.userId] = {
-        ...friend,
-        lat: data.lat,
-        lng: data.lng,
-        sender: data.sender,
-      };
-    }
-    
-    // Update Friends List
+
     function updateFriendsList(friendsData) {
-      friendsLayer.clearLayers();
       state.friends = friendsData.reduce((acc, friend) => ({
         ...acc,
-        [friend.userId]: {
-          ...friend,
-          shareLocation: friend.userId === state.userId ? state.locationEnabled : friend.shareLocation,
-          marker: null,
-        },
+        [friend.userId]: { ...friend, marker: null },
       }), {});
       const friendsListDiv = document.getElementById('friends-list');
       friendsListDiv.innerHTML = '';
@@ -783,35 +421,14 @@
           friendDiv.innerHTML = `
             ${friend.sender}
             <div>
-              <button onclick="toggleLocationShare('${friend.userId}', ${!friend.shareLocation})">
-                ${friend.shareLocation ? 'Unshare' : 'Share'} Location
-              </button>
               <button class="unfriend" onclick="unfriend('${friend.userId}')">Unfriend</button>
             </div>`;
           friendsListDiv.appendChild(friendDiv);
-          // Restore friend marker if location exists
-          if (friend.shareLocation && friend.lat && friend.lng) {
-            const marker = L.circleMarker([friend.lat, friend.lng], {
-              radius: 8,
-              fillColor: '#00ff00',
-              color: '#00ff00',
-              weight: 2,
-              fillOpacity: 0.6,
-            }).bindPopup(`
-              <strong>${friend.sender}</strong><br>
-              Last updated: ${new Date().toLocaleString()}<br>
-              <strong>Weather Status:</strong><br>
-              ${getFriendWarningStatus(friend.lat, friend.lng)}
-            `);
-            friend.marker = marker;
-            friendsLayer.addLayer(marker);
-          }
         }
       });
       saveState();
     }
-    
-    // Update Chat Select Options
+
     function updateChatSelect(friends) {
       const select = document.getElementById('chat-select');
       select.innerHTML = '<option value="group">Group Chat</option>';
@@ -824,20 +441,7 @@
         }
       });
     }
-    
-    // Toggle Location Sharing
-    function toggleLocationShare(friendId, enable) {
-      state.friends[friendId].shareLocation = enable;
-      ws.send(JSON.stringify({
-        type: 'updateFriend',
-        userId: friendId,
-        shareLocation: enable,
-        groupId: state.currentGroupId,
-      }));
-      updateFriendsList(Object.values(state.friends));
-    }
-    
-    // Unfriend
+
     function unfriend(friendId) {
       if (confirm(`Are you sure you want to unfriend ${state.friends[friendId].sender}?`)) {
         ws.send(JSON.stringify({
@@ -846,29 +450,9 @@
           friendId,
           groupId: state.currentGroupId,
         }));
-        if (state.friends[friendId]?.marker) {
-          friendsLayer.removeLayer(state.friends[friendId].marker);
-        }
-        delete state.friends[friendId];
-        updateFriendsList(Object.values(state.friends));
-        updateChatSelect(Object.values(state.friends));
       }
     }
-    
-    // Share Weather Warning
-    function shareWarning(id, event, area, description) {
-      const message = `⚠️ ${event} in ${area}\n${description.substring(0, 200)}...`;
-      ws.send(JSON.stringify({
-        type: 'message',
-        sender: state.userName,
-        senderId: state.userId,
-        message,
-        groupId: state.currentGroupId,
-        target: state.currentChatTarget,
-      }));
-    }
-    
-    // Send Message
+
     function sendMessage() {
       const input = document.getElementById('chat-input');
       const message = input.value.trim();
@@ -887,36 +471,35 @@
         alert('Please join a group before sending messages.');
       }
     }
-    
-  function generateInviteCode() {
-    if (!state.currentGroupId) {
-      state.currentGroupId = Math.random().toString(36).slice(2);
-      saveState();
-    }
-    ws.send(JSON.stringify({
-      type: 'generateInvite',
-      userId: state.userId,
-      groupId: state.currentGroupId,
-      regenerate: false,
-    }));
-  }
-  
-  function regenerateInviteCode() {
-    if (!state.currentGroupId) {
-      alert('No group exists. Please generate an invite first.');
-      return;
-    }
-    if (confirm('Are you sure you want to regenerate the invite code? The current code will be invalidated.')) {
+
+    function generateInviteCode() {
+      if (!state.currentGroupId) {
+        state.currentGroupId = Math.random().toString(36).slice(2);
+        saveState();
+      }
       ws.send(JSON.stringify({
         type: 'generateInvite',
         userId: state.userId,
         groupId: state.currentGroupId,
-        regenerate: true,
+        regenerate: false,
       }));
     }
-  }
-    
-    // Show Invite Code
+
+    function regenerateInviteCode() {
+      if (!state.currentGroupId) {
+        alert('No group exists. Please generate an invite first.');
+        return;
+      }
+      if (confirm('Are you sure you want to regenerate the invite code? The current code will be invalidated.')) {
+        ws.send(JSON.stringify({
+          type: 'generateInvite',
+          userId: state.userId,
+          groupId: state.currentGroupId,
+          regenerate: true,
+        }));
+      }
+    }
+
     function showInviteCode() {
       if (state.inviteCode) {
         alert(`Your invite code: ${state.inviteCode}`);
@@ -924,20 +507,17 @@
         alert('You have not generated an invite code yet. Click "Generate Invite" first.');
       }
     }
-    
-    // Show Friends Panel
+
     function showFriendsPanel() {
       document.getElementById('friends-panel').scrollIntoView({ behavior: 'smooth' });
     }
-    
-    // Show Invite Input
+
     function showInviteInput() {
       const inviteSection = document.getElementById('invite-section');
       inviteSection.style.display = 'block';
       document.getElementById('invite-input').focus();
     }
-    
-    // Submit Invite Code
+
     function submitInviteCode() {
       const code = document.getElementById('invite-input').value.trim();
       if (!code) {
@@ -953,15 +533,39 @@
       document.getElementById('invite-input').value = '';
       document.getElementById('invite-section').style.display = 'none';
     }
-    
-    // Edit Profile
+
+    function inviteViaContacts() {
+      if (!state.inviteCode) {
+        alert('Please generate an invite code first.');
+        return;
+      }
+      if (navigator.contacts && navigator.share) {
+        navigator.contacts.select(['name', 'tel', 'email'], { multiple: true })
+          .then(contacts => {
+            const message = `Join my RadarHQ group! Use this invite code: ${state.inviteCode}`;
+            const shareData = {
+              title: 'RadarHQ Invite',
+              text: message,
+            };
+            navigator.share(shareData)
+              .then(() => alert('Invite shared successfully!'))
+              .catch(err => console.error('Share error:', err));
+          })
+          .catch(err => {
+            console.error('Contacts access error:', err);
+            alert('Unable to access contacts. Please share the invite code manually.');
+          });
+      } else {
+        alert('Contact sharing is not supported on this device. Copy your invite code and share it manually.');
+      }
+    }
+
     function editProfile() {
       const newName = prompt('Enter new name', state.userName);
       if (newName) {
         state.userName = newName;
         localStorage.setItem('userName', newName);
         document.getElementById('user-name').textContent = newName;
-        // Update friends list with new name
         ws.send(JSON.stringify({
           type: 'updateFriend',
           userId: state.userId,
@@ -970,100 +574,20 @@
         }));
       }
     }
-    
-    // Update User Location
-    function updateLocation() {
-      if (!state.locationEnabled || !state.currentGroupId) return;
-      navigator.geolocation.getCurrentPosition(
-        pos => {
-          ws.send(JSON.stringify({
-            type: 'location',
-            userId: state.userId,
-            sender: state.userName,
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-            groupId: state.currentGroupId,
-          }));
-          // Update own marker
-          if (state.friends[state.userId]?.marker) {
-            friendsLayer.removeLayer(state.friends[state.userId].marker);
-          }
-          const warningStatus = getFriendWarningStatus(pos.coords.latitude, pos.coords.longitude);
-          const marker = L.circleMarker([pos.coords.latitude, pos.coords.longitude], {
-            radius: 8,
-            fillColor: '#00ff00',
-            color: '#00ff00',
-            weight: 2,
-            fillOpacity: 0.6,
-          }).bindPopup(`
-            <strong>${state.userName}</strong><br>
-            Last updated: ${new Date().toLocaleString()}<br>
-            <strong>Weather Status:</strong><br>
-            ${warningStatus}
-          `);
-          state.friends[state.userId] = {
-            ...state.friends[state.userId],
-            marker,
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-            shareLocation: true,
-            sender: state.userName,
-          };
-          friendsLayer.addLayer(marker);
-        },
-        err => console.error('Location error:', err),
-        { enableHighAccuracy: true }
-      );
-    }
-    
-    // Open Fullscreen Map
-    function openFullscreen() {
-      document.body.classList.toggle('map-only');
-    }
-    
-    // Initialize Location
-    navigator.geolocation.getCurrentPosition(
-      () => {
-        state.locationEnabled = true;
-        state.friends[state.userId] = {
-          userId: state.userId,
-          sender: state.userName,
-          shareLocation: true,
-        };
-        updateLocation();
-        setInterval(updateLocation, 10000); // Update every 10 seconds
-      },
-      () => alert('Location access denied. Enable it in browser settings.'),
-      { enableHighAccuracy: true }
-    );
-    
-    // Event Listeners
-    document.getElementById('toggleRadar').addEventListener('change', e =>
-      e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer));
-    document.getElementById('toggleFriends').addEventListener('change', e =>
-      e.target.checked ? map.addLayer(friendsLayer) : map.removeLayer(friendsLayer));
-    ['toggleStorm', 'toggleTornado', 'toggleMarine'].forEach(id =>
-      document.getElementById(id).addEventListener('change', updateWarnings));
+
     document.getElementById('chat-select').addEventListener('change', e => {
       state.currentChatTarget = e.target.value;
       document.getElementById('chat-messages').innerHTML = '';
     });
+
     document.getElementById('chat-input').addEventListener('keypress', e => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMessage();
       }
     });
-    
-    // Initialize App
+
     initializeUser();
-    updateRadar();
-    updateWarnings();
-    setInterval(() => {
-      updateRadar();
-      updateWarnings();
-    }, 60000);
-    // Periodic sync with server only if in a group with friends
     setInterval(() => {
       if (state.currentGroupId && Object.keys(state.friends).length > 0) {
         ws.send(JSON.stringify({
