@@ -415,7 +415,6 @@
     const ws = new WebSocket('wss://api.radarhq.pro');
 
     ws.onopen = () => {
-      console.log('WebSocket connection established');
       if (state.token) {
         ws.send(JSON.stringify({
           type: 'authenticate',
@@ -617,7 +616,6 @@
     }
 
     function generateInviteCode() {
-      console.log('Generate Invite button clicked, token:', state.token);
       if (!state.currentGroupId) {
         state.currentGroupId = Math.random().toString(36).slice(2);
         saveState();
@@ -631,14 +629,12 @@
         userId: state.userId,
         groupId: state.currentGroupId,
         regenerate: false,
-        token: state.token // Add token to the message
+        token: state.token
       };
-      console.log('Sending WebSocket message:', message);
       ws.send(JSON.stringify(message));
     }
     
     function regenerateInviteCode() {
-      console.log('Regenerate Invite button clicked, token:', state.token);
       if (!state.currentGroupId) {
         alert('No group exists. Please generate an invite first.');
         return;
@@ -649,9 +645,8 @@
           userId: state.userId,
           groupId: state.currentGroupId,
           regenerate: true,
-          token: state.token // Add token to the message
+          token: state.token
         };
-        console.log('Sending WebSocket message:', message);
         ws.send(JSON.stringify(message));
       }
     }
