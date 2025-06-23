@@ -682,27 +682,31 @@
         alert('Please generate an invite code first.');
         return;
       }
-      if (navigator.contacts && navigator.share) {
-        navigator.contacts.select(['name', 'tel', 'email'], { multiple: true })
-          .then(contacts => {
-            const message = `Join my RadarHQ group! Use this invite code: ${state.inviteCode}`;
-            const shareData = {
-              title: 'RadarHQ Invite',
-              text: message,
-            };
-            navigator.share(shareData)
-              .then(() => alert('Invite shared successfully!'))
-              .catch(err => console.error('Share error:', err));
+
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+      if (isIOS && isSafari) {
+        const message = `Join my RadarHQ group! Use this invite code: ${state.inviteCode}`;
+        if (navigator.share) {
+          navigator.share({
+            title: 'RadarHQ Invite',
+            text: message,
+            url: window.location.href
           })
-          .catch(err => {
-            console.error('Contacts access error:', err);
-            alert('Unable to access contacts. Please share the invite code manually.');
-          });
+            .then(() => alert('Invite shared successfully!'))
+            .catch(err => {
+              console.error('Share failed:', err);
+              alert('Sharing failed. Please copy the invite code and share it manually: ' + state.inviteCode);
+            });
+        } else {
+          alert('Sharing is not supported on this device. Please copy the invite code and share it manually: ' + state.inviteCode);
+        }
       } else {
-        alert('Contact sharing is not supported on this device. Copy your invite code and share it manually.');
+        alert('Contact sharing is not fully supported in this web app. Please copy the invite code and share it manually: ' + state.inviteCode);
       }
     }
-
+    
     function editProfile() {
       const newName = prompt('Enter new name', state.userName);
       if (newName) {
