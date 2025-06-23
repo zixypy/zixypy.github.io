@@ -415,6 +415,7 @@
     const ws = new WebSocket('wss://api.radarhq.pro');
 
     ws.onopen = () => {
+      console.log('WebSocket connection established');
       if (state.token) {
         ws.send(JSON.stringify({
           type: 'authenticate',
@@ -624,7 +625,6 @@
         alert('Please log in to generate an invite code.');
         return;
       }
-      console.log(state.token)
       ws.send(JSON.stringify({
         type: 'generateInvite',
         userId: state.userId,
