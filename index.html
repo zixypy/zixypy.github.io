@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>RadarHQ - Weather Map</title>
+  <title>RadarHQ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="icon" href="https://files.catbox.moe/nnvzas.png" type="image/png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     body.map-only nav,
     body.map-only #fullscreenButton,
@@ -27,7 +26,6 @@
       padding: 0;
       font-family: 'Inter', sans-serif;
       background: #e5e7eb;
-      height: 100%;
     }
 
     nav {
@@ -42,21 +40,31 @@
       z-index: 2000;
     }
 
-    nav img {
-      height: 32px;
-      width: 40px;
-      border-radius: 8px;
-      object-fit: cover;
+  nav img {
+    height: 32px;
+    width: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+    nav .nav-item {
+      position: relative;
     }
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-size: 16px;
+    nav .nav-item:hover .dropdown {
+      display: block;
     }
 
-    nav a:hover {
-      text-decoration: underline;
+    nav .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      color: black;
+      padding: 8px;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
     #fullscreenButton {
@@ -72,7 +80,7 @@
     }
 
     #map {
-      height: 80vh;
+      height: 90vh;
       margin: 16px;
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.15);
@@ -149,7 +157,6 @@
       background: #f8f9fa;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 14px;
     }
 
     .leaflet-tile {
@@ -238,29 +245,19 @@
       font-size: 15px;
       color: #1f2937;
     }
-
-    footer {
+    .ad-container {
+      margin: 16px auto;
       text-align: center;
-      padding: 20px;
-      background: #1a1a1a;
-      color: #ccc;
-      font-size: 14px;
+      max-width: 100%;
+      padding: 0 16px;
     }
 
-    .friend-marker {
-      background: #2563eb;
-      border-radius: 50%;
-      border: 2px solid #fff;
-      box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    body.map-only .ad-container {
+      display: none !important;
     }
   </style>
 </head>
 <body>
-  <nav>
-    <img src="https://files.catbox.moe/nnvzas.png" alt="RadarHQ Logo">
-    <h1 style="font-size: 18px;">RadarHQ</h1>
-    <a href="friends.html" style="margin-left: auto;">Friends & Chat</a>
-  </nav>
   <button id="fullscreenButton" onclick="openFullscreen()">Open Fullscreen</button>
   <div id="map">
     <div id="loading">Loading weather data...</div>
@@ -270,128 +267,41 @@
       <label class="control-label"><input type="checkbox" id="toggleStorm" checked> Severe Thunderstorm Warning</label>
       <label class="control-label"><input type="checkbox" id="toggleTornado" checked> Tornado Warning</label>
       <label class="control-label"><input type="checkbox" id="toggleMarine" checked> Special Marine Warning</label>
-      <label class="control-label"><input type="checkbox" id="toggleFriends" checked> Friend Locations</label>
-    </div>
-    <div id="legend">
-      <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
-      <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
-      <div class="legend-item"><span class="legend-color" style="background: #ff9900"></span>Severe Thunderstorm Warning</div>
-      <div class="legend-item"><span class="legend-color" style="background: #0288d1"></span>Special Marine Warning</div>
-      <a href="https://radarhq.pro/friends" target="_blank" style="text-decoration: none; color: inherit;">
-        <div class="legend-item">
-          <span class="legend-color" style="background: #2563eb"></span>
-          Friend Location
-        </div>
-      </a>
     </div>
   </div>
+
   <div id="infoPanel">
-    <h2>Current Severe Weather</h2>
+    <h2>Current severe weather:</h2>
     <div style="margin-bottom: 10px;">
       Severe Thunderstorm Warnings: <span id="storm-count">0</span><br>
       Tornado Warnings: <span id="tornado-count">0</span><br>
       Special Marine Warnings: <span id="marine-count">0</span>
     </div>
   </div>
-  <footer>
-    <p>Made by Hayden | RadarHQ © 2025</p>
-  </footer>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412927597506706"
+     crossorigin="anonymous"></script>
+  <div id="legend">
+    <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
+    <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
+    <div class="legend-item"><span class="legend-color" style="background: #ff9900"></span>Severe Thunderstorm Warning</div>
+    <div class="legend-item"><span class="legend-color" style="background: #0288d1"></span>Special Marine Warning</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet"></script>
   <script>
     const map = L.map('map').setView([38, -97], 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
     const radarLayer = L.layerGroup().addTo(map);
     const alertLayer = L.layerGroup().addTo(map);
-    const friendsLayer = L.layerGroup().addTo(map);
-
-    const state = {
-      userId: localStorage.getItem('userId') || null,
-      userName: localStorage.getItem('userName') || null,
-      currentGroupId: localStorage.getItem('currentGroupId') || null,
-      friends: JSON.parse(localStorage.getItem('friends')) || {},
-      token: localStorage.getItem('token') || null,
-    };
-
-    const ws = new WebSocket('wss://api.radarhq.pro');
-
-    ws.onopen = () => {
-      if (state.token) {
-        ws.send(JSON.stringify({
-          type: 'authenticate',
-          token: state.token,
-        }));
-      }
-    };
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      switch (data.type) {
-        case 'location':
-          if (data.groupId === state.currentGroupId && state.friends[data.userId]) {
-            state.friends[data.userId].lat = data.lat;
-            state.friends[data.userId].lng = data.lng;
-            updateFriendMarkers();
-          }
-          break;
-        case 'friends':
-          state.friends = data.friends.reduce((acc, friend) => ({
-            ...acc,
-            [friend.userId]: { ...friend, marker: null },
-          }), {});
-          updateFriendMarkers();
-          localStorage.setItem('friends', JSON.stringify(state.friends));
-          break;
-        case 'auth':
-          if (data.success) {
-            state.userId = data.userId;
-            state.userName = data.userName;
-            localStorage.setItem('userId', data.userId);
-            localStorage.setItem('userName', data.userName);
-            localStorage.setItem('token', data.token);
-          } else {
-            localStorage.removeItem('token');
-            state.token = null;
-          }
-          break;
-      }
-    };
-
-    function updateFriendMarkers() {
-      console.log('Friends:', state.friends); // Debug friend data
-      friendsLayer.clearLayers();
-      if (document.getElementById('toggleFriends').checked) {
-        Object.values(state.friends).forEach(friend => {
-          console.log('Processing friend:', friend); // Debug each friend
-          if (friend.userId !== state.userId && friend.shareLocation && friend.lat && friend.lng) {
-            console.log('Adding marker for:', friend.sender, friend.lat, friend.lng); // Debug marker addition
-            const marker = L.circleMarker([friend.lat, friend.lng], {
-              radius: 8,
-              fillColor: '#2563eb',
-              color: '#fff',
-              weight: 2,
-              fillOpacity: 0.8,
-              className: 'friend-marker'
-            }).bindPopup(`${friend.sender}'s Location`);
-            friendsLayer.addLayer(marker);
-            state.friends[friend.userId].marker = marker;
-          }
-        });
-      }
-    }
 
     async function updateRadar() {
-      try {
-        const res = await fetch("https://api.rainviewer.com/public/weather-maps.json");
-        const json = await res.json();
-        const latest = json.radar.past.at(-1).time;
-        const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
-        const tiles = L.tileLayer(url, { opacity: 0.8 });
-        radarLayer.clearLayers().addLayer(tiles);
-        document.getElementById('loading').style.display = 'none';
-      } catch (error) {
-        console.error('Radar update failed:', error);
-      }
+      const res = await fetch("https://api.rainviewer.com/public/weather-maps.json");
+      const json = await res.json();
+      const latest = json.radar.past.at(-1).time;
+      const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
+      const tiles = L.tileLayer(url, { opacity: 0.8 });
+      radarLayer.clearLayers().addLayer(tiles);
     }
 
     async function updateWarnings() {
@@ -406,133 +316,107 @@
       if (types.tornado) urls.push("Tornado Warning");
       if (types.marine) urls.push("Special Marine Warning");
 
-      try {
-        const requests = urls.map(event =>
-          fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(event)}`, {
-            headers: { "Accept": "application/geo+json" }
-          }).then(r => r.json())
-        );
+      const requests = urls.map(event =>
+        fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(event)}`, {
+          headers: { "Accept": "application/geo+json" }
+        }).then(r => r.json())
+      );
 
-        const responses = await Promise.all(requests);
-        const features = responses.flatMap(r => r.features || []);
-        alertLayer.clearLayers();
+      const responses = await Promise.all(requests);
+      const features = responses.flatMap(r => r.features || []);
+      alertLayer.clearLayers();
 
-        let stormCount = 0, tornadoCount = 0, marineCount = 0;
+      let stormCount = 0, tornadoCount = 0, marineCount = 0;
 
-        features.forEach(feature => {
-          const p = feature.properties;
-          const id = `id-${Math.random().toString(36).slice(2)}`;
-          const isTornado = p.event.includes("Tornado");
-          const isMarine = p.event.includes("Marine");
-          const isStorm = p.event.includes("Severe Thunderstorm");
+      features.forEach(feature => {
+        const p = feature.properties;
+        const id = `id-${Math.random().toString(36).slice(2)}`;
+        const isTornado = p.event.includes("Tornado");
+        const isMarine = p.event.includes("Marine");
+        const isStorm = p.event.includes("Severe Thunderstorm");
 
-          if (isStorm) stormCount++;
-          if (isTornado) tornadoCount++;
-          if (isMarine) marineCount++;
-          let possible = isStorm ? "Tornado not possible" : "N/A";
-          if (isStorm && p.description?.toLowerCase().includes("possible tornado")) possible = "Tornado possible!";
-          let strength = isTornado ? "Rotation, not confirmed yet" : "N/A";
-          if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado forming!";
-          if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado Confirmed!";
-          let waterspout = isMarine ? "Waterspout not possible" : "N/A";
-          if (isMarine && p.description?.toLowerCase().includes("waterspout")) waterspout = "Waterspouts possible!";
-          let wind = "Unknown";
-          let hail = "Unknown";
-          const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
-          if (hazardMatch && hazardMatch[1]) {
-            const hazard = hazardMatch[1].toLowerCase();
-            const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
-            if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
-            const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel|Baseball|Tennis Ball/i);
-            if (hailMatch) {
-              let size = hailMatch[0];
-              size = size.match(/Quarter|Half Dollar|Nickel|Penny|Baseball|Tennis Ball/i) ? `${size} sized` : `${size}s`;
-              hail = size;
-            }
+        if (isStorm) stormCount++;
+        if (isTornado) tornadoCount++;
+        if (isMarine) marineCount++;
+        let possible = isStorm ? "Tornado not possible" : "N/A";
+        if (isStorm && p.description?.toLowerCase().includes("possible tornado")) possible = "Tornado possible!";
+        let strength = isTornado ? "Rotation, not confirmed yet" : "N/A";
+        if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado forming!";
+        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado Confirmed!";
+        let waterspout = isMarine ? "Waterspout not possible" : "N/A";
+        if (isMarine && p.description?.toLowerCase().includes("waterspout")) waterspout = "Waterspouts possible!";
+        let wind = "Unknown";
+        let hail = "Unknown";
+        const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
+        if (hazardMatch && hazardMatch[1]) {
+          const hazard = hazardMatch[1].toLowerCase();
+          const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
+          if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
+          const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel|Baseball|Tennis Ball/i);
+          if (hailMatch) {
+            let size = hailMatch[0];
+            size = size.match(/Quarter|Half Dollar|Nickel|Penny|Baseball|Tennis Ball/i) ? `${size} sized` : `${size}s`;
+            hail = size;
           }
+        }
 
-          const headerClass = isTornado && strength === "Tornado Confirmed!" ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
-          const popup = `
-            <div class="popup-header ${headerClass}">${p.event}</div>
-            <div class="popup-body">
-              <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
-              <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
-              <div><span class="label">Area:</span> ${p.areaDesc}</div>
-              <div><span class="label">Max Windspeed:</span> ${wind}</div>
-              ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
-              ${isMarine ? `<div><span class="label">Waterspout:</span> ${waterspout}</div>` : ''}
-              ${isStorm ? `<div><span class="label">Tornado:</span> ${possible}</div>` : ''}
-              ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
-              <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
-              <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g,'<br>')}</div>
-            </div>`;
+        const headerClass = isTornado && strength === "Tornado Confirmed!" ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
+        const popup = `
+          <div class="popup-header ${headerClass}">${p.event}</div>
+          <div class="popup-body">
+            <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
+            <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
+            <div><span class="label">Area:</span> ${p.areaDesc}</div>
+            <div><span class="label">Max Windspeed:</span> ${wind}</div>
+            ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
+            ${isMarine ? `<div><span class="label">Waterspout:</span> ${waterspout}</div>` : ''}
+            ${isStorm ? `<div><span class="label">Tornado:</span> ${possible}</div>` : ''}
+            ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
+            <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
+            <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g,'<br>')}</div>
+          </div>`;
 
-          const fillColor = isTornado
-            ? (strength === "Tornado Confirmed!" ? "#6a1b9a" : "#c62828")
-            : isStorm ? "#ff9900"
-            : isMarine ? "#0288d1"
-            : "#888";
+        const fillColor = isTornado
+          ? (strength === "Tornado Confirmed!" ? "#6a1b9a" : "#c62828")
+          : isStorm ? "#ff9900"
+          : isMarine ? "#0288d1"
+          : "#888";
 
-          const layer = L.geoJSON(feature, {
-            style: {
-              color: fillColor,
-              weight: 5,
-              fillColor: fillColor,
-              fillOpacity: 0.5,
-              opacity: 1
-            },
-            onEachFeature: (f, layer) => {
-              layer.bindPopup(popup);
-            }
-          });
-          alertLayer.addLayer(layer);
+        const layer = L.geoJSON(feature, {
+          style: {
+            color: fillColor,
+            weight: 5,
+            fillColor: fillColor,
+            fillOpacity: 0.5,
+            opacity: 1
+          },
+          onEachFeature: (f, layer) => {
+            layer.bindPopup(popup);
+          }
         });
+        alertLayer.addLayer(layer);
+      });
 
-        document.getElementById('storm-count').textContent = stormCount;
-        document.getElementById('tornado-count').textContent = tornadoCount;
-        document.getElementById('marine-count').textContent = marineCount;
-      } catch (error) {
-        console.error('Warnings update failed:', error);
-      }
+      document.getElementById('storm-count').textContent = stormCount;
+      document.getElementById('tornado-count').textContent = tornadoCount;
+      document.getElementById('marine-count').textContent = marineCount;
     }
 
     function openFullscreen() {
       document.body.classList.toggle('map-only');
     }
 
-    function updateLocation() {
-      if (navigator.geolocation && state.currentGroupId && state.token) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            ws.send(JSON.stringify({
-              type: 'location',
-              userId: state.userId,
-              sender: state.userName,
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-              groupId: state.currentGroupId,
-              token: state.token
-            }));
-          },
-          (error) => console.error('Geolocation error:', error),
-          { enableHighAccuracy: true }
-        );
-      }
-    }
 
     updateRadar();
     updateWarnings();
     setInterval(() => {
       updateRadar();
       updateWarnings();
-      updateLocation();
     }, 60000);
 
     document.getElementById('toggleRadar').addEventListener('change', e => {
       e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer);
     });
-
-    document.getElementById('toggleFriends').addEventListener('change', updateFriendMarkers);
 
     ['toggleStorm', 'toggleTornado', 'toggleMarine'].forEach(id =>
       document.getElementById(id).addEventListener('change', updateWarnings));
@@ -540,12 +424,9 @@
     document.getElementById('toggle-controls').addEventListener('click', () => {
       document.getElementById('controls').classList.toggle('hidden');
     });
-
-    if (state.token) {
-      updateLocation();
-    } else {
-
-    }
   </script>
+  <footer style="text-align: center; padding: 20px; background: #1a1a1a;">
+    <p style="color: #ccc; font-size: 14px; margin-top: 8px;">Made by Hayden | RadarHQ</p>
+  </footer>
 </body>
 </html>
