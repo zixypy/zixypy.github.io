@@ -118,6 +118,10 @@
             background-clip: initial;
         }
         
+        [data-theme="dark"] .logo-text h1 {
+            color: #d1d5db; /* Lighter gray for dark mode */
+        }
+        
         .logo-text p {
             font-size: 0.8rem;
             color: var(--text-muted);
@@ -1153,7 +1157,10 @@
 
         function loadSavedTheme() {
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
+            if (savedTheme === 'light') {
+                document.body.removeAttribute('data-theme');
+                document.getElementById('theme-icon').className = 'fas fa-moon';
+            } else {
                 document.body.setAttribute('data-theme', 'dark');
                 document.getElementById('theme-icon').className = 'fas fa-sun';
             }
