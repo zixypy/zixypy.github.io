@@ -1,432 +1,1229 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>RadarHQ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="icon" href="https://files.catbox.moe/nnvzas.png" type="image/png" />
-  <style>
-    body.map-only nav,
-    body.map-only #fullscreenButton,
-    body.map-only #infoPanel,
-    body.map-only footer {
-      display: none !important;
-    }
-    
-    body.map-only #map {
-      margin: 0 !important;
-      height: 100vh !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadarHQ - Live Weather Radar</title>
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      background: #e5e7eb;
-    }
+    <!-- External Dependencies -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    nav {
-      background: #1f2937;
-      color: white;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 2000;
-    }
-
-  nav img {
-    height: 32px;
-    width: 40px;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-
-    nav .nav-item {
-      position: relative;
-    }
-
-    nav .nav-item:hover .dropdown {
-      display: block;
-    }
-
-    nav .dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      color: black;
-      padding: 8px;
-      border-radius: 6px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-
-    #fullscreenButton {
-      margin: 12px auto;
-      display: block;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      background: #1f2937;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    #map {
-      height: 90vh;
-      margin: 16px;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      position: relative;
-    }
-
-    #controls {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 1000;
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      max-width: 500px;
-      transition: opacity 0.3s, visibility 0s linear;
-    }
-
-    #controls.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    #toggle-controls {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 1001;
-      background: white;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-weight: 500;
-      color: #374151;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    #legend {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      z-index: 1000;
-      background: white;
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      font-size: 12px;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .legend-color {
-      width: 16px;
-      height: 16px;
-      margin-right: 8px;
-      border-radius: 4px;
-      border: 1px solid #666;
-    }
-
-    .control-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .leaflet-tile {
-      image-rendering: auto !important;
-    }
-
-    .leaflet-popup-content-wrapper {
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      max-width: 340px;
-      font-size: 14px;
-    }
-
-    .popup-header {
-      font-weight: 600;
-      text-transform: uppercase;
-      padding: 8px 12px;
-      border-radius: 12px 12px 0 0;
-      font-size: 13px;
-    }
-
-    .popup-header.storm {
-      background-color: #fffae6;
-      color: #ff9900;
-      border: 2px solid #ff9900;
-    }
-
-    .popup-header.tornado {
-      background-color: #fff0f0;
-      color: #c62828;
-      border: 2px solid #c62828;
-    }
-
-    .popup-header.tornado-confirmed {
-      background-color: #f3e5f5;
-      color: #6a1b9a;
-      border: 2px solid #6a1b9a;
-    }
-
-    .popup-header.marine {
-      background-color: #e6f3ff;
-      color: #0288d1;
-      border: 2px solid #0288d1;
-    }
-
-    .popup-body {
-      padding: 12px;
-      background: #fff;
-      border-radius: 0 0 12px 12px;
-    }
-
-    .popup-body .label {
-      font-weight: 600;
-      display: inline-block;
-      margin-bottom: 6px;
-      color: #374151;
-    }
-
-    .warning-button {
-      margin-top: 10px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .full-text {
-      display: none;
-      margin-top: 10px;
-      background: #f8f9fa;
-      border-radius: 6px;
-      padding: 12px;
-      white-space: pre-wrap;
-      max-height: 180px;
-      overflow-y: auto;
-      font-size: 13px;
-      color: #374151;
-    }
-
-    #infoPanel {
-      padding: 16px;
-      text-align: center;
-      font-size: 15px;
-      color: #1f2937;
-    }
-    .ad-container {
-      margin: 16px auto;
-      text-align: center;
-      max-width: 100%;
-      padding: 0 16px;
-    }
-
-    body.map-only .ad-container {
-      display: none !important;
-    }
-  </style>
-</head>
-<body>
-  <button id="fullscreenButton" onclick="openFullscreen()">Open Fullscreen</button>
-  <div id="map">
-    <div id="loading">Loading weather data...</div>
-    <button id="toggle-controls">Toggle Filters</button>
-    <div id="controls" class="hidden">
-      <label class="control-label"><input type="checkbox" id="toggleRadar" checked> Radar</label>
-      <label class="control-label"><input type="checkbox" id="toggleStorm" checked> Severe Thunderstorm Warning</label>
-      <label class="control-label"><input type="checkbox" id="toggleTornado" checked> Tornado Warning</label>
-      <label class="control-label"><input type="checkbox" id="toggleMarine" checked> Special Marine Warning</label>
-    </div>
-  </div>
-
-  <div id="infoPanel">
-    <h2>Current severe weather:</h2>
-    <div style="margin-bottom: 10px;">
-      Severe Thunderstorm Warnings: <span id="storm-count">0</span><br>
-      Tornado Warnings: <span id="tornado-count">0</span><br>
-      Special Marine Warnings: <span id="marine-count">0</span>
-    </div>
-  </div>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2412927597506706"
-     crossorigin="anonymous"></script>
-  <div id="legend">
-    <div class="legend-item"><span class="legend-color" style="background: #c62828"></span>Tornado Warning</div>
-    <div class="legend-item"><span class="legend-color" style="background: #6a1b9a"></span>Confirmed Tornado</div>
-    <div class="legend-item"><span class="legend-color" style="background: #ff9900"></span>Severe Thunderstorm Warning</div>
-    <div class="legend-item"><span class="legend-color" style="background: #0288d1"></span>Special Marine Warning</div>
-  </div>
-
-  <script src="https://unpkg.com/leaflet"></script>
-  <script>
-    const map = L.map('map').setView([38, -97], 5);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
-
-    const radarLayer = L.layerGroup().addTo(map);
-    const alertLayer = L.layerGroup().addTo(map);
-
-    async function updateRadar() {
-      const res = await fetch("https://api.rainviewer.com/public/weather-maps.json");
-      const json = await res.json();
-      const latest = json.radar.past.at(-1).time;
-      const url = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
-      const tiles = L.tileLayer(url, { opacity: 0.8 });
-      radarLayer.clearLayers().addLayer(tiles);
-    }
-
-    async function updateWarnings() {
-      const types = {
-        storm: document.getElementById('toggleStorm').checked,
-        tornado: document.getElementById('toggleTornado').checked,
-        marine: document.getElementById('toggleMarine').checked
-      };
-
-      const urls = [];
-      if (types.storm) urls.push("Severe Thunderstorm Warning");
-      if (types.tornado) urls.push("Tornado Warning");
-      if (types.marine) urls.push("Special Marine Warning");
-
-      const requests = urls.map(event =>
-        fetch(`https://api.weather.gov/alerts/active?event=${encodeURIComponent(event)}`, {
-          headers: { "Accept": "application/geo+json" }
-        }).then(r => r.json())
-      );
-
-      const responses = await Promise.all(requests);
-      const features = responses.flatMap(r => r.features || []);
-      alertLayer.clearLayers();
-
-      let stormCount = 0, tornadoCount = 0, marineCount = 0;
-
-      features.forEach(feature => {
-        const p = feature.properties;
-        const id = `id-${Math.random().toString(36).slice(2)}`;
-        const isTornado = p.event.includes("Tornado");
-        const isMarine = p.event.includes("Marine");
-        const isStorm = p.event.includes("Severe Thunderstorm");
-
-        if (isStorm) stormCount++;
-        if (isTornado) tornadoCount++;
-        if (isMarine) marineCount++;
-        let possible = isStorm ? "Tornado not possible" : "N/A";
-        if (isStorm && p.description?.toLowerCase().includes("possible tornado")) possible = "Tornado possible!";
-        let strength = isTornado ? "Rotation, not confirmed yet" : "N/A";
-        if (isTornado && p.description?.toLowerCase().includes("funnel")) strength = "Tornado forming!";
-        if (isTornado && p.description?.toLowerCase().includes("confirmed")) strength = "Tornado Confirmed!";
-        let waterspout = isMarine ? "Waterspout not possible" : "N/A";
-        if (isMarine && p.description?.toLowerCase().includes("waterspout")) waterspout = "Waterspouts possible!";
-        let wind = "Unknown";
-        let hail = "Unknown";
-        const hazardMatch = p.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
-        if (hazardMatch && hazardMatch[1]) {
-          const hazard = hazardMatch[1].toLowerCase();
-          const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
-          if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
-          const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel|Baseball|Tennis Ball/i);
-          if (hailMatch) {
-            let size = hailMatch[0];
-            size = size.match(/Quarter|Half Dollar|Nickel|Penny|Baseball|Tennis Ball/i) ? `${size} sized` : `${size}s`;
-            hail = size;
-          }
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-accent: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.15);
+            --blue-500: #3b82f6;
+            --blue-600: #2563eb;
+            --green-500: #10b981;
+            --orange-500: #f59e0b;
+            --red-500: #ef4444;
+            --red-600: #dc2626;
+            --purple-600: #9333ea;
+            --indigo-600: #4f46e5;
         }
 
-        const headerClass = isTornado && strength === "Tornado Confirmed!" ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
-        const popup = `
-          <div class="popup-header ${headerClass}">${p.event}</div>
-          <div class="popup-body">
-            <div><span class="label">Sent:</span> ${new Date(p.sent).toLocaleString()}</div>
-            <div><span class="label">Expires:</span> ${new Date(p.expires).toLocaleString()}</div>
-            <div><span class="label">Area:</span> ${p.areaDesc}</div>
-            <div><span class="label">Max Windspeed:</span> ${wind}</div>
-            ${!isMarine ? `<div><span class="label">Hail Size:</span> ${hail}</div>` : ''}
-            ${isMarine ? `<div><span class="label">Waterspout:</span> ${waterspout}</div>` : ''}
-            ${isStorm ? `<div><span class="label">Tornado:</span> ${possible}</div>` : ''}
-            ${isTornado ? `<div><span class="label">Tornado:</span> ${strength}</div>` : ""}
-            <button class="warning-button" onclick="document.getElementById('${id}').style.display='block'; this.style.display='none'">Show Full Warning</button>
-            <div class="full-text" id="${id}">${(p.description || 'No description').replace(/\n/g,'<br>')}</div>
-          </div>`;
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-accent: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --border-light: #475569;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-lg: rgba(0, 0, 0, 0.4);
+        }
 
-        const fillColor = isTornado
-          ? (strength === "Tornado Confirmed!" ? "#6a1b9a" : "#c62828")
-          : isStorm ? "#ff9900"
-          : isMarine ? "#0288d1"
-          : "#888";
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        const layer = L.geoJSON(feature, {
-          style: {
-            color: fillColor,
-            weight: 5,
-            fillColor: fillColor,
-            fillOpacity: 0.5,
-            opacity: 1
-          },
-          onEachFeature: (f, layer) => {
-            layer.bindPopup(popup);
-          }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--indigo-600) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .logo-icon:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-text h1 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--blue-600), var(--indigo-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.625rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            min-width: 40px;
+            min-height: 40px;
+        }
+
+        .btn:hover {
+            background: var(--bg-accent);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .btn-primary {
+            background: var(--blue-500);
+            color: white;
+            border-color: var(--blue-500);
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-600);
+            border-color: var(--blue-600);
+        }
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green-500);
+            padding: 0.5rem 1rem;
+            border-radius: 24px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--green-500);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 1.5rem;
+            min-height: calc(100vh - 100px);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+        }
+
+        /* Map Section */
+        .map-container {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px var(--shadow);
+            overflow: hidden;
+            position: relative;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .map-container:hover {
+            box-shadow: 0 12px 40px var(--shadow-lg);
+        }
+
+        .map-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .map-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+            font-size: 1.1rem;
+        }
+
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+            color: var(--blue-500);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #map {
+            height: 550px;
+            width: 100%;
+        }
+
+        /* Controls Panel */
+        .controls-panel {
+            position: absolute;
+            top: 1.25rem;
+            left: 1.25rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            box-shadow: 0 8px 32px var(--shadow-lg);
+            min-width: 240px;
+            z-index: 1000;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .controls-panel.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .controls-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .controls-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .control-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .control-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Enhanced Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 22px;
+            background: var(--border);
+            border-radius: 22px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--border-light);
+        }
+
+        .toggle.active {
+            background: var(--blue-500);
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle.active .toggle-thumb {
+            transform: translateX(22px);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            position: absolute;
+            bottom: 1.25rem;
+            left: 1.25rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        /* Info Panel */
+        .info-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 12px 40px var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .card-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.05rem;
+        }
+
+        .card-content {
+            padding: 1.25rem;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .alert-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .alert-item:hover {
+            transform: translateX(4px);
+        }
+
+        .alert-storm {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .alert-tornado {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .alert-marine {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .alert-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        .alert-storm .alert-icon {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .alert-tornado .alert-icon {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .alert-marine .alert-icon {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+        }
+
+        .alert-text h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .alert-text p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .alert-count {
+            background: rgba(0, 0, 0, 0.08);
+            color: var(--text-primary);
+            padding: 0.5rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        /* Legend */
+        .legend-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .legend-item:hover {
+            background: var(--bg-accent);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .legend-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Fullscreen Mode */
+        body.fullscreen-mode .header,
+        body.fullscreen-mode .info-panel {
+            display: none !important;
+        }
+
+        body.fullscreen-mode .container {
+            max-width: none;
+            padding: 0;
+            grid-template-columns: 1fr;
+            gap: 0;
+            min-height: 100vh;
+        }
+
+        body.fullscreen-mode .map-container {
+            border-radius: 0;
+            border: none;
+            height: 100vh;
+        }
+
+        body.fullscreen-mode #map {
+            height: 100vh;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .controls-panel {
+                left: 0.75rem;
+                right: 0.75rem;
+                min-width: auto;
+            }
+
+            #map {
+                height: 450px;
+            }
+
+            .logo-text h1 {
+                font-size: 1.2rem;
+            }
+
+            .status-badge {
+                display: none;
+            }
+        }
+
+        /* Custom Popup Styles */
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px !important;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+            overflow: hidden !important;
+        }
+
+        .popup-header {
+            padding: 1rem;
+            font-weight: 600;
+            color: white;
+            margin: -8px -8px 8px -8px;
+            border-radius: 12px 12px 0 0;
+            font-size: 0.95rem;
+        }
+
+        .popup-body {
+            padding: 0.5rem 0;
+        }
+
+        .popup-body > div {
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-body strong {
+            color: var(--text-primary);
+        }
+
+        .popup-details {
+            background: var(--bg-accent);
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            max-height: 140px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-cloud-rain"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>RadarHQ</h1>
+                    <p>Real-time Weather Radar</p>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="status-badge">
+                    <div class="status-dot"></div>
+                    <span>Live Updates</span>
+                </div>
+
+                <div class="header-controls">
+                    <button class="btn" onclick="toggleTheme()" title="Toggle Theme">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                    <button class="btn" onclick="centerOnUser()" title="Find My Location">
+                        <i class="fas fa-crosshairs"></i>
+                    </button>
+                    <button class="btn" onclick="toggleFullscreen()" title="Fullscreen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Map Section -->
+        <div class="map-container">
+            <div class="map-header">
+                <div class="map-title">
+                    <i class="fas fa-map-location-dot"></i>
+                    <span>Live Weather Radar</span>
+                    <i class="fas fa-spinner loading-spinner" id="loading-spinner" style="display: none;"></i>
+                </div>
+                <div class="map-controls">
+                    <button class="btn" onclick="toggleControls()" title="Layer Controls">
+                        <i class="fas fa-sliders-h"></i>
+                    </button>
+                    <button class="btn" onclick="refreshData()" title="Refresh Data">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div id="map"></div>
+
+            <!-- Controls Panel -->
+            <div class="controls-panel" id="controls-panel">
+                <div class="controls-header">
+                    <h4 class="controls-title">Map Layers</h4>
+                    <button class="btn" onclick="toggleControls()" style="padding: 0.25rem;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="control-item">
+                    <label class="control-label">Radar</label>
+                    <div class="toggle active" onclick="toggleLayer('radar', this)">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+
+                <div class="control-item">
+                    <label class="control-label">Severe Thunderstorm</label>
+                    <div class="toggle active" onclick="toggleLayer('storm', this)">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+
+                <div class="control-item">
+                    <label class="control-label">Tornado</label>
+                    <div class="toggle active" onclick="toggleLayer('tornado', this)">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+
+                <div class="control-item">
+                    <label class="control-label">Marine</label>
+                    <div class="toggle active" onclick="toggleLayer('marine', this)">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-dot"></div>
+                <span>Updated: <span id="last-updated">--:--</span></span>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <!-- Weather Alerts -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        Live Weather Alerts
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div class="alert-item alert-storm">
+                        <div class="alert-info">
+                            <div class="alert-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="alert-text">
+                                <h4>Severe Thunderstorm</h4>
+                                <p>Warnings Active</p>
+                            </div>
+                        </div>
+                        <div class="alert-count" id="storm-display">0</div>
+                    </div>
+
+                    <div class="alert-item alert-tornado">
+                        <div class="alert-info">
+                            <div class="alert-icon">
+                                <i class="fas fa-wind"></i>
+                            </div>
+                            <div class="alert-text">
+                                <h4>Tornado</h4>
+                                <p>Warnings Active</p>
+                            </div>
+                        </div>
+                        <div class="alert-count" id="tornado-display">0</div>
+                    </div>
+
+                    <div class="alert-item alert-marine">
+                        <div class="alert-info">
+                            <div class="alert-icon">
+                                <i class="fas fa-ship"></i>
+                            </div>
+                            <div class="alert-text">
+                                <h4>Marine</h4>
+                                <p>Warnings Active</p>
+                            </div>
+                        </div>
+                        <div class="alert-count" id="marine-display">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-palette"></i>
+                        Map Legend
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #dc2626;"></div>
+                            <span class="legend-label">Tornado Warning</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #9333ea;"></div>
+                            <span class="legend-label">Confirmed Tornado</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #f59e0b;"></div>
+                            <span class="legend-label">Severe Thunderstorm</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #3b82f6;"></div>
+                            <span class="legend-label">Marine Warning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let radarLayer;
+        let alertLayer;
+        let layerControls = {
+            radar: true,
+            storm: true,
+            tornado: true,
+            marine: true
+        };
+
+        function initMap() {
+            console.log('Initializing map...');
+
+            map = L.map('map', {
+                center: [39.8283, -98.5795],
+                zoom: 5,
+                zoomControl: true,
+                attributionControl: true,
+                preferCanvas: true,
+                zoomAnimation: true,
+                fadeAnimation: true,
+                markerZoomAnimation: true
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19,
+                className: 'map-tiles'
+            }).addTo(map);
+
+            alertLayer = L.layerGroup().addTo(map);
+
+            console.log('Map initialized successfully');
+
+            loadRadar();
+            loadWeatherAlerts();
+        }
+
+        async function loadRadar() {
+            if (!layerControls.radar) return;
+
+            try {
+                console.log('Loading radar data...');
+                const response = await fetch('https://api.rainviewer.com/public/weather-maps.json');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.radar && data.radar.past && data.radar.past.length > 0) {
+                    const latest = data.radar.past[data.radar.past.length - 1].time;
+                    const radarUrl = `https://tilecache.rainviewer.com/v2/radar/${latest}/256/{z}/{x}/{y}/5/1_1.png`;
+
+                    if (radarLayer) {
+                        map.removeLayer(radarLayer);
+                    }
+
+                    radarLayer = L.tileLayer(radarUrl, {
+                        opacity: 0.7,
+                        attribution: 'Radar data &copy; RainViewer',
+                        className: 'radar-layer'
+                    });
+
+                    if (layerControls.radar) {
+                        radarLayer.addTo(map);
+                    }
+
+                    console.log('Radar data loaded successfully');
+                } else {
+                    console.warn('No radar data available');
+                }
+            } catch (error) {
+                console.error('Error loading radar:', error);
+                showNotification('Failed to load radar data', 'error');
+            }
+        }
+
+        async function loadWeatherAlerts() {
+            try {
+                console.log('Loading weather alerts...');
+                showLoading(true);
+
+                const alertTypes = [
+                    'Severe Thunderstorm Warning',
+                    'Tornado Warning',
+                    'Special Marine Warning'
+                ];
+
+                const promises = alertTypes.map(async (eventType) => {
+                    try {
+                        const response = await fetch(
+                            `https://api.weather.gov/alerts/active?event=${encodeURIComponent(eventType)}`,
+                            {
+                                headers: {
+                                    'Accept': 'application/geo+json',
+                                    'User-Agent': 'RadarHQ/1.0'
+                                }
+                            }
+                        );
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const data = await response.json();
+                        return data.features || [];
+                    } catch (error) {
+                        console.error(`Error fetching ${eventType}:`, error);
+                        return [];
+                    }
+                });
+
+                const results = await Promise.all(promises);
+                const allAlerts = results.flat();
+
+                alertLayer.clearLayers();
+
+                let stormCount = 0;
+                let tornadoCount = 0;
+                let marineCount = 0;
+
+                allAlerts.forEach((alert) => {
+                    const props = alert.properties;
+                    const isStorm = props.event.includes('Severe Thunderstorm');
+                    const isTornado = props.event.includes('Tornado');
+                    const isMarine = props.event.includes('Marine');
+
+                    if (isStorm) stormCount++;
+                    if (isTornado) tornadoCount++;
+                    if (isMarine) marineCount++;
+
+                    if ((isStorm && !layerControls.storm) ||
+                        (isTornado && !layerControls.tornado) ||
+                        (isMarine && !layerControls.marine)) {
+                        return;
+                    }
+
+                    let color = '#888888';
+                    let icon = 'fa-exclamation-triangle';
+
+                    if (isTornado) {
+                        const isConfirmed = props.description?.toLowerCase().includes('confirmed');
+                        color = isConfirmed ? '#9333ea' : '#dc2626';
+                        icon = 'fa-wind';
+                    } else if (isStorm) {
+                        color = '#f59e0b';
+                        icon = 'fa-bolt';
+                    } else if (isMarine) {
+                        color = '#3b82f6';
+                        icon = 'fa-ship';
+                    }
+                    const popupContent = `
+                        <div>
+                            <div class="popup-header" style="background-color: ${color};">
+                                <i class="fas ${icon}" style="margin-right: 0.5rem;"></i>
+                                ${props.event}
+                            </div>
+                            <div class="popup-body">
+                                <div><strong>Area:</strong> ${props.areaDesc}</div>
+                                <div><strong>Issued:</strong> ${new Date(props.sent).toLocaleString()}</div>
+                                <div><strong>Expires:</strong> ${new Date(props.expires).toLocaleString()}</div>
+                                <details>
+                                    <summary style="cursor: pointer; font-weight: 500; margin: 0.5rem 0;">Full Description</summary>
+                                    <div class="popup-details">${props.description?.replace(/\n/g, '<br>') || 'No description available'}</div>
+                                </details>
+                            </div>
+                        </div>
+                    `;
+
+                    if (alert.geometry) {
+                        const geoJsonLayer = L.geoJSON(alert.geometry, {
+                            style: {
+                                color: color,
+                                weight: 3,
+                                fillColor: color,
+                                fillOpacity: 0.3,
+                                opacity: 0.8,
+                                dashArray: isTornado ? '5, 5' : null
+                            }
+                        });
+
+                        geoJsonLayer.bindPopup(popupContent, {
+                            maxWidth: 380,
+                            className: 'weather-alert-popup'
+                        });
+
+                        alertLayer.addLayer(geoJsonLayer);
+                    }
+                });
+
+                updateCountsAnimated(stormCount, tornadoCount, marineCount);
+                updateLastUpdated();
+
+                console.log(`Loaded ${allAlerts.length} weather alerts`);
+
+            } catch (error) {
+                console.error('Error loading weather alerts:', error);
+                showNotification('Failed to load weather alerts', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function updateCountsAnimated(storm, tornado, marine) {
+            animateCount('storm-count', storm);
+            animateCount('tornado-count', tornado);
+            animateCount('marine-count', marine);
+            animateCount('storm-display', storm);
+            animateCount('tornado-display', tornado);
+            animateCount('marine-display', marine);
+        }
+
+        function animateCount(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const currentValue = parseInt(element.textContent) || 0;
+            const increment = targetValue > currentValue ? 1 : -1;
+            const steps = Math.abs(targetValue - currentValue);
+            let step = 0;
+
+            const timer = setInterval(() => {
+                if (step >= steps) {
+                    clearInterval(timer);
+                    element.textContent = targetValue;
+                    return;
+                }
+                element.textContent = currentValue + (increment * step);
+                step++;
+            }, 50);
+        }
+
+        function updateLastUpdated() {
+            const now = new Date();
+            document.getElementById('last-updated').textContent = now.toLocaleTimeString();
+        }
+
+        function showLoading(show) {
+            const spinner = document.getElementById('loading-spinner');
+            spinner.style.display = show ? 'inline-block' : 'none';
+        }
+
+        function showNotification(message, type = 'info') {
+            console.log(`${type.toUpperCase()}: ${message}`);
+        }
+
+        function toggleLayer(layerType, toggleElement) {
+            layerControls[layerType] = !layerControls[layerType];
+            toggleElement.classList.toggle('active');
+
+            if (layerType === 'radar') {
+                if (layerControls.radar && radarLayer) {
+                    map.addLayer(radarLayer);
+                } else if (radarLayer) {
+                    map.removeLayer(radarLayer);
+                }
+            } else {
+                loadWeatherAlerts();
+            }
+        }
+
+        function toggleControls() {
+            const panel = document.getElementById('controls-panel');
+            panel.classList.toggle('visible');
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function loadSavedTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-icon').className = 'fas fa-sun';
+            }
+        }
+
+        function toggleFullscreen() {
+            document.body.classList.toggle('fullscreen-mode');
+            setTimeout(() => {
+                if (map) {
+                    map.invalidateSize();
+                }
+            }, 300);
+        }
+
+        function centerOnUser() {
+            if (navigator.geolocation) {
+                showLoading(true);
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    map.setView([lat, lng], 8);
+
+                    const userIcon = L.divIcon({
+                        className: 'user-location-marker',
+                        html: '<i class="fas fa-location-dot" style="color: #3b82f6; font-size: 1.5rem;"></i>',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 15]
+                    });
+
+                    L.marker([lat, lng], { icon: userIcon })
+                        .addTo(map)
+                        .bindPopup('Your Location')
+                        .openPopup();
+
+                    showLoading(false);
+                }, (error) => {
+                    console.error('Geolocation error:', error);
+                    showNotification('Unable to get your location. Please check your browser settings.', 'error');
+                    showLoading(false);
+                });
+            } else {
+                showNotification('Geolocation is not supported by this browser.', 'error');
+            }
+        }
+
+        function refreshData() {
+            showLoading(true);
+            Promise.all([loadRadar(), loadWeatherAlerts()])
+                .then(() => {
+                    showNotification('Data refreshed successfully', 'success');
+                })
+                .catch(() => {
+                    showNotification('Failed to refresh some data', 'error');
+                })
+                .finally(() => {
+                    showLoading(false);
+                });
+        }
+
+        function startAutoRefresh() {
+            let refreshInterval = 60000;
+            let retryCount = 0;
+            const maxRetries = 3;
+
+            function refresh() {
+                Promise.all([loadRadar(), loadWeatherAlerts()])
+                    .then(() => {
+                        retryCount = 0;
+                        refreshInterval = 60000; // Reset to 1 minute on success
+                    })
+                    .catch(() => {
+                        retryCount++;
+                        if (retryCount <= maxRetries) {
+                            refreshInterval = Math.min(refreshInterval * 2, 300000); // Max 5 minutes
+                        }
+                    });
+            }
+
+            setInterval(refresh, refreshInterval);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing RadarHQ...');
+
+            loadSavedTheme();
+
+            setTimeout(() => {
+                initMap();
+                startAutoRefresh();
+            }, 100);
         });
-        alertLayer.addLayer(layer);
-      });
 
-      document.getElementById('storm-count').textContent = stormCount;
-      document.getElementById('tornado-count').textContent = tornadoCount;
-      document.getElementById('marine-count').textContent = marineCount;
-    }
+        window.addEventListener('resize', () => {
+            if (map) {
+                map.invalidateSize();
+            }
+        });
 
-    function openFullscreen() {
-      document.body.classList.toggle('map-only');
-    }
-
-
-    updateRadar();
-    updateWarnings();
-    setInterval(() => {
-      updateRadar();
-      updateWarnings();
-    }, 60000);
-
-    document.getElementById('toggleRadar').addEventListener('change', e => {
-      e.target.checked ? map.addLayer(radarLayer) : map.removeLayer(radarLayer);
-    });
-
-    ['toggleStorm', 'toggleTornado', 'toggleMarine'].forEach(id =>
-      document.getElementById(id).addEventListener('change', updateWarnings));
-
-    document.getElementById('toggle-controls').addEventListener('click', () => {
-      document.getElementById('controls').classList.toggle('hidden');
-    });
-  </script>
-  <footer style="text-align: center; padding: 20px; background: #1a1a1a;">
-    <p style="color: #ccc; font-size: 14px; margin-top: 8px;">Made by Hayden | RadarHQ</p>
-  </footer>
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                console.log('Page hidden, pausing updates');
+            } else {
+                console.log('Page visible, resuming updates');
+                refreshData();
+            }
+        });
+    </script>
 </body>
 </html>
