@@ -8,29 +8,34 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
         :root {
             --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-accent: #f1f5f9;
-            --text-primary: #0f172a;
+            --bg-secondary: #fafbfc;
+            --bg-accent: #f5f7fa;
+            --text-primary: #1a1f2e;
             --text-secondary: #64748b;
             --text-muted: #94a3b8;
             --border: #e2e8f0;
-            --border-light: #f1f5f9;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --shadow-lg: rgba(0, 0, 0, 0.15);
-            --blue-500: #3b82f6;
-            --blue-600: #2563eb;
-            --green-500: #10b981;
-            --orange-500: #f59e0b;
-            --red-500: #ef4444;
-            --red-600: #dc2626;
-            --purple-600: #9333ea;
-            --indigo-600: #4f46e5;
+            --border-light: #f0f4f8;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+            --blue: #3b82f6;
+            --blue-dark: #2563eb;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --red-dark: #dc2626;
+            --purple: #8b5cf6;
+            --indigo: #6366f1;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         [data-theme="dark"] {
@@ -42,8 +47,10 @@
             --text-muted: #94a3b8;
             --border: #334155;
             --border-light: #475569;
-            --shadow: rgba(0, 0, 0, 0.3);
-            --shadow-lg: rgba(0, 0, 0, 0.4);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -54,25 +61,27 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-accent) 100%);
+            background: var(--bg-secondary);
             color: var(--text-primary);
             min-height: 100vh;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .header {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
-            padding: 1rem 0;
+            padding: 0.75rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
         }
 
         [data-theme="dark"] .header {
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(15, 23, 42, 0.8);
         }
 
         .header-content {
@@ -91,157 +100,158 @@
         }
 
         .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: #4A4A4A;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-            transition: transform 0.2s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
         }
 
         .logo-icon:hover {
             transform: scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .logo-text h1 {
-            font-size: 1.375rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: #4A4A4A;
-            background: none;
-            -webkit-background-clip: initial;
-            -webkit-text-fill-color: initial;
-            background-clip: initial;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
         }
-        
+
         .logo-text p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            font-weight: 500;
+            font-weight: 400;
+            margin-top: 1px;
         }
 
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            margin-right: 0.5rem;
+        }
+
+        .status-dot {
+            width: 5px;
+            height: 5px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         .btn {
-            background: none;
+            background: var(--bg-primary);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 0.625rem;
+            border-radius: 8px;
+            padding: 0.5rem;
             cursor: pointer;
             color: var(--text-secondary);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.875rem;
-            min-width: 40px;
-            min-height: 40px;
+            width: 36px;
+            height: 36px;
+            box-shadow: var(--shadow);
         }
 
         .btn:hover {
             background: var(--bg-accent);
             color: var(--text-primary);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--shadow);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-primary {
-            background: var(--blue-500);
+            background: var(--blue);
             color: white;
-            border-color: var(--blue-500);
+            border-color: var(--blue);
         }
 
         .btn-primary:hover {
-            background: var(--blue-600);
-            border-color: var(--blue-600);
-        }
-
-        .status-badge {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--green-500);
-            padding: 0.5rem 1rem;
-            border-radius: 24px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--green-500);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.1); }
+            background: var(--blue-dark);
+            border-color: var(--blue-dark);
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 1.5rem;
+            padding: 1rem;
             display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: 1.5rem;
-            min-height: calc(100vh - 100px);
+            grid-template-columns: 1fr 300px;
+            gap: 1rem;
+            min-height: calc(100vh - 80px);
         }
 
         @media (max-width: 1024px) {
             .container {
                 grid-template-columns: 1fr;
-                padding: 1rem;
+                padding: 0.75rem;
             }
         }
 
         .map-container {
             background: var(--bg-primary);
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
             border: 1px solid var(--border);
-            box-shadow: 0 8px 32px var(--shadow);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
             position: relative;
-            transition: box-shadow 0.3s ease;
+            transition: var(--transition);
         }
 
         .map-container:hover {
-            box-shadow: 0 12px 40px var(--shadow-lg);
+            box-shadow: var(--shadow-xl);
         }
 
         .map-header {
-            padding: 1.25rem;
+            padding: 1rem;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            background: var(--bg-primary);
         }
 
         .map-title {
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            flex: 1;
-            font-size: 1.1rem;
+            gap: 0.5rem;
+            font-size: 0.95rem;
         }
 
         .loading-spinner {
             animation: spin 1s linear infinite;
-            color: var(--blue-500);
+            color: var(--blue);
         }
 
         @keyframes spin {
@@ -251,7 +261,7 @@
 
         .map-controls {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.25rem;
         }
 
         #map {
@@ -261,18 +271,18 @@
 
         .controls-panel {
             position: absolute;
-            top: 1.25rem;
-            left: 1.25rem;
+            top: 1rem;
+            left: 1rem;
             background: var(--bg-primary);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem;
-            box-shadow: 0 8px 32px var(--shadow-lg);
-            min-width: 240px;
+            border-radius: var(--radius);
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            min-width: 220px;
             z-index: 1000;
-            transform: translateY(-100%);
+            transform: translateY(-110%);
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             backdrop-filter: blur(10px);
         }
 
@@ -285,11 +295,11 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .controls-title {
-            font-size: 0.95rem;
+            font-size: 0.875rem;
             font-weight: 600;
             color: var(--text-primary);
         }
@@ -298,31 +308,28 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1rem;
-            padding: 0.5rem 0;
+            margin-bottom: 0.75rem;
+            padding: 0.25rem 0;
         }
 
         .control-label {
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
             font-weight: 500;
         }
 
         .toggle {
             position: relative;
-            width: 44px;
-            height: 22px;
+            width: 38px;
+            height: 20px;
             background: var(--border);
-            border-radius: 22px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid var(--border-light);
+            transition: var(--transition);
         }
 
         .toggle.active {
-            background: var(--blue-500);
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: var(--blue);
         }
 
         .toggle-thumb {
@@ -333,78 +340,78 @@
             height: 18px;
             background: white;
             border-radius: 50%;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .toggle.active .toggle-thumb {
-            transform: translateX(22px);
+            transform: translateX(18px);
         }
 
         .status-bar {
             position: absolute;
-            bottom: 1.25rem;
-            left: 1.25rem;
+            bottom: 1rem;
+            left: 1rem;
             background: var(--bg-primary);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            font-size: 0.8rem;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.375rem;
             backdrop-filter: blur(10px);
-            box-shadow: 0 4px 12px var(--shadow);
+            box-shadow: var(--shadow-md);
         }
 
         .info-panel {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .card {
             background: var(--bg-primary);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px var(--shadow);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .card:hover {
-            box-shadow: 0 12px 40px var(--shadow-lg);
-            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-1px);
         }
 
         .card-header {
-            padding: 1.25rem;
+            padding: 1rem;
             border-bottom: 1px solid var(--border);
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            background: var(--bg-primary);
         }
 
         .card-title {
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.05rem;
+            gap: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .card-content {
-            padding: 1.25rem;
+            padding: 1rem;
         }
 
         .alert-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 0.75rem;
-            transition: all 0.2s ease;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
             cursor: pointer;
         }
 
@@ -413,101 +420,103 @@
         }
 
         .alert-item:hover {
-            transform: translateX(4px);
+            transform: translateX(2px);
         }
 
         .alert-storm {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
-            border: 1px solid rgba(245, 158, 11, 0.2);
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.15);
         }
 
         .alert-tornado {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.15);
         }
-        
+
         .alert-confirmed-tornado {
-            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%);
-            border: 1px solid rgba(147, 51, 234, 0.2);
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.15);
         }
+
         .alert-marine {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.15);
         }
 
         .alert-info {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.625rem;
         }
 
         .alert-icon {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
         }
 
         .alert-storm .alert-icon {
-            background: rgba(245, 158, 11, 0.15);
-            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--orange);
         }
 
         .alert-tornado .alert-icon {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--red);
         }
-        
+
         .alert-confirmed-tornado .alert-icon {
-            background: rgba(147, 51, 234, 0.15);
-            color: #9333ea;
+            background: rgba(139, 92, 246, 0.12);
+            color: var(--purple);
         }
-        
+
         .alert-marine .alert-icon {
-            background: rgba(59, 130, 246, 0.15);
-            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.12);
+            color: var(--blue);
         }
 
         .alert-text h4 {
-            font-size: 0.95rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.125rem;
             color: var(--text-primary);
         }
 
         .alert-text p {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            font-weight: 500;
+            font-weight: 400;
         }
 
         .alert-count {
-            background: rgba(0, 0, 0, 0.08);
+            background: var(--bg-accent);
             color: var(--text-primary);
-            padding: 0.5rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            min-width: 32px;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            min-width: 24px;
             text-align: center;
+            border: 1px solid var(--border);
         }
 
         .legend-items {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.5rem;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: background 0.2s ease;
+            gap: 0.5rem;
+            padding: 0.375rem;
+            border-radius: 6px;
+            transition: var(--transition);
         }
 
         .legend-item:hover {
@@ -515,15 +524,15 @@
         }
 
         .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 6px;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
             border: 1px solid var(--border);
             flex-shrink: 0;
         }
 
         .legend-label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
             font-weight: 500;
         }
@@ -557,49 +566,58 @@
             }
 
             .container {
-                padding: 1rem;
+                padding: 0.5rem;
             }
 
             .controls-panel {
-                left: 0.75rem;
-                right: 0.75rem;
+                left: 0.5rem;
+                right: 0.5rem;
                 min-width: auto;
             }
 
             #map {
-                height: 450px;
+                height: 400px;
             }
 
             .logo-text h1 {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
 
             .status-badge {
                 display: none;
             }
+
+            .alert-text h4 {
+                font-size: 0.75rem;
+            }
+
+            .alert-text p {
+                font-size: 0.65rem;
+            }
         }
 
         .leaflet-popup-content-wrapper {
-            border-radius: 12px !important;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+            border-radius: var(--radius) !important;
+            box-shadow: var(--shadow-lg) !important;
             overflow: hidden !important;
         }
 
         .popup-header {
-            padding: 1rem;
+            padding: 0.75rem;
             font-weight: 600;
             color: white;
             margin: -8px -8px 8px -8px;
-            border-radius: 12px 12px 0 0;
-            font-size: 0.95rem;
+            border-radius: var(--radius) var(--radius) 0 0;
+            font-size: 0.875rem;
         }
 
         .popup-body {
-            padding: 0.5rem 0;
+            padding: 0.25rem 0;
         }
 
         .popup-body > div {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.375rem;
+            font-size: 0.8rem;
         }
 
         .popup-body strong {
@@ -608,11 +626,11 @@
 
         .popup-details {
             background: var(--bg-accent);
-            padding: 0.75rem;
+            padding: 0.5rem;
             border-radius: 6px;
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
-            max-height: 140px;
+            margin-top: 0.375rem;
+            font-size: 0.75rem;
+            max-height: 120px;
             overflow-y: auto;
             border: 1px solid var(--border);
         }
@@ -620,7 +638,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
@@ -629,15 +647,11 @@
         }
 
         .card {
-            animation: fadeInUp 0.6s ease-out;
+            animation: fadeInUp 0.4s ease-out;
         }
 
         .card:nth-child(2) {
             animation-delay: 0.1s;
-        }
-
-        .card:nth-child(3) {
-            animation-delay: 0.2s;
         }
     </style>
 </head>
@@ -646,17 +660,17 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">
-                    <img src="https://files.catbox.moe/varlrg.png" alt="RadarHQ Logo" style="width: 40px; height: 40px;">
+                    <img src="https://files.catbox.moe/varlrg.png" alt="RadarHQ Logo">
                 </div>
                 <div class="logo-text">
                     <h1>RadarHQ</h1>
-                    <p>Real-time Weather Radar | Created by Hayden</p>
+                    <p>Live Weather Radar</p>
                 </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="display: flex; align-items: center;">
                 <div class="status-badge">
                     <div class="status-dot"></div>
-                    <span>Updates Every Minute</span>
+                    <span>Live Updates</span>
                 </div>
 
                 <div class="header-controls">
@@ -678,16 +692,16 @@
         <div class="map-container">
             <div class="map-header">
                 <div class="map-title">
-                    <i class="fas fa-map-location-dot"></i>
-                    <span>Live Weather Radar</span>
+                    <i class="fas fa-radar"></i>
+                    <span>Weather Radar</span>
                     <i class="fas fa-spinner loading-spinner" id="loading-spinner" style="display: none;"></i>
                 </div>
                 <div class="map-controls">
                     <button class="btn" onclick="toggleControls()" title="Layer Controls">
-                        <i class="fas fa-sliders-h"></i>
+                        <i class="fas fa-layer-group"></i>
                     </button>
-                    <button class="btn" onclick="refreshData()" title="Refresh Data">
-                        <i class="fas fa-sync-alt"></i>
+                    <button class="btn" onclick="refreshData()" title="Refresh">
+                        <i class="fas fa-refresh"></i>
                     </button>
                 </div>
             </div>
@@ -697,7 +711,7 @@
             <div class="controls-panel" id="controls-panel">
                 <div class="controls-header">
                     <h4 class="controls-title">Map Layers</h4>
-                    <button class="btn" onclick="toggleControls()" style="padding: 0.25rem;">
+                    <button class="btn" onclick="toggleControls()" style="padding: 0.25rem; width: 28px; height: 28px;">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
@@ -710,14 +724,14 @@
                 </div>
 
                 <div class="control-item">
-                    <label class="control-label">Severe Thunderstorm</label>
+                    <label class="control-label">Severe Storms</label>
                     <div class="toggle active" onclick="toggleLayer('storm', this)">
                         <div class="toggle-thumb"></div>
                     </div>
                 </div>
 
                 <div class="control-item">
-                    <label class="control-label">Tornado</label>
+                    <label class="control-label">Tornados</label>
                     <div class="toggle active" onclick="toggleLayer('tornado', this)">
                         <div class="toggle-thumb"></div>
                     </div>
@@ -736,8 +750,8 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-triangle-exclamation"></i>
-                        Live Weather Alerts
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Active Alerts
                     </h3>
                 </div>
                 <div class="card-content">
@@ -747,49 +761,50 @@
                                 <i class="fas fa-bolt"></i>
                             </div>
                             <div class="alert-text">
-                                <h4>Severe Thunderstorm</h4>
-                                <p># Of Warnings Active: </p>
+                                <h4>Severe Storms</h4>
+                                <p>Thunderstorm warnings</p>
                             </div>
                         </div>
                         <div class="alert-count" id="storm-display">0</div>
                     </div>
 
-                    <div class="alert-item alert-marine">
-                        <div class="alert-info">
-                            <div class="alert-icon">
-                                <i class="fas fa-ship"></i>
-                            </div>
-                            <div class="alert-text">
-                                <h4>Special Marine</h4>
-                                <p># Of Warnings Active: </p>
-                            </div>
-                        </div>
-                        <div class="alert-count" id="marine-display">0</div>
-                    </div>
                     <div class="alert-item alert-tornado">
                         <div class="alert-info">
                             <div class="alert-icon">
                                 <i class="fas fa-tornado"></i>
                             </div>
                             <div class="alert-text">
-                                <h4>Tornado Warning</h4>
-                                <p># Of Warnings Active: </p>
+                                <h4>Tornado Warnings</h4>
+                                <p>Active tornado alerts</p>
                             </div>
                         </div>
                         <div class="alert-count" id="tornado-display">0</div>
                     </div>
-                    
+
                     <div class="alert-item alert-confirmed-tornado">
                         <div class="alert-info">
                             <div class="alert-icon">
                                 <i class="fas fa-exclamation-circle"></i>
                             </div>
                             <div class="alert-text">
-                                <h4>Confirmed Tornado</h4>
-                                <p># Of Confirmed Tornadoes: </p>
+                                <h4>Confirmed Tornados</h4>
+                                <p>Visually confirmed</p>
                             </div>
                         </div>
                         <div class="alert-count" id="confirmed-tornado-display">0</div>
+                    </div>
+
+                    <div class="alert-item alert-marine">
+                        <div class="alert-info">
+                            <div class="alert-icon">
+                                <i class="fas fa-anchor"></i>
+                            </div>
+                            <div class="alert-text">
+                                <h4>Marine Warnings</h4>
+                                <p>Special marine alerts</p>
+                            </div>
+                        </div>
+                        <div class="alert-count" id="marine-display">0</div>
                     </div>
                 </div>
             </div>
@@ -797,8 +812,8 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-palette"></i>
-                        Map Legend
+                        <i class="fas fa-map"></i>
+                        Legend
                     </h3>
                 </div>
                 <div class="card-content">
@@ -808,16 +823,16 @@
                             <span class="legend-label">Severe Thunderstorm</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-color" style="background: #3b82f6;"></div>
-                            <span class="legend-label">Marine Warning</span>
-                        </div>
-                        <div class="legend-item">
                             <div class="legend-color" style="background: #dc2626;"></div>
                             <span class="legend-label">Tornado Warning</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-color" style="background: #9333ea;"></div>
+                            <div class="legend-color" style="background: #8b5cf6;"></div>
                             <span class="legend-label">Confirmed Tornado</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #3b82f6;"></div>
+                            <span class="legend-label">Marine Warning</span>
                         </div>
                     </div>
                 </div>
@@ -978,14 +993,14 @@
 
                     if (isTornado) {
                         const isConfirmed = props.description?.toLowerCase().includes('confirmed');
-                        color = isConfirmed ? '#9333ea' : '#dc2626';
-                        icon = 'fa-wind';
+                        color = isConfirmed ? '#8b5cf6' : '#dc2626';
+                        icon = 'fa-tornado';
                     } else if (isStorm) {
                         color = '#f59e0b';
                         icon = 'fa-bolt';
                     } else if (isMarine) {
                         color = '#3b82f6';
-                        icon = 'fa-ship';
+                        icon = 'fa-anchor';
                     }
 
                     let strength = 'N/A';
@@ -1058,12 +1073,7 @@
                     }
                 });
 
-                document.getElementById('storm-display').textContent = stormCount;
-                document.getElementById('tornado-display').textContent = tornadoCount;
-                document.getElementById('confirmed-tornado-display').textContent = confirmedTornadoCount;
-                document.getElementById('marine-display').textContent = marineCount;
-
-                updateLastUpdated();
+                updateCountsAnimated(stormCount, tornadoCount, confirmedTornadoCount, marineCount);
 
                 console.log(`Loaded ${allAlerts.length} weather alerts`);
 
@@ -1075,12 +1085,10 @@
             }
         }
 
-        function updateCountsAnimated(storm, tornado, marine) {
-            animateCount('storm-count', storm);
-            animateCount('tornado-count', tornado);
-            animateCount('marine-count', marine);
+        function updateCountsAnimated(storm, tornado, confirmedTornado, marine) {
             animateCount('storm-display', storm);
             animateCount('tornado-display', tornado);
+            animateCount('confirmed-tornado-display', confirmedTornado);
             animateCount('marine-display', marine);
         }
 
@@ -1100,11 +1108,6 @@
                 element.textContent = currentValue + (increment * step);
                 step++;
             }, 50);
-        }
-
-        function updateLastUpdated() {
-            const now = new Date();
-            document.getElementById('last-updated').textContent = now.toLocaleTimeString();
         }
 
         function showLoading(show) {
