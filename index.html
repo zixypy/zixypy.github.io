@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RadarHQ - Live Weather Radar</title>
-
-    <!-- External Dependencies -->
+    <link rel="icon" href="https://files.catbox.moe/nnvzas.png" type="image/png" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,7 +60,6 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Header Styles */
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -192,7 +190,6 @@
             50% { opacity: 0.5; transform: scale(1.1); }
         }
 
-        /* Main Content */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -210,7 +207,6 @@
             }
         }
 
-        /* Map Section */
         .map-container {
             background: var(--bg-primary);
             border-radius: 16px;
@@ -263,7 +259,6 @@
             width: 100%;
         }
 
-        /* Controls Panel */
         .controls-panel {
             position: absolute;
             top: 1.25rem;
@@ -313,7 +308,6 @@
             font-weight: 500;
         }
 
-        /* Enhanced Toggle Switch */
         .toggle {
             position: relative;
             width: 44px;
@@ -347,7 +341,6 @@
             transform: translateX(22px);
         }
 
-        /* Status Bar */
         .status-bar {
             position: absolute;
             bottom: 1.25rem;
@@ -366,7 +359,6 @@
             box-shadow: 0 4px 12px var(--shadow);
         }
 
-        /* Info Panel */
         .info-panel {
             display: flex;
             flex-direction: column;
@@ -433,7 +425,11 @@
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
-
+        
+        .alert-confirmed-tornado {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%);
+            border: 1px solid rgba(147, 51, 234, 0.2);
+        }
         .alert-marine {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
             border: 1px solid rgba(59, 130, 246, 0.2);
@@ -464,7 +460,12 @@
             background: rgba(239, 68, 68, 0.15);
             color: #ef4444;
         }
-
+        
+        .alert-confirmed-tornado .alert-icon {
+            background: rgba(147, 51, 234, 0.15);
+            color: #9333ea;
+        }
+        
         .alert-marine .alert-icon {
             background: rgba(59, 130, 246, 0.15);
             color: #3b82f6;
@@ -494,7 +495,6 @@
             text-align: center;
         }
 
-        /* Legend */
         .legend-items {
             display: flex;
             flex-direction: column;
@@ -528,7 +528,6 @@
             font-weight: 500;
         }
 
-        /* Fullscreen Mode */
         body.fullscreen-mode .header,
         body.fullscreen-mode .info-panel {
             display: none !important;
@@ -552,7 +551,6 @@
             height: 100vh;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
                 padding: 0 1rem;
@@ -581,7 +579,6 @@
             }
         }
 
-        /* Custom Popup Styles */
         .leaflet-popup-content-wrapper {
             border-radius: 12px !important;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
@@ -620,7 +617,6 @@
             border: 1px solid var(--border);
         }
 
-        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -646,7 +642,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-content">
             <div class="logo">
@@ -655,14 +650,14 @@
                 </div>
                 <div class="logo-text">
                     <h1>RadarHQ</h1>
-                    <p>Real-time Weather Radar</p>
+                    <p>Real-time Weather Radar | Created by Hayden</p>
                 </div>
             </div>
 
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <div class="status-badge">
                     <div class="status-dot"></div>
-                    <span>Live Updates</span>
+                    <span>Updates Every Minute</span>
                 </div>
 
                 <div class="header-controls">
@@ -680,9 +675,7 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <div class="container">
-        <!-- Map Section -->
         <div class="map-container">
             <div class="map-header">
                 <div class="map-title">
@@ -700,10 +693,8 @@
                 </div>
             </div>
 
-            <!-- Map -->
             <div id="map"></div>
 
-            <!-- Controls Panel -->
             <div class="controls-panel" id="controls-panel">
                 <div class="controls-header">
                     <h4 class="controls-title">Map Layers</h4>
@@ -741,16 +732,13 @@
                 </div>
             </div>
 
-            <!-- Status Bar -->
             <div class="status-bar">
                 <div class="status-dot"></div>
                 <span>Updated: <span id="last-updated">--:--</span></span>
             </div>
         </div>
 
-        <!-- Info Panel -->
         <div class="info-panel">
-            <!-- Weather Alerts -->
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
@@ -766,7 +754,7 @@
                             </div>
                             <div class="alert-text">
                                 <h4>Severe Thunderstorm</h4>
-                                <p>Warnings Active</p>
+                                <p># Of Warnings Active: </p>
                             </div>
                         </div>
                         <div class="alert-count" id="storm-display">0</div>
@@ -778,11 +766,23 @@
                                 <i class="fas fa-wind"></i>
                             </div>
                             <div class="alert-text">
-                                <h4>Tornado</h4>
-                                <p>Warnings Active</p>
+                                <h4>Tornado Warning</h4>
+                                <p># Of Warnings Active: </p>
                             </div>
                         </div>
                         <div class="alert-count" id="tornado-display">0</div>
+                    </div>
+                    <div class="alert-item alert-confirmed-tornado">
+                        <div class="alert-info">
+                            <div class="alert-icon">
+                                <i class="fas fa-wind"></i>
+                            </div>
+                            <div class="alert-text">
+                                <h4>Confirmed Tornado</h4>
+                                <p># Of Warnings Active: </p>
+                            </div>
+                        </div>
+                        <div class="alert-count" id="confirmed-tornado-display">0</div>
                     </div>
 
                     <div class="alert-item alert-marine">
@@ -792,7 +792,7 @@
                             </div>
                             <div class="alert-text">
                                 <h4>Marine</h4>
-                                <p>Warnings Active</p>
+                                <p># Of Warnings Active: </p>
                             </div>
                         </div>
                         <div class="alert-count" id="marine-display">0</div>
@@ -800,7 +800,6 @@
                 </div>
             </div>
 
-            <!-- Legend -->
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
@@ -955,6 +954,7 @@
 
                 let stormCount = 0;
                 let tornadoCount = 0;
+                let confirmedTornadoCount = 0;
                 let marineCount = 0;
 
                 allAlerts.forEach((alert) => {
@@ -964,7 +964,13 @@
                     const isMarine = props.event.includes('Marine');
 
                     if (isStorm) stormCount++;
-                    if (isTornado) tornadoCount++;
+                    if (isTornado) {
+                        if (props.description?.toLowerCase().includes('confirmed')) {
+                            confirmedTornadoCount++;
+                        } else {
+                            tornadoCount++;
+                        }
+                    }
                     if (isMarine) marineCount++;
 
                     if ((isStorm && !layerControls.storm) ||
@@ -987,9 +993,36 @@
                         color = '#3b82f6';
                         icon = 'fa-ship';
                     }
+
+                    let strength = 'N/A';
+                    if (isTornado) {
+                        if (props.description?.toLowerCase().includes('confirmed')) strength = 'Confirmed Tornado';
+                        else if (props.description?.toLowerCase().includes('large and extremely dangerous')) strength = 'Confirmed Large Tornado';
+                        else if (props.description?.toLowerCase().includes('radar indicated rotation')) strength = 'Radar Indicated Rotation';
+                        else if (props.description?.toLowerCase().includes('funnel')) strength = 'Funnel Cloud Observed';
+                    }
+                    let possibleTornado = isStorm && props.description?.toLowerCase().includes('possible tornado') ? 'Tornado Possible' : 'N/A';
+                    let waterspout = isMarine && props.description?.toLowerCase().includes('waterspout') ? 'Waterspout Possible' : 'N/A';
+
+                    let wind = 'Unknown';
+                    let hail = 'Unknown';
+                    const hazardMatch = props.description?.match(/HAZARD[\s.:-]*([\s\S]*?)\n/i);
+                    if (hazardMatch && hazardMatch[1]) {
+                        const hazard = hazardMatch[1].toLowerCase();
+                        const windMatch = hazard.match(/(\d+)\s?(mph|knots)/i);
+                        if (windMatch) wind = `${windMatch[1]} ${windMatch[2].toLowerCase()}`;
+                        const hailMatch = hazard.match(/Quarter|Half Dollar|Golf Ball|Ping Pong Ball|Penny|Nickel|Baseball|Tennis Ball/i);
+                        if (hailMatch) {
+                            let size = hailMatch[0];
+                            size = size.match(/Quarter|Half Dollar|Nickel|Penny|Baseball|Tennis Ball/i) ? `${size} sized` : `${size}s`;
+                            hail = size;
+                        }
+                    }
+
+                    const headerClass = isTornado && strength === 'Confirmed Tornado' ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
                     const popupContent = `
                         <div>
-                            <div class="popup-header" style="background-color: ${color};">
+                            <div class="popup-header ${headerClass}" style="background-color: ${color}; opacity: 0.9;">
                                 <i class="fas ${icon}" style="margin-right: 0.5rem;"></i>
                                 ${props.event}
                             </div>
@@ -997,6 +1030,11 @@
                                 <div><strong>Area:</strong> ${props.areaDesc}</div>
                                 <div><strong>Issued:</strong> ${new Date(props.sent).toLocaleString()}</div>
                                 <div><strong>Expires:</strong> ${new Date(props.expires).toLocaleString()}</div>
+                                <div><strong>Max Windspeed:</strong> ${wind}</div>
+                                ${!isMarine ? `<div><strong>Hail Size:</strong> ${hail}</div>` : ''}
+                                ${isMarine ? `<div><strong>Waterspout:</strong> ${waterspout}</div>` : ''}
+                                ${isStorm ? `<div><strong>Tornado:</strong> ${possibleTornado}</div>` : ''}
+                                ${isTornado ? `<div><strong>Tornado:</strong> ${strength}</div>` : ""}
                                 <details>
                                     <summary style="cursor: pointer; font-weight: 500; margin: 0.5rem 0;">Full Description</summary>
                                     <div class="popup-details">${props.description?.replace(/\n/g, '<br>') || 'No description available'}</div>
@@ -1013,7 +1051,7 @@
                                 fillColor: color,
                                 fillOpacity: 0.3,
                                 opacity: 0.8,
-                                dashArray: isTornado ? '5, 5' : null
+                                dashArray: null
                             }
                         });
 
@@ -1026,7 +1064,11 @@
                     }
                 });
 
-                updateCountsAnimated(stormCount, tornadoCount, marineCount);
+                document.getElementById('storm-display').textContent = stormCount;
+                document.getElementById('tornado-display').textContent = tornadoCount;
+                document.getElementById('confirmed-tornado-display').textContent = confirmedTornadoCount;
+                document.getElementById('marine-display').textContent = marineCount;
+
                 updateLastUpdated();
 
                 console.log(`Loaded ${allAlerts.length} weather alerts`);
@@ -1186,12 +1228,12 @@
                 Promise.all([loadRadar(), loadWeatherAlerts()])
                     .then(() => {
                         retryCount = 0;
-                        refreshInterval = 60000; // Reset to 1 minute on success
+                        refreshInterval = 60000;
                     })
                     .catch(() => {
                         retryCount++;
                         if (retryCount <= maxRetries) {
-                            refreshInterval = Math.min(refreshInterval * 2, 300000); // Max 5 minutes
+                            refreshInterval = Math.min(refreshInterval * 2, 300000);
                         }
                     });
             }
