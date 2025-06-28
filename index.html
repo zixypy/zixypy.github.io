@@ -1002,8 +1002,8 @@
                         else if (props.description?.toLowerCase().includes('radar indicated rotation')) strength = 'Radar Indicated Rotation';
                         else if (props.description?.toLowerCase().includes('funnel')) strength = 'Funnel Cloud Observed';
                     }
-                    let possibleTornado = isStorm && props.description?.toLowerCase().includes('possible tornado') ? 'Tornado Possible' : 'N/A';
-                    let waterspout = isMarine && props.description?.toLowerCase().includes('waterspout') ? 'Waterspout Possible' : 'N/A';
+                    let possibleTornado = isStorm && props.description?.toLowerCase().includes('possible tornado') ? 'Tornado Possible' : 'Tornado Not Possible';
+                    let waterspout = isMarine && props.description?.toLowerCase().includes('waterspout') ? 'Waterspout Possible' : 'Waterspout Not Possible';
 
                     let wind = 'Unknown';
                     let hail = 'Unknown';
