@@ -998,7 +998,7 @@
                     let strength = 'N/A';
                     if (isTornado) {
                         if (props.description?.toLowerCase().includes('confirmed')) strength = 'Confirmed Tornado';
-                        else if (props.description?.toLowerCase().includes('confirmed large')) strength = 'Confirmed Large Tornado';
+                        else if (props.description?.toLowerCase().includes('large')) strength = 'Confirmed Large Tornado';
                         else if (props.description?.toLowerCase().includes('radar indicated rotation')) strength = 'Radar Indicated Rotation';
                         else if (props.description?.toLowerCase().includes('funnel')) strength = 'Funnel Cloud Observed';
                     }
