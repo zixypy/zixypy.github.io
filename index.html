@@ -871,12 +871,22 @@
             loadRadar();
             loadWeatherAlerts();
         }
-
-        async function loadRadar() {
-            if (!layerControls.radar) return;
+        
+        function loadRadar() {
+            if (!layerControls || !layerControls.radar) return;
         
             try {
                 console.log('Loading radar data...');
+        
+                if (!map.getPane('radarPane')) {
+                    map.createPane('radarPane');
+                    map.getPane('radarPane').style.zIndex = 300; 
+                }
+        
+                if (!map.getPane('alertsPane')) {
+                    map.createPane('alertsPane');
+                    map.getPane('alertsPane').style.zIndex = 400;
+                }
         
                 if (radarLayer) {
                     map.removeLayer(radarLayer);
@@ -893,17 +903,16 @@
                     className: 'radar-layer'
                 });
         
-                if (layerControls.radar) {
-                    radarLayer.addTo(map);
-                }
+                radarLayer.addTo(map);
         
                 console.log('Radar data loaded successfully');
             } catch (error) {
                 console.error('Error loading radar:', error);
-                showNotification('Failed to load radar data', 'error');
+                if (typeof showNotification === 'function') {
+                    showNotification('Failed to load radar data', 'error');
+                }
             }
         }
-        
 
         async function loadWeatherAlerts() {
             try {
