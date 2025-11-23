@@ -120,7 +120,7 @@
         }
         
         [data-theme="dark"] .logo-text h1 {
-            color: #d1d5db; /* Lighter gray for dark mode */
+            color: #d1d5db;
         }
         
         .logo-text p {
@@ -229,10 +229,12 @@
         .map-header {
             padding: 1.25rem;
             border-bottom: 1px solid var(--border);
-            display: flex;
+            display: flex !important;
             align-items: center;
             justify-content: space-between;
             background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            position: relative;
+            z-index: 10;
         }
 
         .map-title {
@@ -551,9 +553,13 @@
             border: none;
             height: 100vh;
         }
+        
+        body.fullscreen-mode .map-header {
+            display: flex !important;
+        }
 
         body.fullscreen-mode #map {
-            height: 100vh;
+            height: calc(100vh - 80px);
         }
 
         @media (max-width: 768px) {
@@ -717,6 +723,13 @@
                 </div>
 
                 <div class="control-item">
+                    <label class="control-label">Velocity</label>
+                    <div class="toggle" onclick="toggleLayer('velocity', this)">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+
+                <div class="control-item">
                     <label class="control-label">Severe Thunderstorm</label>
                     <div class="toggle active" onclick="toggleLayer('storm', this)">
                         <div class="toggle-thumb"></div>
@@ -786,17 +799,43 @@
                         <div class="alert-count" id="tornado-display">0</div>
                     </div>
                     
-                    <div class="alert-item alert-confirmed-tornado">
+                    <div class="alert-item alert-storm" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%); border: 1px solid rgba(59, 130, 246, 0.2);">
                         <div class="alert-info">
-                            <div class="alert-icon">
-                                <i class="fas fa-exclamation-circle"></i>
+                            <div class="alert-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                                <i class="fas fa-eye"></i>
                             </div>
                             <div class="alert-text">
-                                <h4>Confirmed Tornadoes</h4>
-                                <p>Spotted and confirmed</p>
+                                <h4>Severe Thunderstorm Watch</h4>
+                                <p>Watch conditions</p>
                             </div>
                         </div>
-                        <div class="alert-count" id="confirmed-tornado-display">0</div>
+                        <div class="alert-count" id="storm-watch-display">0</div>
+                    </div>
+                    
+                    <div class="alert-item alert-tornado" style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%); border: 1px solid rgba(220, 38, 38, 0.2);">
+                        <div class="alert-info">
+                            <div class="alert-icon" style="background: rgba(220, 38, 38, 0.15); color: #dc2626;">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="alert-text">
+                                <h4>Tornado Watch</h4>
+                                <p>Watch conditions</p>
+                            </div>
+                        </div>
+                        <div class="alert-count" id="tornado-watch-display">0</div>
+                    </div>
+                    
+                    <div class="alert-item alert-storm" style="background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%); border: 1px solid rgba(147, 51, 234, 0.2);">
+                        <div class="alert-info">
+                            <div class="alert-icon" style="background: rgba(147, 51, 234, 0.15); color: #9333ea;">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="alert-text">
+                                <h4>Special Weather Statement</h4>
+                                <p>Important weather information</p>
+                            </div>
+                        </div>
+                        <div class="alert-count" id="special-statement-display">0</div>
                     </div>
                 </div>
             </div>
@@ -823,8 +862,16 @@
                             <span class="legend-label">Tornado Warning</span>
                         </div>
                         <div class="legend-item">
-                            <div class="legend-color" style="background: #9333ea;"></div>
-                            <span class="legend-label">Confirmed Tornado</span>
+                            <div class="legend-color" style="background: #3b82f6;"></div>
+                            <span class="legend-label">Severe Thunderstorm Watch</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #dc2626;"></div>
+                            <span class="legend-label">Tornado Watch</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #10b981; border: 1px dashed #10b981;"></div>
+                            <span class="legend-label">Velocity</span>
                         </div>
                     </div>
                 </div>
@@ -836,83 +883,218 @@
     <script>
         let map;
         let radarLayer;
+        let velocityLayer;
         let alertLayer;
+        let nexradLayer = null;
+
         let layerControls = {
             radar: true,
+            velocity: false,
             storm: true,
             tornado: true,
             marine: true
         };
-
+        const nexradSites = [
+            { id: "KABR", lat: 45.455, lon: -98.413, name: "Aberdeen, SD" },
+            { id: "KABX", lat: 35.149, lon: -106.823, name: "Albuquerque, NM" },
+            { id: "KAKQ", lat: 36.984, lon: -77.007, name: "Wakefield, VA" },
+            { id: "KAMA", lat: 35.233, lon: -101.709, name: "Amarillo, TX" },
+            { id: "KAMX", lat: 25.611, lon: -80.412, name: "Miami, FL" },
+            { id: "KAPX", lat: 44.906, lon: -84.723, name: "Gaylord, MI" },
+            { id: "KARX", lat: 43.822, lon: -91.191, name: "La Crosse, WI" },
+            { id: "KATX", lat: 48.194, lon: -122.495, name: "Seattle, WA" },
+            { id: "KBBX", lat: 39.496, lon: -121.633, name: "Beale AFB, CA" },
+            { id: "KBGM", lat: 42.199, lon: -75.984, name: "Binghamton, NY" },
+            { id: "KBHX", lat: 40.498, lon: -124.292, name: "Eureka, CA" },
+            { id: "KBIS", lat: 46.772, lon: -100.760, name: "Bismarck, ND" },
+            { id: "KBLX", lat: 45.853, lon: -108.606, name: "Billings, MT" },
+            { id: "KBMX", lat: 33.173, lon: -86.769, name: "Birmingham, AL" },
+            { id: "KBOX", lat: 41.955, lon: -70.541, name: "Boston, MA" },
+            { id: "KBRO", lat: 25.915, lon: -97.419, name: "Brownsville, TX" },
+            { id: "KBUF", lat: 42.948, lon: -78.736, name: "Buffalo, NY" },
+            { id: "KBYX", lat: 24.597, lon: -81.703, name: "Key West, FL" },
+            { id: "KCAE", lat: 33.948, lon: -81.118, name: "Columbia, SC" },
+            { id: "KCBW", lat: 46.039, lon: -67.806, name: "Caribou, ME" },
+            { id: "KCBX", lat: 44.498, lon: -116.015, name: "Boise, ID" },
+            { id: "KCCX", lat: 40.923, lon: -78.003, name: "State College, PA" },
+            { id: "KCLE", lat: 41.413, lon: -81.859, name: "Cleveland, OH" },
+            { id: "KCLX", lat: 32.655, lon: -81.042, name: "Charleston, SC" },
+            { id: "KCRP", lat: 27.784, lon: -97.511, name: "Corpus Christi, TX" },
+            { id: "KCYS", lat: 41.152, lon: -104.806, name: "Cheyenne, WY" },
+            { id: "KDAX", lat: 38.501, lon: -121.677, name: "Sacramento, CA" },
+            { id: "KDDC", lat: 37.760, lon: -99.969, name: "Dodge City, KS" },
+            { id: "KDFX", lat: 29.272, lon: -100.280, name: "Laughlin AFB, TX" },
+            { id: "KDIX", lat: 39.946, lon: -74.411, name: "Philadelphia, PA" },
+            { id: "KDLH", lat: 46.836, lon: -92.209, name: "Duluth, MN" },
+            { id: "KDMX", lat: 41.731, lon: -93.722, name: "Des Moines, IA" },
+            { id: "KDOX", lat: 38.825, lon: -75.440, name: "Dover, DE" },
+            { id: "KDTX", lat: 42.700, lon: -83.471, name: "Detroit, MI" },
+            { id: "KDVN", lat: 41.611, lon: -90.580, name: "Davenport, IA" },
+            { id: "KDYX", lat: 32.538, lon: -99.254, name: "Dyess AFB, TX" },
+            { id: "KEAX", lat: 38.810, lon: -94.264, name: "Kansas City, MO" },
+            { id: "KEMX", lat: 31.893, lon: -110.630, name: "Tucson, AZ" },
+            { id: "KENX", lat: 42.586, lon: -74.064, name: "Albany, NY" },
+            { id: "KEOX", lat: 31.460, lon: -85.460, name: "Fort Rucker, AL" },
+            { id: "KEPZ", lat: 31.873, lon: -106.698, name: "El Paso, TX" },
+            { id: "KESX", lat: 36.458, lon: -114.533, name: "Las Vegas, NV" },
+            { id: "KEVX", lat: 30.564, lon: -86.552, name: "Eglin AFB, FL" },
+            { id: "KEWX", lat: 29.703, lon: -98.029, name: "San Antonio, TX" },
+            { id: "KEYX", lat: 35.097, lon: -118.168, name: " Edwards AFB, CA" },
+            { id: "KFCX", lat: 37.024, lon: -80.274, name: "Roanoke, VA" },
+            { id: "KFDR", lat: 34.362, lon: -98.976, name: "Frederick, OK" },
+            { id: "KFDX", lat: 34.636, lon: -103.629, name: "Cannon AFB, NM" },
+            { id: "KFFC", lat: 33.363, lon: -84.566, name: "Atlanta, GA" },
+            { id: "KFSD", lat: 43.587, lon: -96.729, name: "Sioux Falls, SD" },
+            { id: "KFWS", lat: 32.573, lon: -97.303, name: "Dallas/Fort Worth, TX" },
+            { id: "KGGW", lat: 48.206, lon: -106.625, name: "Glasgow, MT" },
+            { id: "KGJX", lat: 39.062, lon: -108.208, name: "Grand Junction, CO" },
+            { id: "KGLD", lat: 39.367, lon: -101.700, name: "Goodland, KS" },
+            { id: "KGRB", lat: 44.498, lon: -88.111, name: "Green Bay, WI" },
+            { id: "KGRK", lat: 30.721, lon: -97.383, name: "Fort Cavazos, TX" },
+            { id: "KGRR", lat: 42.893, lon: -85.544, name: "Grand Rapids, MI" },
+            { id: "KGSP", lat: 34.883, lon: -82.220, name: "Greenville/Spartanburg, SC" },
+            { id: "KGWX", lat: 33.900, lon: -88.329, name: "Columbus AFB, MS" },
+            { id: "KGYX", lat: 43.891, lon: -70.256, name: "Gray, ME" },
+            { id: "KHDX", lat: 33.076, lon: -106.121, name: "Holloman AFB, NM" },
+            { id: "KHGX", lat: 29.471, lon: -95.079, name: "Houston, TX" },
+            { id: "KHNX", lat: 36.315, lon: -119.632, name: "Hanford, CA" },
+            { id: "KHPX", lat: 36.736, lon: -87.285, name: "Fort Campbell, KY" },
+            { id: "KHTX", lat: 34.930, lon: -86.083, name: "Huntsville, AL" },
+            { id: "KICT", lat: 37.654, lon: -97.443, name: "Wichita, KS" },
+            { id: "KICX", lat: 37.590, lon: -112.862, name: "Cedar City, UT" },
+            { id: "KILN", lat: 39.420, lon: -83.821, name: "Wilmington, OH" },
+            { id: "KILX", lat: 40.150, lon: -89.336, name: "Lincoln, IL" },
+            { id: "KIND", lat: 39.707, lon: -86.280, name: "Indianapolis, IN" },
+            { id: "KINX", lat: 36.175, lon: -95.564, name: "Tulsa, OK" },
+            { id: "KIWA", lat: 33.289, lon: -111.670, name: "Phoenix, AZ" },
+            { id: "KIWX", lat: 41.358, lon: -85.700, name: "Northern Indiana" },
+            { id: "KJAX", lat: 30.484, lon: -81.702, name: "Jacksonville, FL" },
+            { id: "KJGX", lat: 32.675, lon: -83.351, name: "Atlanta, GA" },
+            { id: "KJKL", lat: 37.590, lon: -83.313, name: "Jackson, KY" },
+            { id: "KLBB", lat: 33.654, lon: -101.814, name: "Lubbock, TX" },
+            { id: "KLCH", lat: 30.125, lon: -93.215, name: "Lake Charles, LA" },
+            { id: "KLGX", lat: 47.116, lon: -124.235, name: "Langley Hill, WA" },
+            { id: "KLIX", lat: 30.336, lon: -89.826, name: "New Orleans, LA" },
+            { id: "KLNX", lat: 42.050, lon: -100.745, name: "North Platte, NE" },
+            { id: "KLTX", lat: 33.989, lon: -78.429, name: "Wilmington, NC" },
+            { id: "KLVX", lat: 37.975, lon: -85.935, name: "Louisville, KY" },
+            { id: "KLZK", lat: 34.836, lon: -92.262, name: "Little Rock, AR" },
+            { id: "KMAF", lat: 31.942, lon: -102.189, name: "Midland, TX" },
+            { id: "KMAX", lat: 42.081, lon: -122.717, name: "Medford, OR" },
+            { id: "KMBX", lat: 48.392, lon: -100.865, name: "Minot AFB, ND" },
+            { id: "KMHX", lat: 34.775, lon: -76.876, name: "Morehead City, NC" },
+            { id: "KMKX", lat: 42.967, lon: -88.550, name: "Milwaukee, WI" },
+            { id: "KMLB", lat: 28.113, lon: -80.654, name: "Melbourne, FL" },
+            { id: "KMOB", lat: 30.679, lon: -88.240, name: "Mobile, AL" },
+            { id: "KMPX", lat: 44.848, lon: -93.565, name: "Minneapolis, MN" },
+            { id: "KMQT", lat: 46.531, lon: -87.548, name: "Marquette, MI" },
+            { id: "KMRX", lat: 36.168, lon: -83.402, name: "Knoxville, TN" },
+            { id: "KMSX", lat: 47.041, lon: -113.986, name: "Missoula, MT" },
+            { id: "KMTX", lat: 41.262, lon: -112.447, name: "Salt Lake City, UT" },
+            { id: "KMUX", lat: 37.155, lon: -121.898, name: "San Francisco, CA" },
+            { id: "KMVX", lat: 47.528, lon: -97.325, name: "Grand Forks, ND" },
+            { id: "KMXX", lat: 32.536, lon: -85.789, name: "Maxwell AFB, AL" },
+            { id: "KNKX", lat: 32.918, lon: -117.042, name: "San Diego, CA" },
+            { id: "KNQA", lat: 35.344, lon: -89.873, name: "Memphis, TN" },
+            { id: "KOAX", lat: 41.320, lon: -96.366, name: "Omaha, NE" },
+            { id: "KOHX", lat: 36.247, lon: -86.562, name: "Nashville, TN" },
+            { id: "KOKX", lat: 40.866, lon: -72.864, name: "New York City, NY" },
+            { id: "KOTX", lat: 47.680, lon: -117.625, name: "Spokane, WA" },
+            { id: "KPAH", lat: 37.068, lon: -88.772, name: "Paducah, KY" },
+            { id: "KPBZ", lat: 40.531, lon: -80.217, name: "Pittsburgh, PA" },
+            { id: "KPDT", lat: 45.690, lon: -118.852, name: "Pendleton, OR" },
+            { id: "KPOE", lat: 31.155, lon: -92.976, name: "Fort Polk, LA" },
+            { id: "KPUX", lat: 38.460, lon: -104.181, name: "Pueblo, CO" },
+            { id: "KRAX", lat: 35.665, lon: -78.489, name: "Raleigh, NC" },
+            { id: "KRGX", lat: 39.755, lon: -119.461, name: "Reno, NV" },
+            { id: "KRIW", lat: 43.066, lon: -108.478, name: "Riverton, WY" },
+            { id: "KRLX", lat: 38.311, lon: -81.723, name: "Charleston, WV" },
+            { id: "KRTX", lat: 45.707, lon: -122.964, name: "Portland, OR" },
+            { id: "KSFX", lat: 43.105, lon: -112.686, name: "Pocatello, ID" },
+            { id: "KSGF", lat: 37.235, lon: -93.400, name: "Springfield, MO" },
+            { id: "KSHV", lat: 32.450, lon: -93.841, name: "Shreveport, LA" },
+            { id: "KSJT", lat: 31.371, lon: -100.493, name: "San Angelo, TX" },
+            { id: "KSOX", lat: 33.817, lon: -117.635, name: "Orange County, CA" },
+            { id: "KSRX", lat: 35.290, lon: -94.362, name: "Fort Smith, AR" },
+            { id: "KTBW", lat: 27.705, lon: -82.402, name: "Tampa, FL" },
+            { id: "KTFX", lat: 47.459, lon: -111.384, name: "Great Falls, MT" },
+            { id: "KTLH", lat: 30.397, lon: -84.328, name: "Tallahassee, FL" },
+            { id: "KTLX", lat: 35.333, lon: -97.277, name: "Oklahoma City, OK" },
+            { id: "KTWX", lat: 38.996, lon: -95.226, name: "Topeka, KS" },
+            { id: "KTYX", lat: 43.755, lon: -75.679, name: "Montague, NY" },
+            { id: "KUDX", lat: 44.125, lon: -102.829, name: "Rapid City, SD" },
+            { id: "KUEX", lat: 40.320, lon: -98.440, name: "Hastings, NE" },
+            { id: "KVAX", lat: 30.890, lon: -83.001, name: "Moody AFB, GA" },
+            { id: "KVBX", lat: 34.838, lon: -120.397, name: "Vandenberg AFB, CA" },
+            { id: "KVLD", lat: 30.969, lon: -83.214, name: "Valdosta, GA" },
+            { id: "KVRX", lat: 34.975, lon: -97.268, name: "Vance AFB, OK" },
+            { id: "KVTX", lat: 34.411, lon: -119.178, name: "Los Angeles, CA" },
+            { id: "KVWX", lat: 38.260, lon: -85.942, name: "Louisville, KY" },
+            { id: "KYUX", lat: 32.495, lon: -114.656, name: "Yuma, AZ" }
+        ];
         function initMap() {
-            console.log('Initializing map...');
+        map = L.map('map', { center: [39.8283, -98.5795], zoom: 5, zoomControl: true, preferCanvas: true });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors', maxZoom: 19 }).addTo(map);
 
-            map = L.map('map', {
-                center: [39.8283, -98.5795],
-                zoom: 5,
-                zoomControl: true,
-                attributionControl: true,
-                preferCanvas: true,
-                zoomAnimation: true,
-                fadeAnimation: true,
-                markerZoomAnimation: true
-            });
+        map.createPane('radarPane'); map.getPane('radarPane').style.zIndex = 300;
+        map.createPane('velocityPane'); map.getPane('velocityPane').style.zIndex = 310;
+        map.createPane('alertsPane'); map.getPane('alertsPane').style.zIndex = 400;
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19,
-                className: 'map-tiles'
-            }).addTo(map);
+        alertLayer = L.layerGroup().addTo(map);
+        nexradLayer = L.layerGroup();
 
-            alertLayer = L.layerGroup().addTo(map);
+        loadRadar();
+        loadWeatherAlerts();
+    }
 
-            console.log('Map initialized successfully');
+    function loadRadar() {
+        if (!layerControls.radar) { if (radarLayer) map.removeLayer(radarLayer); return; }
+        if (radarLayer) map.removeLayer(radarLayer);
+        radarLayer = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
+            layers: 'nexrad-n0r-900913',
+            format: 'image/png',
+            transparent: true,
+            opacity: 0.7,
+            pane: 'radarPane',
+            attribution: 'Radar © Iowa State Mesonet'
+        }).addTo(map);
+    }
 
-            loadRadar();
-            loadWeatherAlerts();
-        }
-        
-        function loadRadar() {
-            if (!layerControls || !layerControls.radar) return;
-        
-            try {
-                console.log('Loading radar data...');
-        
-                if (!map.getPane('radarPane')) {
-                    map.createPane('radarPane');
-                    map.getPane('radarPane').style.zIndex = 300; 
-                }
-        
-                if (!map.getPane('alertsPane')) {
-                    map.createPane('alertsPane');
-                    map.getPane('alertsPane').style.zIndex = 400;
-                }
-        
-                if (radarLayer) {
-                    map.removeLayer(radarLayer);
-                }
-        
-                radarLayer = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
-                    layers: 'nexrad-n0r-900913',
-                    format: 'image/png',
-                    transparent: true,
-                    version: '1.1.1',
-                    opacity: 0.7,
-                    pane: 'radarPane',
-                    attribution: 'Radar data © Iowa State Mesonet',
-                    className: 'radar-layer'
-                });
-        
-                radarLayer.addTo(map);
-        
-                console.log('Radar data loaded successfully');
-            } catch (error) {
-                console.error('Error loading radar:', error);
-                if (typeof showNotification === 'function') {
-                    showNotification('Failed to load radar data', 'error');
-                }
-            }
-        }
+    function loadRadarSites() {
+        nexradLayer.clearLayers();
+        nexradSites.forEach(site => {
+            const marker = L.circleMarker([site.lat, site.lon], { radius: 6, color: "#10b981", fillColor: "#10b981", fillOpacity: 0.9, weight: 2 });
+            marker.bindPopup(`<strong>${site.id}</strong><br>${site.name}<br><button onclick="setVelocitySite('${site.id}')">View Velocity</button>`);
+            nexradLayer.addLayer(marker);
+        });
+    }
+
+    function setVelocitySite(siteID) {
+        if (velocityLayer) map.removeLayer(velocityLayer);
+
+        const lowerSiteID = siteID.toLowerCase();
+        const now = new Date();
+        const baseUrl = `https://opengeo.ncep.noaa.gov/geoserver/${lowerSiteID}/${lowerSiteID}_sr_bvel/ows`;
+        const params = new URLSearchParams({
+            service: 'WMS', request: 'GetMap', layers: `${lowerSiteID}_sr_bvel`, styles: '', format: 'image/png',
+            transparent: 'true', version: '1.1.1', time: now.toISOString(), width: '256', height: '256', srs: 'EPSG:3857'
+        });
+
+        velocityLayer = L.tileLayer.wms(`${baseUrl}?${params}`, {
+            layers: `${lowerSiteID}_sr_bvel`,
+            format: 'image/png',
+            transparent: true,
+            opacity: 0.85,
+            pane: 'velocityPane',
+            attribution: `SRV © NOAA/NWS (${siteID})`
+        }).addTo(map);
+
+        const site = nexradSites.find(s => s.id === siteID);
+        if (site) map.setView([site.lat, site.lon], 9);
+    }
+
+
+        const alertTags = new Map();
 
         async function loadWeatherAlerts() {
             try {
@@ -922,7 +1104,10 @@
                 const alertTypes = [
                     'Severe Thunderstorm Warning',
                     'Tornado Warning',
-                    'Special Marine Warning'
+                    'Special Marine Warning',
+                    'Severe Thunderstorm Watch',
+                    'Tornado Watch',
+                    'Special Weather Statement'
                 ];
 
                 const promises = alertTypes.map(async (eventType) => {
@@ -951,33 +1136,49 @@
 
                 const results = await Promise.all(promises);
                 const allAlerts = results.flat();
+                
+                const watches = allAlerts.filter(a => {
+                    const event = a.properties?.event || '';
+                    return event.includes('Watch');
+                });
+                console.log(`Found ${watches.length} watches:`, watches.map(w => w.properties?.event));
 
                 alertLayer.clearLayers();
 
                 let stormCount = 0;
                 let tornadoCount = 0;
-                let confirmedTornadoCount = 0;
                 let marineCount = 0;
+                let stormWatchCount = 0;
+                let tornadoWatchCount = 0;
+                let specialStatementCount = 0;
 
                 allAlerts.forEach((alert) => {
                     const props = alert.properties;
-                    const isStorm = props.event.includes('Severe Thunderstorm');
-                    const isTornado = props.event.includes('Tornado');
-                    const isMarine = props.event.includes('Marine');
+                    const eventName = props.event || '';
+                    
+                    const isStormWatch = eventName === 'Severe Thunderstorm Watch' || 
+                                        (eventName.includes('Severe Thunderstorm') && eventName.includes('Watch'));
+                    const isTornadoWatch = eventName === 'Tornado Watch' || 
+                                          (eventName.includes('Tornado') && eventName.includes('Watch') && !eventName.includes('Warning'));
+                    
+                    const isStorm = eventName.includes('Severe Thunderstorm') && eventName.includes('Warning') && !isStormWatch;
+                    const isTornado = eventName.includes('Tornado') && eventName.includes('Warning') && !isTornadoWatch;
+                    const isMarine = eventName.includes('Marine');
+                    const isSpecialStatement = eventName.includes('Special Weather Statement');
 
                     if (isStorm) stormCount++;
-                    if (isTornado) {
-                        if (props.description?.toLowerCase().includes('confirmed')) {
-                            confirmedTornadoCount++;
-                        } else {
-                            tornadoCount++;
-                        }
-                    }
+                    if (isTornado) tornadoCount++;
                     if (isMarine) marineCount++;
+                    if (isStormWatch) stormWatchCount++;
+                    if (isTornadoWatch) tornadoWatchCount++;
+                    if (isSpecialStatement) specialStatementCount++;
 
                     if ((isStorm && !layerControls.storm) ||
                         (isTornado && !layerControls.tornado) ||
-                        (isMarine && !layerControls.marine)) {
+                        (isMarine && !layerControls.marine) ||
+                        (isStormWatch && !layerControls.storm) ||
+                        (isTornadoWatch && !layerControls.tornado) ||
+                        (isSpecialStatement && !layerControls.storm)) {
                         return;
                     }
 
@@ -994,17 +1195,53 @@
                     } else if (isMarine) {
                         color = '#3b82f6';
                         icon = 'fa-ship';
+                    } else if (isStormWatch) {
+                        color = '#3b82f6';
+                        icon = 'fa-eye';
+                    } else if (isTornadoWatch) {
+                        color = '#dc2626';
+                        icon = 'fa-eye';
+                    } else if (isSpecialStatement) {
+                        color = '#9333ea';
+                        icon = 'fa-info-circle';
                     }
 
+                    const descLower = props.description?.toLowerCase() || '';
+                    const alertId = props.id || alert.id || Math.random().toString();
+                    
+                    if (!alertTags.has(alertId)) {
+                        alertTags.set(alertId, []);
+                    }
+                    
+                    const autoTags = [];
+                    if (isTornado) {
+                        if (descLower.includes('emergency')) {
+                            autoTags.push('Tornado Emergency');
+                        } else if ((descLower.includes('large') || descLower.includes('dangerous')) && 
+                                   (descLower.includes('particularly') || descLower.includes('pds'))) {
+                            autoTags.push('Particularly dangerous situation');
+                        }
+                    }
+                    if (isStorm && descLower.includes('destructive')) {
+                        autoTags.push('Destructive Storm');
+                    }
+                    
+                    const existingTags = alertTags.get(alertId);
+                    autoTags.forEach(tag => {
+                        if (!existingTags.includes(tag)) {
+                            existingTags.push(tag);
+                        }
+                    });
+                    
                     let strength = 'N/A';
                     if (isTornado) {
-                        if (props.description?.toLowerCase().includes('confirmed')) strength = 'Confirmed Tornado';
-                        else if (props.description?.toLowerCase().includes('extremely')) strength = 'Confirmed Large Tornado';
-                        else if (props.description?.toLowerCase().includes('radar indicated rotation')) strength = 'Radar Indicated Rotation';
-                        else if (props.description?.toLowerCase().includes('funnel')) strength = 'Funnel Cloud Observed';
+                        if (descLower.includes('confirmed')) strength = 'Confirmed Tornado';
+                        else if (descLower.includes('extremely')) strength = 'Confirmed Large Tornado';
+                        else if (descLower.includes('radar indicated rotation')) strength = 'Radar Indicated Rotation';
+                        else if (descLower.includes('funnel')) strength = 'Funnel Cloud Observed';
                     }
-                    let possibleTornado = isStorm && props.description?.toLowerCase().includes('possible tornado') ? 'Tornado Possible' : 'Tornado Not Possible';
-                    let waterspout = isMarine && props.description?.toLowerCase().includes('waterspout') ? 'Waterspout Possible' : 'Waterspout Not Possible';
+                    let possibleTornado = isStorm && descLower.includes('possible tornado') ? 'Tornado Possible' : 'Tornado Not Possible';
+                    let waterspout = isMarine && descLower.includes('waterspout') ? 'Waterspout Possible' : 'Waterspout Not Possible';
 
                     let wind = 'Unknown';
                     let hail = 'Unknown';
@@ -1021,22 +1258,30 @@
                         }
                     }
 
-                    const headerClass = isTornado && strength === 'Confirmed Tornado' ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : 'storm';
+                    const headerClass = isTornado && strength === 'Confirmed Tornado' ? 'tornado-confirmed' : isTornado ? 'tornado' : isMarine ? 'marine' : isSpecialStatement ? 'special-statement' : 'storm';
+                    const currentTags = alertTags.get(alertId) || [];
+                    const tagsHtml = currentTags.length > 0 
+                        ? `<div style="margin: 0.75rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${currentTags.map(tag => `<span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(59, 130, 246, 0.3);">${tag}</span>`).join('')}
+                          </div>`
+                        : '';
+                    
                     const popupContent = `
-                        <div>
+                        <div data-alert-id="${alertId}">
                             <div class="popup-header ${headerClass}" style="background-color: ${color}; opacity: 0.9;">
                                 <i class="fas ${icon}" style="margin-right: 0.5rem;"></i>
                                 ${props.event}
                             </div>
                             <div class="popup-body">
+                                ${tagsHtml}
                                 <div><strong>Area:</strong> ${props.areaDesc}</div>
                                 <div><strong>Issued:</strong> ${new Date(props.sent).toLocaleString()}</div>
                                 <div><strong>Expires:</strong> ${new Date(props.expires).toLocaleString()}</div>
-                                <div><strong>Max Windspeed:</strong> ${wind}</div>
-                                ${!isMarine ? `<div><strong>Hail Size:</strong> ${hail}</div>` : ''}
+                                ${!isStormWatch && !isTornadoWatch && !isSpecialStatement ? `<div><strong>Max Windspeed:</strong> ${wind}</div>` : ''}
+                                ${!isMarine && !isStormWatch && !isTornadoWatch && !isSpecialStatement ? `<div><strong>Hail Size:</strong> ${hail}</div>` : ''}
                                 ${isMarine ? `<div><strong>Waterspout:</strong> ${waterspout}</div>` : ''}
-                                ${isStorm ? `<div><strong>Tornado:</strong> ${possibleTornado}</div>` : ''}
-                                ${isTornado ? `<div><strong>Tornado:</strong> ${strength}</div>` : ""}
+                                ${isStorm && !isStormWatch ? `<div><strong>Tornado:</strong> ${possibleTornado}</div>` : ''}
+                                ${isTornado && !isTornadoWatch ? `<div><strong>Tornado:</strong> ${strength}</div>` : ""}
                                 <details>
                                     <summary style="cursor: pointer; font-weight: 500; margin: 0.5rem 0;">Full Description</summary>
                                     <div class="popup-details">${props.description?.replace(/\n/g, '<br>') || 'No description available'}</div>
@@ -1045,6 +1290,10 @@
                         </div>
                     `;
 
+                    if (isStormWatch || isTornadoWatch) {
+                        console.log(`Processing ${isStormWatch ? 'Severe Thunderstorm' : 'Tornado'} Watch:`, props.event, 'Has geometry:', !!alert.geometry);
+                    }
+                    
                     if (alert.geometry) {
                         const geoJsonLayer = L.geoJSON(alert.geometry, {
                             style: {
@@ -1053,13 +1302,78 @@
                                 fillColor: color,
                                 fillOpacity: 0.3,
                                 opacity: 0.8,
-                                dashArray: null
+                                dashArray: (isStormWatch || isTornadoWatch || isSpecialStatement) ? '10, 5' : null
                             }
                         });
 
-                        geoJsonLayer.bindPopup(popupContent, {
+                        const popup = L.popup({
                             maxWidth: 380,
                             className: 'weather-alert-popup'
+                        }).setContent(popupContent);
+
+                        geoJsonLayer.bindPopup(popup);
+                        
+                        if (isStormWatch || isTornadoWatch) {
+                            console.log(`Adding ${isStormWatch ? 'Severe Thunderstorm' : 'Tornado'} Watch to map:`, props.event);
+                        }
+                        
+                        geoJsonLayer.on('click', function() {
+                            const descLower = props.description?.toLowerCase() || '';
+                            let tagToAdd = null;
+                            
+                            if (isTornado) {
+                                if (descLower.includes('emergency')) {
+                                    tagToAdd = 'Tornado Emergency';
+                                } else if ((descLower.includes('large') || descLower.includes('dangerous')) && 
+                                           (descLower.includes('particularly') || descLower.includes('pds'))) {
+                                    tagToAdd = 'Particularly dangerous situation';
+                                }
+                            } else if (isStorm && descLower.includes('destructive')) {
+                                tagToAdd = 'Destructive Storm';
+                            }
+                            
+                            if (tagToAdd) {
+                                const currentTags = alertTags.get(alertId) || [];
+                                if (!currentTags.includes(tagToAdd)) {
+                                    currentTags.push(tagToAdd);
+                                    alertTags.set(alertId, currentTags);
+                                    
+                                    const updatedTagsHtml = currentTags.length > 0 
+                                        ? `<div style="margin: 0.75rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                            ${currentTags.map(tag => `<span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(59, 130, 246, 0.3);">${tag}</span>`).join('')}
+                                          </div>`
+                                        : '';
+                                    
+                                    const updatedContent = `
+                                        <div data-alert-id="${alertId}">
+                                            <div class="popup-header ${headerClass}" style="background-color: ${color}; opacity: 0.9;">
+                                                <i class="fas ${icon}" style="margin-right: 0.5rem;"></i>
+                                                ${props.event}
+                                            </div>
+                                            <div class="popup-body">
+                                                ${updatedTagsHtml}
+                                                <div><strong>Area:</strong> ${props.areaDesc}</div>
+                                                <div><strong>Issued:</strong> ${new Date(props.sent).toLocaleString()}</div>
+                                                <div><strong>Expires:</strong> ${new Date(props.expires).toLocaleString()}</div>
+                                                ${!isStormWatch && !isTornadoWatch && !isSpecialStatement ? `<div><strong>Max Windspeed:</strong> ${wind}</div>` : ''}
+                                                ${!isMarine && !isStormWatch && !isTornadoWatch && !isSpecialStatement ? `<div><strong>Hail Size:</strong> ${hail}</div>` : ''}
+                                                ${isMarine ? `<div><strong>Waterspout:</strong> ${waterspout}</div>` : ''}
+                                                ${isStorm && !isStormWatch ? `<div><strong>Tornado:</strong> ${possibleTornado}</div>` : ''}
+                                                ${isTornado && !isTornadoWatch ? `<div><strong>Tornado:</strong> ${strength}</div>` : ""}
+                                                <details>
+                                                    <summary style="cursor: pointer; font-weight: 500; margin: 0.5rem 0;">Full Description</summary>
+                                                    <div class="popup-details">${props.description?.replace(/\n/g, '<br>') || 'No description available'}</div>
+                                                </details>
+                                            </div>
+                                        </div>
+                                    `;
+                                    
+                                    popup.setContent(updatedContent);
+                                    if (popup.isOpen()) {
+                                        popup.update();
+                                    }
+                                }
+                            }
                         });
 
                         alertLayer.addLayer(geoJsonLayer);
@@ -1068,8 +1382,16 @@
 
                 document.getElementById('storm-display').textContent = stormCount;
                 document.getElementById('tornado-display').textContent = tornadoCount;
-                document.getElementById('confirmed-tornado-display').textContent = confirmedTornadoCount;
                 document.getElementById('marine-display').textContent = marineCount;
+                if (document.getElementById('storm-watch-display')) {
+                    document.getElementById('storm-watch-display').textContent = stormWatchCount;
+                }
+                if (document.getElementById('tornado-watch-display')) {
+                    document.getElementById('tornado-watch-display').textContent = tornadoWatchCount;
+                }
+                if (document.getElementById('special-statement-display')) {
+                    document.getElementById('special-statement-display').textContent = specialStatementCount;
+                }
 
                 updateLastUpdated();
 
@@ -1129,14 +1451,39 @@
             toggleElement.classList.toggle('active');
 
             if (layerType === 'radar') {
-                if (layerControls.radar && radarLayer) {
-                    map.addLayer(radarLayer);
-                } else if (radarLayer) {
-                    map.removeLayer(radarLayer);
+                if (layerControls.radar) {
+                    loadRadar();
+                    if (layerControls.velocity) {
+                        layerControls.velocity = false;
+                        document.querySelector('.control-item:nth-child(2) .toggle').classList.remove('active');
+                        if (velocityLayer) map.removeLayer(velocityLayer);
+                        if (nexradLayer) map.removeLayer(nexradLayer);
+                    }
+                } else {
+                    if (radarLayer) map.removeLayer(radarLayer);
                 }
-            } else {
-                loadWeatherAlerts();
+                return;
             }
+
+            if (layerType === 'velocity') {
+                if (layerControls.velocity) {
+                    if (!nexradLayer) nexradLayer = L.layerGroup();
+                    loadRadarSites();
+                    map.addLayer(nexradLayer);
+
+                    if (layerControls.radar) {
+                        layerControls.radar = false;
+                        document.querySelector('.control-item:nth-child(1) .toggle').classList.remove('active');
+                        if (radarLayer) map.removeLayer(radarLayer);
+                    }
+                } else {
+                    if (velocityLayer) map.removeLayer(velocityLayer);
+                    if (nexradLayer) map.removeLayer(nexradLayer);
+                }
+                return;
+            }
+
+            loadWeatherAlerts();
         }
 
         function toggleControls() {
@@ -1212,7 +1559,7 @@
 
         function refreshData() {
             showLoading(true);
-            Promise.all([loadRadar(), loadWeatherAlerts()])
+            Promise.all([loadRadar(), loadVelocity(), loadWeatherAlerts()])
                 .then(() => {
                     showNotification('Data refreshed successfully', 'success');
                 })
@@ -1230,7 +1577,7 @@
             const maxRetries = 3;
 
             function refresh() {
-                Promise.all([loadRadar(), loadWeatherAlerts()])
+                Promise.all([loadRadar(), loadVelocity(), loadWeatherAlerts()])
                     .then(() => {
                         retryCount = 0;
                         refreshInterval = 60000;
