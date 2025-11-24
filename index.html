@@ -1213,8 +1213,7 @@
                     if (isTornado) {
                         if (descLower.includes('emergency')) {
                             autoTags.push('Tornado Emergency');
-                        } else if ((descLower.includes('large') || descLower.includes('dangerous')) && 
-                                   (descLower.includes('particularly') || descLower.includes('pds'))) {
+                        } else if ((descLower.includes('large') || descLower.includes('dangerous'))
                             autoTags.push('Particularly dangerous situation');
                         }
                     }
@@ -1232,7 +1231,6 @@
                     let strength = 'N/A';
                     if (isTornado) {
                         if (descLower.includes('confirmed')) strength = 'Confirmed Tornado';
-                        else if (descLower.includes('extremely')) strength = 'Confirmed Large Tornado';
                         else if (descLower.includes('radar indicated rotation')) strength = 'Radar Indicated Rotation';
                         else if (descLower.includes('funnel')) strength = 'Funnel Cloud Observed';
                     }
@@ -1449,12 +1447,6 @@
             if (layerType === 'radar') {
                 if (layerControls.radar) {
                     loadRadar();
-                    if (layerControls.velocity) {
-                        layerControls.velocity = false;
-                        document.querySelector('.control-item:nth-child(2) .toggle').classList.remove('active');
-                        if (velocityLayer) map.removeLayer(velocityLayer);
-                        if (nexradLayer) map.removeLayer(nexradLayer);
-                    }
                 } else {
                     if (radarLayer) map.removeLayer(radarLayer);
                 }
