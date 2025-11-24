@@ -1213,10 +1213,11 @@
                     if (isTornado) {
                         if (descLower.includes('emergency')) {
                             autoTags.push('Tornado Emergency');
-                        } else if ((descLower.includes('large') || descLower.includes('dangerous')) {
+                        } else if (descLower.includes('large') || descLower.includes('dangerous')) {
                             autoTags.push('Particularly dangerous situation');
                         }
                     }
+
                     if (isStorm && descLower.includes('destructive')) {
                         autoTags.push('Destructive Storm');
                     }
