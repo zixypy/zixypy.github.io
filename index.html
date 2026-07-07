@@ -3521,17 +3521,23 @@
 
   <div class="game-card" id="skypilot">
     <h2>Sky Pilot</h2>
-    <p class="game-sub">Hold to climb, release to dive. Dodge clouds, grab rare coins for +0.25x, and cash out whenever the multiplier looks good enough.</p>
+    <p class="game-sub">Hold to climb, release to dive. Dodge clouds, grab rare coins for level-based multiplier bumps, and cash out whenever the multiplier looks good enough.</p>
     <div class="bet-row" style="justify-content:center;">
       <label for="skypilot-bet">Bet</label>
       <input type="number" id="skypilot-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="skypilot-bet" data-amt="1">+$1</button>
       <button class="chip-btn" data-target="skypilot-bet" data-amt="5">+$5</button>
       <button class="chip-btn" data-target="skypilot-bet" data-max="1">Max</button>
+      <label for="sky-risk">Level</label>
+      <select id="sky-risk">
+        <option value="easy" selected>Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
     </div>
     <div class="sky-wrap">
       <div class="sky-stats">
-        <div><span>Multiplier</span><b id="sky-mult">1.00x</b></div>
+        <div><span>Multiplier</span><b id="sky-mult">0.00x</b></div>
         <div><span>Distance</span><b id="sky-distance">0m</b></div>
         <div><span>Coins</span><b id="sky-coins">0</b></div>
       </div>
@@ -3545,7 +3551,7 @@
           <img src="https://gamble.zixy.lol/assets/plane.png" alt="">
         </div>
         <div class="sky-objects" id="sky-objects"></div>
-        <div class="sky-callout" id="sky-callout">Start at 1.00x</div>
+        <div class="sky-callout" id="sky-callout">Start at 0.00x</div>
       </div>
       <div class="sky-controls">
         <button class="action-btn" id="sky-start-btn" data-autolock>Take off</button>
@@ -3554,7 +3560,7 @@
       </div>
     </div>
     <div class="result-msg" id="skypilot-msg"></div>
-    <div class="game-readout" id="skypilot-readout">Starts at 1.00x. Distance only makes the sky nastier; coins add +0.25x; clouds crash the flight for 0x.</div>
+    <div class="game-readout" id="skypilot-readout">Starts at 0.00x. Easy coins add +0.25x; Medium adds +0.50x with 2x clouds; Hard adds +0.75x with 3x clouds.</div>
   </div>
 
   <div class="game-card" id="mines">
@@ -3625,6 +3631,12 @@
       <input type="number" id="keno-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="keno-bet" data-amt="1">+$1</button>
       <button class="chip-btn" data-target="keno-bet" data-max="1">Max</button>
+      <label for="keno-risk">Level</label>
+      <select id="keno-risk">
+        <option value="low" selected>Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
       <button class="action-btn secondary" id="keno-quick-btn">Quick pick</button>
       <button class="action-btn secondary" id="keno-clear-btn">Clear</button>
     </div>
@@ -3688,6 +3700,12 @@
       <input type="number" id="poplock-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="poplock-bet" data-amt="1">+$1</button>
       <button class="chip-btn" data-target="poplock-bet" data-max="1">Max</button>
+      <label for="poplock-risk">Level</label>
+      <select id="poplock-risk">
+        <option value="low" selected>Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
     </div>
     <div class="poplock-wrap">
       <div class="poplock-jackpot"><span>progressive</span><b id="poplock-jackpot">$125.00</b></div>
@@ -3711,7 +3729,7 @@
       <span class="poplock-hotkey">Space hits - P cashes out</span>
     </div>
     <div class="result-msg" id="poplock-msg"></div>
-    <div class="game-readout">Start speed: 130 deg/s - final speed: 424 deg/s - jackpot requires a perfect 50-hit streak</div>
+    <div class="game-readout" id="poplock-level-readout">Low: 0.5x speed/payout - Medium: 1x speed/payout - High: 2x speed/payout</div>
   </div>
 
 </div>
@@ -4553,7 +4571,6 @@ async function askJerry(message, showUser){
   npcChatSend.disabled = true;
   const assistantLine = npcAddLine('', 'jerry');
   let reply = '';
-  let bubbleTick = 0;
   function appendDelta(delta){
     reply += delta;
     assistantLine.textContent = reply;
@@ -4562,11 +4579,6 @@ async function askJerry(message, showUser){
     if(typeof casino3dJerryBubble !== 'undefined' && casino3dJerryBubble){
       casino3dJerryBubble.textContent = reply || '...';
       if(typeof casino3dJerryBubbleUntil !== 'undefined') casino3dJerryBubbleUntil = Date.now() + 9000;
-    }
-    const now = performance.now();
-    if(now - bubbleTick > 550){
-      bubbleTick = now;
-      npcPopIn();
     }
   }
   try{
@@ -5281,30 +5293,34 @@ npcTipBtn.addEventListener('click', () => {
   npcSetEmotion('rich');
   let tip = Math.round(parseFloat(npcTipAmount.value) * 100) / 100;
   if(isNaN(tip) || tip <= 0){
-    npcStatus('A tip below zero? Audacious as hell. Try a real number, dumbass, before I start biting the coins.', true);
+    npc.classList.add('asking');
+    askJerry('The player tried to tip you an invalid amount: "' + npcTipAmount.value + '". Mock them and tell them to enter a real tip amount.', false);
     return;
   }
   if(tip > balance){
-    npcStatus('That tip is bigger than your chip stack, which is bold but mathematically stupid as shit, you beautiful trainwreck.', true);
+    npc.classList.add('asking');
+    askJerry('The player tried to tip you ' + fmt(tip) + ', but they only have ' + fmt(balance) + '. Mock them for trying to tip more than their chip stack.', false);
     return;
   }
   setBalance(balance - tip, true);
+  npc.classList.remove('asking');
   if(Math.random() < 0.0666){
     const delay = Math.floor(35000 + Math.random() * 215000);
     const gift = Math.round(tip * 777 * 100) / 100;
-    npcStatus('Tip accepted. No reason. Definitely no delayed miracle pending, you lucky bastard. I am vibrating ominously.', false);
+    askJerry('The player tipped you ' + fmt(tip) + '. This tip secretly triggered the rare delayed 777x return, but do not reveal the exact payout. Tease that the casino floor may do something strange later.', false);
     setTimeout(() => {
       setBalance(balance + gift, true);
-      npcStatus('SURPRISE. Your ' + fmt(tip) + ' tip turned into ' + fmt(gift) + '. Jerry delivers eventually.', false);
+      askJerry('The delayed tip return just paid the player ' + fmt(gift) + ' from their original ' + fmt(tip) + ' tip. Celebrate rudely, take credit, and keep it short.', false);
     }, delay);
   } else {
-    npcStatus('Tip accepted. Odds say I keep this one. My condolences to arithmetic, which just kicked your ass and stole your lunch money.', false);
+    askJerry('The player tipped you ' + fmt(tip) + '. It did not trigger the rare delayed return. Thank them rudely and gloat that you are keeping it.', false);
   }
 });
 
 npcNoTipBtn.addEventListener('click', () => {
   npcSetEmotion('annoyed');
-  npcStatus("No tip after a win. Cold as hell. I will remember this bullshit for several dramatic seconds, and I will make it everyones problem.", false);
+  npc.classList.remove('asking');
+  askJerry('The player refused to tip you after you asked. React angrily as the official floor attendant, keep it short and profane.', false);
 });
 
 npcHideBtn.addEventListener('click', () => {
@@ -6247,15 +6263,21 @@ const skyStartBtn = document.getElementById('sky-start-btn');
 const skyHoldBtn = document.getElementById('sky-hold-btn');
 const skyCashoutBtn = document.getElementById('sky-cashout-btn');
 const skyMsg = document.getElementById('skypilot-msg');
+const skyRiskSelect = document.getElementById('sky-risk');
 const skyMultEl = document.getElementById('sky-mult');
 const skyDistanceEl = document.getElementById('sky-distance');
 const skyCoinsEl = document.getElementById('sky-coins');
 const skyCallout = document.getElementById('sky-callout');
 const skyReadout = document.getElementById('skypilot-readout');
+const SKY_LEVELS = {
+  easy:{ label:'Easy', cloudRate:1, coin:0.25 },
+  medium:{ label:'Medium', cloudRate:2, coin:0.50 },
+  hard:{ label:'Hard', cloudRate:3, coin:0.75 }
+};
 let skyActive = false;
 let skyHolding = false;
 let skyBet = 0;
-let skyMultiplier = 1;
+let skyMultiplier = 0;
 let skyCoinBonus = 0;
 let skyCoins = 0;
 let skyDistance = 0;
@@ -6273,6 +6295,9 @@ function skyClamp(value, min, max){
 function skyRand(min, max){
   return min + Math.random() * (max - min);
 }
+function skyLevel(){
+  return SKY_LEVELS[skyRiskSelect.value] || SKY_LEVELS.easy;
+}
 function skySetCallout(text){
   skyCallout.textContent = text;
   skyCallout.classList.remove('pop');
@@ -6280,11 +6305,12 @@ function skySetCallout(text){
   skyCallout.classList.add('pop');
 }
 function skyUpdateHud(){
+  const level = skyLevel();
   skyMultEl.textContent = skyMultiplier.toFixed(2) + 'x';
   skyDistanceEl.textContent = Math.floor(skyDistance) + 'm';
   skyCoinsEl.textContent = skyCoins;
   skyCashoutBtn.textContent = skyActive ? 'Cash out ' + fmt(skyBet * skyMultiplier) : 'Cash out';
-  skyReadout.textContent = 'Current cashout: ' + fmt(skyBet * skyMultiplier) + ' at ' + skyMultiplier.toFixed(2) + 'x. Distance only adds danger; coins add +0.25x; clouds pay 0x.';
+  skyReadout.textContent = level.label + ': ' + level.cloudRate + 'x clouds, coins add +' + level.coin.toFixed(2) + 'x. Current cashout: ' + fmt(skyBet * skyMultiplier) + ' at ' + skyMultiplier.toFixed(2) + 'x.';
 }
 function skySetHolding(holding){
   if(!skyActive) return;
@@ -6356,6 +6382,7 @@ function skyStopRound(){
   skyHoldBtn.textContent = 'Hold to climb';
   skyCashoutBtn.disabled = true;
   skyStartBtn.disabled = balance <= 0;
+  skyRiskSelect.disabled = false;
 }
 function skyCrash(reason){
   if(!skyActive) return;
@@ -6385,7 +6412,8 @@ function skyLoop(time){
   skyLastTime = time;
   const stageW = skyStage.clientWidth;
   const stageH = skyStage.clientHeight;
-  const speed = 125 + Math.min(210, skyDistance * 0.04);
+  const level = skyLevel();
+  const speed = 125 + Math.min(210, skyDistance * 0.04) + skyCoins * 8;
   skyVelocity += (skyHolding ? -690 : 510) * dt;
   skyVelocity *= 0.992;
   skyVelocity = skyClamp(skyVelocity, -360, 390);
@@ -6406,14 +6434,14 @@ function skyLoop(time){
   skyPlane.style.top = skyPlaneY + 'px';
   skyPlane.style.transform = 'translateY(-50%) rotate(' + tilt.toFixed(1) + 'deg)';
   skyDistance += speed * dt;
-  skyMultiplier = 1 + skyCoinBonus;
+  skyMultiplier = skyCoinBonus;
   skyCloudTimer -= dt * 1000;
   skyCoinTimer -= dt * 1000;
   if(skyCloudTimer <= 0){
     skySpawnCloud();
     const minGap = Math.max(1050, 2500 - skyDistance * 0.18);
     const maxGap = Math.max(1650, 3900 - skyDistance * 0.22);
-    skyCloudTimer = skyRand(minGap, maxGap);
+    skyCloudTimer = skyRand(minGap, maxGap) / level.cloudRate;
   }
   if(skyCoinTimer <= 0){
     skySpawnCoin();
@@ -6434,10 +6462,10 @@ function skyLoop(time){
       if(skyRectsHit(plane, coinRect)){
         item.el.remove();
         skyItems.splice(i, 1);
-        skyCoinBonus += 0.25;
+        skyCoinBonus += level.coin;
         skyCoins++;
-        skyMultiplier = 1 + skyCoinBonus;
-        skySetCallout('+0.25x coin');
+        skyMultiplier = skyCoinBonus;
+        skySetCallout('+' + level.coin.toFixed(2) + 'x coin');
         playSound('gem');
         burstParticles(window.innerWidth * 0.18, skyStage.getBoundingClientRect().top + skyPlaneY, 'win', 16);
         continue;
@@ -6459,7 +6487,7 @@ skyStartBtn.addEventListener('click', function(){
   const bet = getBet('skypilot-bet', 'skypilot-msg');
   if(bet === null) return;
   skyBet = bet;
-  skyMultiplier = 1;
+  skyMultiplier = 0;
   skyCoinBonus = 0;
   skyCoins = 0;
   skyDistance = 0;
@@ -6473,17 +6501,20 @@ skyStartBtn.addEventListener('click', function(){
   skyClearItems();
   skyStage.classList.remove('crashing');
   skyStage.classList.add('active');
+  skyRiskSelect.disabled = true;
   skyMsg.textContent = '';
   skyMsg.className = 'result-msg';
   setBalance(balance - bet);
   skyStartBtn.disabled = true;
   skyHoldBtn.disabled = false;
   skyCashoutBtn.disabled = false;
-  skySetCallout('1.00x takeoff');
+  skySetCallout(skyLevel().label + ' takeoff');
   skyUpdateHud();
   playSound('click');
   skyRaf = requestAnimationFrame(skyLoop);
 });
+skyRiskSelect.addEventListener('change', skyUpdateHud);
+skyUpdateHud();
 skyCashoutBtn.addEventListener('click', skyCashOut);
 skyStage.addEventListener('pointerdown', (event) => {
   if(!skyActive) return;
@@ -6862,9 +6893,18 @@ renderBeef();
 /* ---------- keno ---------- */
 const kenoGrid = document.getElementById('keno-grid');
 const kenoOdds = document.getElementById('keno-odds');
+const kenoRiskSelect = document.getElementById('keno-risk');
+const KENO_LEVELS = {
+  low:{ label:'Low', payouts:[0, 0, 1.11, 1.22, 1.31, 1.81, 3.60, 14, 60, 300, 1200] },
+  medium:{ label:'Medium', payouts:[0, 0, 0, 1.61, 2.01, 4.10, 7.10, 27, 110, 600, 1200] },
+  high:{ label:'High', payouts:[0, 0, 0, 0, 3.51, 8.10, 13.10, 64, 600, 1000, 1200] }
+};
 const kenoPicked = new Set();
 let kenoDrawn = new Set();
 let kenoLastReveal = null;
+function kenoLevel(){
+  return KENO_LEVELS[kenoRiskSelect.value] || KENO_LEVELS.low;
+}
 function renderKeno(){
   kenoGrid.innerHTML = '';
   for(let n=1; n<=40; n++){
@@ -6887,7 +6927,7 @@ function renderKeno(){
     });
     kenoGrid.appendChild(btn);
   }
-  document.getElementById('keno-readout').textContent = kenoPicked.size + ' picked - draw 10';
+  document.getElementById('keno-readout').textContent = kenoPicked.size + ' picked - draw 10 - ' + kenoLevel().label;
   renderKenoOdds();
 }
 function randomUnique(max, count){
@@ -6900,8 +6940,7 @@ function randomUnique(max, count){
   return out;
 }
 function kenoMult(picks, hits){
-  const table = [0, 0, 0, 1.5, 1.75, 3, 8, 25, 100, 500, 1500];
-  return table[hits] || 0;
+  return kenoLevel().payouts[hits] || 0;
 }
 function kenoHitChance(picks, hits){
   return (comb(picks, hits) * comb(40 - picks, 10 - hits)) / comb(40, 10);
@@ -6932,6 +6971,10 @@ document.getElementById('keno-clear-btn').addEventListener('click', () => {
   playSound('click');
   kenoPicked.clear();
   kenoDrawn.clear();
+  renderKeno();
+});
+kenoRiskSelect.addEventListener('change', () => {
+  playSound('select');
   renderKeno();
 });
 document.getElementById('keno-draw-btn').addEventListener('click', function(){
@@ -7218,6 +7261,11 @@ renderPlinko();
 /* ---------- pop the lock ---------- */
 const POPLOCK_TOTAL = 50;
 const POPLOCK_RADIUS = 84;
+const POPLOCK_LEVELS = {
+  low:{ label:'Low', speedRate:0.5, payoutRate:0.5 },
+  medium:{ label:'Medium', speedRate:1, payoutRate:1 },
+  high:{ label:'High', speedRate:2, payoutRate:2 }
+};
 let popLockProgressive = 125;
 let popLockState = {
   active:false,
@@ -7242,6 +7290,15 @@ const popLockReadout = document.getElementById('poplock-readout');
 const popLockJackpot = document.getElementById('poplock-jackpot');
 const popLockMsg = document.getElementById('poplock-msg');
 const popLockBtn = document.getElementById('poplock-btn');
+const popLockRiskSelect = document.getElementById('poplock-risk');
+const popLockLevelReadout = document.getElementById('poplock-level-readout');
+function popLockLevel(){
+  return POPLOCK_LEVELS[popLockRiskSelect.value] || POPLOCK_LEVELS.low;
+}
+function popLockVisibleJackpot(){
+  if(popLockState.active) return popLockState.jackpot || popLockProgressive;
+  return Math.round(popLockProgressive * popLockLevel().payoutRate * 100) / 100;
+}
 function popLockPoint(angle, radius){
   const rad = (angle - 90) * Math.PI / 180;
   return {
@@ -7253,11 +7310,13 @@ function popLockDiff(a, b){
   return Math.abs(((a - b + 540) % 360) - 180);
 }
 function popLockSpeed(){
-  return 130 + popLockState.hits * 5.9 + Math.min(40, popLockState.hits * popLockState.hits * 0.035);
+  const base = 130 + popLockState.hits * 5.9 + Math.min(40, popLockState.hits * popLockState.hits * 0.035);
+  return base * popLockLevel().speedRate;
 }
 function popLockCashoutMult(){
   if(popLockState.hits <= 0) return 0;
-  return Math.round((1 + popLockState.hits * 0.08 + Math.pow(popLockState.hits / POPLOCK_TOTAL, 2) * 2.2) * 100) / 100;
+  const base = 1 + popLockState.hits * 0.08 + Math.pow(popLockState.hits / POPLOCK_TOTAL, 2) * 2.2;
+  return Math.round(base * popLockLevel().payoutRate * 100) / 100;
 }
 function popLockTolerance(){
   return Math.max(5.6, 13 - popLockState.hits * 0.15);
@@ -7306,9 +7365,11 @@ function popLockRender(){
   const left = POPLOCK_TOTAL - popLockState.hits;
   popLockCenterText.textContent = popLockState.active ? 'LOCKS' : 'PRESS';
   popLockProgressText.textContent = left;
-  popLockJackpot.textContent = fmt(popLockState.jackpot || popLockProgressive);
+  const visibleJackpot = popLockVisibleJackpot();
+  popLockJackpot.textContent = fmt(visibleJackpot);
   const cashout = popLockState.active && popLockState.hits > 0 ? ' - P cashout: ' + fmt(popLockState.bet * popLockCashoutMult()) + ' (' + popLockCashoutMult().toFixed(2) + 'x)' : '';
-  popLockReadout.textContent = left + ' locks left - window ' + popLockTolerance().toFixed(1) + 'deg - speed ' + Math.round(popLockSpeed()) + 'deg/s ' + (popLockState.direction > 0 ? 'clockwise' : 'counter') + ' - jackpot ' + fmt(popLockState.jackpot || popLockProgressive) + cashout;
+  popLockReadout.textContent = popLockLevel().label + ' - ' + left + ' locks left - window ' + popLockTolerance().toFixed(1) + 'deg - speed ' + Math.round(popLockSpeed()) + 'deg/s ' + (popLockState.direction > 0 ? 'clockwise' : 'counter') + ' - jackpot ' + fmt(visibleJackpot) + cashout;
+  popLockLevelReadout.textContent = 'Low: 0.5x speed/payout - Medium: 1x speed/payout - High: 2x speed/payout';
 }
 function popLockBump(cls){
   popLockMachine.classList.remove('hit', 'miss');
@@ -7330,6 +7391,7 @@ function popLockEnd(won){
   if(popLockState.raf) cancelAnimationFrame(popLockState.raf);
   popLockState.raf = null;
   popLockBtn.textContent = 'Start';
+  popLockRiskSelect.disabled = false;
   popLockRender();
   if(won){
     const payout = Math.round(popLockState.jackpot * 100) / 100;
@@ -7341,7 +7403,7 @@ function popLockEnd(won){
   } else {
     const grow = popLockState.bet * 4 + popLockState.hits * 0.25;
     popLockProgressive = Math.round((popLockProgressive + grow) * 100) / 100;
-    popLockMsg.textContent = 'Missed at ' + popLockState.hits + ' / 50. Progressive climbed to ' + fmt(popLockProgressive) + '.';
+    popLockMsg.textContent = 'Missed at ' + popLockState.hits + ' / 50. Progressive climbed to ' + fmt(popLockVisibleJackpot()) + '.';
     popLockMsg.className = 'result-msg lose';
     awardPayout(0, 'pop the lock', false);
   }
@@ -7358,6 +7420,7 @@ function popLockCashOut(){
   popLockState.active = false;
   if(popLockState.raf) cancelAnimationFrame(popLockState.raf);
   popLockState.raf = null;
+  popLockRiskSelect.disabled = false;
   const mult = popLockCashoutMult();
   const payout = Math.round(popLockState.bet * mult * 100) / 100;
   popLockMsg.textContent = 'Paused and cashed out at ' + popLockState.hits + ' / 50 locks. Paid ' + fmt(payout) + ' (' + mult.toFixed(2) + 'x).';
@@ -7373,7 +7436,7 @@ function popLockCashOut(){
     direction:1,
     lit:[],
     bet:0,
-    jackpot:popLockProgressive,
+    jackpot:popLockVisibleJackpot(),
     lastTs:null,
     raf:null
   };
@@ -7384,6 +7447,7 @@ function popLockStart(){
   if(bet === null) return;
   playSound('click');
   setBalance(balance - bet);
+  const level = popLockLevel();
   popLockProgressive = Math.round((popLockProgressive + bet * 0.5) * 100) / 100;
   popLockState = {
     active:true,
@@ -7393,13 +7457,14 @@ function popLockStart(){
     direction:1,
     lit:[],
     bet,
-    jackpot:Math.round((popLockProgressive + bet * 85) * 100) / 100,
+    jackpot:Math.round((popLockProgressive + bet * 85) * level.payoutRate * 100) / 100,
     lastTs:null,
     raf:null
   };
   popLockState.target = popLockPickTarget();
+  popLockRiskSelect.disabled = true;
   popLockBtn.textContent = 'Pop';
-  popLockMsg.textContent = 'Hit the yellow dot. One miss ends the run.';
+  popLockMsg.textContent = level.label + ' run. Hit the yellow dot. One miss ends the run.';
   popLockMsg.className = 'result-msg';
   popLockRender();
   popLockState.raf = requestAnimationFrame(popLockLoop);
@@ -7432,6 +7497,10 @@ function popLockPress(){
   popLockRender();
 }
 popLockBtn.addEventListener('click', popLockPress);
+popLockRiskSelect.addEventListener('change', () => {
+  playSound('select');
+  popLockRender();
+});
 document.addEventListener('keydown', (event) => {
   const typing = event.target && /input|textarea|select/i.test(event.target.tagName);
   if(typing || event.repeat) return;
