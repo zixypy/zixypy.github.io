@@ -1814,12 +1814,20 @@
     position:absolute;
     left:8%;
     top:50%;
-    width:86px;
-    height:48px;
+    width:112px;
+    height:70px;
     transform:translateY(-50%);
     z-index:5;
     filter:drop-shadow(0 12px 12px rgba(0,0,0,0.28));
     transition:transform 0.08s linear;
+  }
+  .sky-plane img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    pointer-events:none;
+    user-select:none;
   }
   .sky-stage.active .sky-plane{ animation:sky-plane-bob 0.45s ease-in-out infinite alternate; }
   @keyframes sky-plane-bob{
@@ -1878,10 +1886,10 @@
   .sky-plane::after{
     content:"";
     position:absolute;
-    left:-15px;
-    top:23px;
-    width:18px;
-    height:8px;
+    left:0;
+    top:50%;
+    width:24px;
+    height:10px;
     border-radius:50%;
     background:linear-gradient(90deg, rgba(255,209,102,0), rgba(255,209,102,0.9));
     animation:sky-thrust 0.12s ease-in-out infinite alternate;
@@ -3389,11 +3397,7 @@
         <div class="sky-danger top"></div>
         <div class="sky-danger bottom"></div>
         <div class="sky-plane" id="sky-plane">
-          <div class="sky-plane-wing"></div>
-          <div class="sky-plane-body"></div>
-          <div class="sky-plane-tail"></div>
-          <div class="sky-plane-nose"></div>
-          <div class="sky-plane-window"></div>
+          <img src="assets/plane.png" alt="">
         </div>
         <div class="sky-objects" id="sky-objects"></div>
         <div class="sky-callout" id="sky-callout">Start at 0.50x</div>
@@ -5920,10 +5924,10 @@ function skySpawnCloud(extraX){
   const stageH = skyStage.clientHeight;
   const el = document.createElement('div');
   el.className = 'sky-cloud' + (Math.random() > 0.65 ? ' hot' : '');
-  const w = skyRand(78, 126 + Math.min(52, skyDistance / 22));
+  const w = skyRand(74, 112 + Math.min(34, skyDistance / 45));
   const h = 45;
   const y = skyRand(62, Math.max(92, stageH - 88));
-  const x = stageW + (extraX || skyRand(35, 160));
+  const x = stageW - w - 4 + (extraX || 0);
   el.style.width = w + 'px';
   el.style.left = x + 'px';
   el.style.top = y + 'px';
@@ -5936,7 +5940,7 @@ function skySpawnCoin(){
   const el = document.createElement('div');
   el.className = 'sky-coin';
   el.textContent = '$';
-  const x = stageW + skyRand(80, 220);
+  const x = stageW - 40;
   const y = skyRand(52, Math.max(82, stageH - 74));
   el.style.left = x + 'px';
   el.style.top = y + 'px';
@@ -5947,14 +5951,22 @@ function skyPlaneRect(){
   const stageRect = skyStage.getBoundingClientRect();
   const planeRect = skyPlane.getBoundingClientRect();
   return {
-    x:planeRect.left - stageRect.left + 10,
-    y:planeRect.top - stageRect.top + 8,
-    w:Math.max(20, planeRect.width - 20),
-    h:Math.max(18, planeRect.height - 16)
+    x:planeRect.left - stageRect.left + 30,
+    y:planeRect.top - stageRect.top + 22,
+    w:Math.max(22, planeRect.width - 60),
+    h:Math.max(16, planeRect.height - 42)
   };
 }
 function skyRectsHit(a, b){
   return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+function skyCloudHitsPlane(plane, item){
+  const cloudZones = [
+    { x:item.x + item.w * 0.27, y:item.y - 7, w:item.w * 0.22, h:24 },
+    { x:item.x + item.w * 0.54, y:item.y - 12, w:item.w * 0.27, h:28 },
+    { x:item.x + item.w * 0.25, y:item.y + 15, w:item.w * 0.52, h:21 }
+  ];
+  return cloudZones.some(zone => skyRectsHit(plane, zone));
 }
 function skyStopRound(){
   skyActive = false;
@@ -6017,15 +6029,13 @@ function skyLoop(time){
   skyPlane.style.top = skyPlaneY + 'px';
   skyPlane.style.transform = 'translateY(-50%) rotate(' + tilt.toFixed(1) + 'deg)';
   skyDistance += speed * dt;
-  skyMultiplier = 0.5 + skyDistance / 560 + skyCoinBonus;
+  skyMultiplier = 0.5 + skyDistance / 8400 + skyCoinBonus;
   skyCloudTimer -= dt * 1000;
   skyCoinTimer -= dt * 1000;
   if(skyCloudTimer <= 0){
     skySpawnCloud();
-    const pressure = Math.min(0.82, skyDistance / 1700);
-    if(Math.random() < pressure * 0.42) skySpawnCloud(skyRand(120, 260));
-    const minGap = Math.max(260, 1120 - skyDistance * 0.55);
-    const maxGap = Math.max(470, 1550 - skyDistance * 0.5);
+    const minGap = Math.max(1050, 2500 - skyDistance * 0.18);
+    const maxGap = Math.max(1650, 3900 - skyDistance * 0.22);
     skyCloudTimer = skyRand(minGap, maxGap);
   }
   if(skyCoinTimer <= 0){
@@ -6038,8 +6048,7 @@ function skyLoop(time){
     item.x -= speed * dt * (item.type === 'coin' ? 1.05 : 1);
     item.el.style.left = item.x + 'px';
     if(item.type === 'cloud'){
-      const cloudRect = { x:item.x + 12, y:item.y - 22, w:item.w - 24, h:66 };
-      if(skyRectsHit(plane, cloudRect)){
+      if(skyCloudHitsPlane(plane, item)){
         skyCrash('Cloud strike');
         return;
       }
@@ -6057,7 +6066,7 @@ function skyLoop(time){
         continue;
       }
     }
-    if(item.x < -180){
+    if(item.x < -item.w - 24){
       item.el.remove();
       skyItems.splice(i, 1);
     }
@@ -6079,8 +6088,8 @@ skyStartBtn.addEventListener('click', function(){
   skyDistance = 0;
   skyVelocity = 0;
   skyPlaneY = skyStage.clientHeight / 2;
-  skyCloudTimer = 700;
-  skyCoinTimer = skyRand(4200, 7800);
+  skyCloudTimer = 1200;
+  skyCoinTimer = skyRand(5200, 9000);
   skyLastTime = 0;
   skyActive = true;
   skyHolding = false;
@@ -7153,6 +7162,5 @@ document.getElementById('poker-draw-btn').addEventListener('click', function(){
 });
 renderPoker();
 </script>
-
 </body>
 </html>
