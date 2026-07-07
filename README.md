@@ -1,0 +1,1 @@
+This was originally just a silly little project that we vibe coded. Couldnt stop thinking of ideas though... That's how we ended up here. Enjoy the list of games we've provided for you with all fun no risk
