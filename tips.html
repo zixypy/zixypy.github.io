@@ -156,6 +156,33 @@
     text-transform:uppercase;
     color:var(--brass-light);
   }
+  .wallet{
+    position:fixed;
+    right:1.25rem;
+    top:1.25rem;
+    z-index:5;
+    background:var(--ink);
+    border:2px solid var(--brass);
+    border-radius:12px;
+    padding:0.65rem 0.9rem;
+    min-width:150px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.32), inset 0 0 14px rgba(0,0,0,0.45);
+    text-align:right;
+  }
+  .wallet span{
+    display:block;
+    color:var(--text-muted);
+    font-size:0.68rem;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-bottom:0.18rem;
+  }
+  .wallet b{
+    display:block;
+    color:#ffd166;
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.2rem;
+  }
   .stage{
     max-width:980px;
     margin:1.5rem auto 0;
@@ -405,6 +432,15 @@
     z-index:1;
   }
   @media (max-width:760px){
+    .wallet{
+      position:relative;
+      right:auto;
+      top:auto;
+      margin:1rem auto 0;
+      width:calc(100% - 3rem);
+      max-width:320px;
+      text-align:center;
+    }
     .jar-layout{ grid-template-columns:1fr; }
     .game-card{ padding:1.3rem; }
     .tip-controls{ align-items:stretch; }
@@ -424,6 +460,11 @@
   <span class="ambient-card" style="--x:12%;--d:26s;--delay:-12s;--drift:24vw;--r0:-12deg;--r1:420deg;"></span>
   <span class="ambient-card" style="--x:53%;--d:22s;--delay:-5s;--drift:-20vw;--r0:8deg;--r1:-390deg;"></span>
   <span class="ambient-card" style="--x:76%;--d:28s;--delay:-18s;--drift:18vw;--r0:16deg;--r1:510deg;"></span>
+</div>
+
+<div class="wallet" aria-live="polite">
+  <span>your chips</span>
+  <b id="wallet-balance">$10.00</b>
 </div>
 
 <div class="marquee-frame">
@@ -466,24 +507,48 @@
 </footer>
 
 <script>
-const TIP_JSON_URL = 'jerrys-global-tip-jar.json';
+const TIP_JSON_URL = 'https://gamble.zixy.lol/jerrys-global-tip-jar.json';
 const TIP_STORAGE_KEY = 'velvet-chip-jerry-global-tips';
 const TIP_EVENT_KEY = 'velvet-chip-jerry-global-tip-event';
+const BALANCE_STORAGE_KEY = 'velvet-chip-balance';
+const TIP_CHANNEL_NAME = 'velvet-chip-jerry-global-tip-jar';
 const totalEl = document.getElementById('tip-total');
 const sourceEl = document.getElementById('tip-source');
 const statusEl = document.getElementById('status');
 const feedEl = document.getElementById('feed');
 const inputEl = document.getElementById('tip-input');
 const tipBtn = document.getElementById('tip-btn');
+const walletEl = document.getElementById('wallet-balance');
 const jerryFace = document.getElementById('jerry-face');
 const jerryLine = document.getElementById('jerry-line');
 let jsonTotal = 0;
 let displayedTotal = 0;
 let targetTotal = 0;
 let lastJsonStamp = '';
+let lastSeenTips = null;
+let lastSeenBalance = null;
+let lastSeenTipEvent = localStorage.getItem(TIP_EVENT_KEY) || '';
+let lastHandledTipEventId = '';
+let tipChannel = null;
 
 function money(n){
   return Number(n || 0).toLocaleString(undefined, { minimumFractionDigits:2, maximumFractionDigits:2 });
+}
+function fmt(n){
+  return '$' + money(n);
+}
+function loadBalance(){
+  const value = parseFloat(localStorage.getItem(BALANCE_STORAGE_KEY));
+  return Number.isFinite(value) && value >= 0 ? value : 10;
+}
+function setBalance(value){
+  const clean = Math.max(0, Math.round(value * 100) / 100);
+  localStorage.setItem(BALANCE_STORAGE_KEY, clean.toFixed(2));
+  walletEl.textContent = fmt(clean);
+  return clean;
+}
+function refreshBalance(){
+  walletEl.textContent = fmt(loadBalance());
 }
 function localTips(){
   const value = parseFloat(localStorage.getItem(TIP_STORAGE_KEY));
@@ -502,6 +567,18 @@ function addFeed(amount, source){
   row.innerHTML = '<span>' + source + '</span><b>+' + money(amount) + '</b>';
   feedEl.prepend(row);
   while(feedEl.children.length > 6) feedEl.lastElementChild.remove();
+}
+function handleTipEvent(data, sourceLabel){
+  if(!data || !Number.isFinite(parseFloat(data.amount))) return;
+  const amount = Math.round(parseFloat(data.amount) * 100) / 100;
+  const eventId = [amount.toFixed(2), data.source || '', data.at || ''].join('|');
+  if(eventId && eventId === lastHandledTipEventId) return;
+  lastHandledTipEventId = eventId;
+  refreshTarget(sourceLabel || 'live casino tip at ' + new Date().toLocaleTimeString());
+  statusEl.textContent = 'Jerry heard another +' + money(amount) + ' chips hit the jar.';
+  jerryFace.textContent = '$D';
+  jerryLine.textContent = 'Jerry is counting the tips so loudly the cage can hear it.';
+  addFeed(amount, data.source || 'Casino tip');
 }
 function burstParticles(x, y, count){
   const palette = ['#ffd166', '#63d7ff', '#e8c85a', '#ffffff'];
@@ -552,8 +629,18 @@ function donate(amount, source){
     jerryFace.textContent = '>:(';
     return;
   }
+  const currentBalance = loadBalance();
+  if(clean > currentBalance){
+    statusEl.textContent = 'You only have ' + fmt(currentBalance) + '. Jerry cannot steal chips you do not have yet.';
+    jerryFace.textContent = '>:(';
+    jerryLine.textContent = 'Jerry checked the cage ledger and found your wallet tragically hilarious.';
+    return;
+  }
+  setBalance(currentBalance - clean);
   setLocalTips(localTips() + clean);
-  localStorage.setItem(TIP_EVENT_KEY, JSON.stringify({ amount:clean, source:source || 'local donation', at:Date.now() }));
+  const event = { amount:clean, source:source || 'local donation', at:Date.now() };
+  localStorage.setItem(TIP_EVENT_KEY, JSON.stringify(event));
+  if(tipChannel) tipChannel.postMessage(event);
   refreshTarget('live browser donation at ' + new Date().toLocaleTimeString());
   statusEl.textContent = 'Jerry pocketed +' + money(clean) + ' chips and called it "compliance."';
   jerryFace.textContent = '$D';
@@ -561,6 +648,27 @@ function donate(amount, source){
   const rect = totalEl.getBoundingClientRect();
   burstParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, 32);
   addFeed(clean, source || 'This browser');
+}
+function pollLiveState(){
+  const tips = localTips();
+  if(lastSeenTips === null) lastSeenTips = tips;
+  else if(tips !== lastSeenTips){
+    lastSeenTips = tips;
+    refreshTarget('live poll sync at ' + new Date().toLocaleTimeString());
+  }
+  const balance = loadBalance();
+  if(lastSeenBalance === null) lastSeenBalance = balance;
+  else if(balance !== lastSeenBalance){
+    lastSeenBalance = balance;
+    refreshBalance();
+  }
+  const eventRaw = localStorage.getItem(TIP_EVENT_KEY) || '';
+  if(eventRaw && eventRaw !== lastSeenTipEvent){
+    lastSeenTipEvent = eventRaw;
+    try{
+      handleTipEvent(JSON.parse(eventRaw), 'live casino tip at ' + new Date().toLocaleTimeString());
+    } catch(err){}
+  }
 }
 function animateTotal(){
   const delta = targetTotal - displayedTotal;
@@ -578,17 +686,33 @@ inputEl.addEventListener('keydown', event => {
 });
 window.addEventListener('storage', event => {
   if(event.key === TIP_STORAGE_KEY){
+    lastSeenTips = localTips();
     refreshTarget('live browser sync at ' + new Date().toLocaleTimeString());
+  }
+  if(event.key === BALANCE_STORAGE_KEY){
+    lastSeenBalance = loadBalance();
+    refreshBalance();
   }
   if(event.key === TIP_EVENT_KEY && event.newValue){
     try{
       const data = JSON.parse(event.newValue);
-      if(data && Number.isFinite(data.amount)) addFeed(data.amount, 'Other casino tab');
+      lastSeenTipEvent = event.newValue;
+      handleTipEvent(data, 'live casino tip at ' + new Date().toLocaleTimeString());
     } catch(err){}
   }
 });
+try{
+  tipChannel = new BroadcastChannel(TIP_CHANNEL_NAME);
+  tipChannel.onmessage = event => {
+    handleTipEvent(event.data, 'broadcast sync at ' + new Date().toLocaleTimeString());
+    lastSeenTips = localTips();
+    lastSeenBalance = loadBalance();
+  };
+} catch(err){}
 loadJsonTotal();
+refreshBalance();
 setInterval(loadJsonTotal, 3500);
+setInterval(pollLiveState, 300);
 animateTotal();
 </script>
 </body>
