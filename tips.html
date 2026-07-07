@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<title>Jerry's Global Tip Jar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f3d2e;
+    --bg-glow-a:rgba(255,255,255,0.03);
+    --bg-glow-b:rgba(255,255,255,0.03);
+    --card-bg:#154a37;
+    --card-border:rgba(201,162,39,0.3);
+    --text:#f0e6d2;
+    --text-muted:rgba(240,230,210,0.7);
+    --text-faint:rgba(240,230,210,0.5);
+    --brass:#c9a227;
+    --brass-light:#e8c85a;
+    --burgundy:#6b1e2a;
+    --burgundy-light:#82273a;
+    --ink:#241a10;
+    --ink-text:#f0e6d2;
+    --win:#ffd166;
+    --loss:#e2887a;
+    --tile-bg:#1c5c44;
+    --tile-border:rgba(201,162,39,0.4);
+    --divider:rgba(201,162,39,0.35);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    padding:0 0 4rem;
+    background:var(--bg);
+    background-image:
+      radial-gradient(circle at 20% 10%, var(--bg-glow-a), transparent 40%),
+      radial-gradient(circle at 80% 90%, var(--bg-glow-b), transparent 40%);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+  }
+  .casino-ambient{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+  }
+  .ambient-chip{
+    position:absolute;
+    left:var(--x);
+    top:110%;
+    width:var(--s);
+    height:var(--s);
+    border-radius:50%;
+    border:2px dashed rgba(255,209,102,0.5);
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,0.55), rgba(255,209,102,0.65) 35%, rgba(107,30,42,0.7) 36% 62%, rgba(255,209,102,0.7) 63%);
+    opacity:0.24;
+    animation:ambient-chip-rise var(--d) linear infinite;
+    animation-delay:var(--delay);
+  }
+  .ambient-chip:nth-child(2n){
+    border-color:rgba(99,215,255,0.38);
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,0.45), rgba(99,215,255,0.55) 35%, rgba(21,63,104,0.68) 36% 62%, rgba(99,215,255,0.5) 63%);
+  }
+  .ambient-card{
+    position:absolute;
+    left:var(--x);
+    top:105%;
+    width:34px;
+    height:48px;
+    border-radius:5px;
+    border:1px solid rgba(240,230,210,0.45);
+    background:rgba(240,230,210,0.13);
+    opacity:0.14;
+    animation:ambient-card-rise var(--d) linear infinite;
+    animation-delay:var(--delay);
+  }
+  .ambient-scanline{
+    position:fixed;
+    left:0;
+    right:0;
+    top:-20%;
+    height:18%;
+    background:linear-gradient(180deg, transparent, rgba(255,209,102,0.045), transparent);
+    animation:ambient-scan 5.5s linear infinite;
+  }
+  @keyframes ambient-chip-rise{
+    from{ transform:translate3d(0,0,0) rotate(0deg); }
+    to{ transform:translate3d(var(--drift), -135vh, 0) rotate(var(--rot)); }
+  }
+  @keyframes ambient-card-rise{
+    from{ transform:translate3d(0,0,0) rotate(var(--r0)); }
+    to{ transform:translate3d(var(--drift), -130vh, 0) rotate(var(--r1)); }
+  }
+  @keyframes ambient-scan{ to{ transform:translateY(135vh); } }
+  .marquee-frame{
+    max-width:900px;
+    margin:0 auto;
+    padding:2rem 1.5rem 1rem;
+    position:relative;
+    z-index:1;
+  }
+  header{
+    text-align:center;
+    padding:1.5rem 1rem 2rem;
+    border-bottom:2px dashed var(--divider);
+  }
+  .lights{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:0.75rem;
+  }
+  .lights span{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--brass);
+    box-shadow:0 0 6px 2px rgba(232,200,90,0.5);
+    animation:twinkle 1.6s ease-in-out infinite;
+  }
+  .lights span:nth-child(odd){animation-delay:0.4s;}
+  .lights span:nth-child(3n){animation-delay:0.8s;}
+  @keyframes twinkle{ 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+  h1{
+    font-family:'DM Serif Display', serif;
+    font-size:clamp(2.2rem, 7vw, 4rem);
+    margin:0;
+    color:var(--brass-light);
+    letter-spacing:0.5px;
+    text-shadow:0 0 18px rgba(232,200,90,0.22);
+    animation:title-float 3.2s ease-in-out infinite;
+  }
+  @keyframes title-float{
+    0%,100%{ transform:translateY(0); text-shadow:0 0 18px rgba(232,200,90,0.22); }
+    50%{ transform:translateY(-3px); text-shadow:0 0 28px rgba(232,200,90,0.42); }
+  }
+  .tagline{
+    color:var(--text);
+    opacity:0.7;
+    font-size:0.95rem;
+    margin-top:0.4rem;
+    letter-spacing:0.5px;
+  }
+  .fake-badge{
+    display:inline-block;
+    margin-top:0.9rem;
+    padding:0.3rem 0.9rem;
+    border:1px solid var(--brass);
+    border-radius:999px;
+    font-size:0.72rem;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--brass-light);
+  }
+  .stage{
+    max-width:980px;
+    margin:1.5rem auto 0;
+    padding:0 1.5rem;
+    position:relative;
+    z-index:1;
+  }
+  .game-card{
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:16px;
+    padding:2rem;
+    box-shadow:0 18px 50px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04);
+    position:relative;
+    overflow:hidden;
+  }
+  .game-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 50% 18%, rgba(255,209,102,0.10), transparent 22%),
+      linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,0.04) 48%, transparent 56% 100%);
+    pointer-events:none;
+  }
+  .game-card > *{ position:relative; z-index:1; }
+  .jar-layout{
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) 280px;
+    gap:1.25rem;
+    align-items:stretch;
+  }
+  .odometer{
+    background:var(--ink);
+    border:3px solid var(--brass);
+    border-radius:10px;
+    padding:1.2rem 1.4rem;
+    display:grid;
+    gap:0.35rem;
+    box-shadow:inset 0 0 14px rgba(0,0,0,0.6);
+    position:relative;
+    overflow:hidden;
+    min-height:180px;
+    align-content:center;
+    animation:odometer-hum 2.4s ease-in-out infinite;
+  }
+  .odometer::after{
+    content:"";
+    position:absolute;
+    inset:-20%;
+    background:linear-gradient(100deg, transparent 38%, rgba(255,255,255,0.16), transparent 62%);
+    animation:odometer-sweep 2.8s ease-in-out infinite;
+  }
+  .odometer .label{
+    font-size:0.75rem;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--brass);
+    opacity:0.8;
+    position:relative;
+    z-index:1;
+  }
+  .odometer .value{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:clamp(2.8rem, 9vw, 5rem);
+    color:#ffd166;
+    line-height:1;
+    position:relative;
+    z-index:1;
+    text-shadow:0 0 28px rgba(255,209,102,0.24);
+  }
+  .odometer .sub{
+    color:var(--text-muted);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.8rem;
+    position:relative;
+    z-index:1;
+  }
+  @keyframes odometer-hum{
+    0%,100%{ box-shadow:inset 0 0 14px rgba(0,0,0,0.6), 0 0 0 rgba(255,209,102,0); }
+    50%{ box-shadow:inset 0 0 22px rgba(255,209,102,0.14), 0 0 26px rgba(255,209,102,0.14); }
+  }
+  @keyframes odometer-sweep{
+    0%,35%{ transform:translateX(-70%) rotate(8deg); opacity:0; }
+    50%{ opacity:1; }
+    80%,100%{ transform:translateX(70%) rotate(8deg); opacity:0; }
+  }
+  .jerry-card{
+    min-height:180px;
+    background:var(--ink);
+    border:2px solid var(--brass);
+    border-radius:12px;
+    padding:1rem;
+    display:grid;
+    align-content:center;
+    gap:0.55rem;
+    box-shadow:0 12px 30px rgba(0,0,0,0.28);
+  }
+  .jerry-face{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:800;
+    font-size:3.6rem;
+    color:var(--brass-light);
+    line-height:1;
+    text-align:center;
+  }
+  .jerry-title{
+    font-family:'JetBrains Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--brass-light);
+    text-align:center;
+    font-size:0.8rem;
+  }
+  .jerry-line{
+    color:var(--text-muted);
+    text-align:center;
+    line-height:1.45;
+    font-size:0.88rem;
+  }
+  .tip-controls{
+    margin-top:1.3rem;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:0.75rem;
+  }
+  .tip-controls input{
+    width:150px;
+    background:var(--ink);
+    border:1px solid var(--brass);
+    color:var(--ink-text);
+    padding:0.65rem 0.75rem;
+    border-radius:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:1rem;
+  }
+  .action-btn,
+  .chip-btn{
+    border:none;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+  }
+  .action-btn{
+    background:var(--brass);
+    color:var(--ink);
+    padding:0.75rem 1.5rem;
+    border-radius:8px;
+    font-weight:800;
+    font-size:1rem;
+    box-shadow:0 8px 18px rgba(0,0,0,0.22);
+  }
+  .action-btn:hover{ background:var(--brass-light); transform:translateY(-1px); }
+  .chip-btn{
+    background:var(--burgundy);
+    color:#f0e6d2;
+    border:1px solid rgba(255,255,255,0.15);
+    padding:0.55rem 0.9rem;
+    border-radius:999px;
+    font-weight:700;
+  }
+  .chip-btn:hover{ background:var(--burgundy-light); }
+  .action-btn::after,
+  .chip-btn::after{
+    content:"";
+    position:absolute;
+    inset:-40% -70%;
+    background:linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.24), transparent 65%);
+    transform:translateX(-70%) rotate(8deg);
+    opacity:0;
+    pointer-events:none;
+  }
+  .action-btn:hover::after,
+  .chip-btn:hover::after{ animation:button-sheen 0.8s ease; }
+  @keyframes button-sheen{
+    0%{ opacity:0; transform:translateX(-70%) rotate(8deg); }
+    20%{ opacity:1; }
+    100%{ opacity:0; transform:translateX(70%) rotate(8deg); }
+  }
+  .status{
+    min-height:1.5rem;
+    margin-top:1rem;
+    color:var(--text-muted);
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.82rem;
+  }
+  .feed{
+    margin-top:1rem;
+    display:grid;
+    gap:0.45rem;
+  }
+  .feed-line{
+    border:1px solid var(--tile-border);
+    background:rgba(36,26,16,0.32);
+    border-radius:8px;
+    padding:0.55rem 0.7rem;
+    color:var(--text-muted);
+    font-size:0.84rem;
+    display:flex;
+    justify-content:space-between;
+    gap:1rem;
+  }
+  .feed-line b{
+    color:var(--brass-light);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .casino-particle{
+    position:fixed;
+    left:var(--x);
+    top:var(--y);
+    pointer-events:none;
+    z-index:9999;
+    color:var(--c, #ffd166);
+    background:var(--c, #ffd166);
+    width:var(--s, 10px);
+    height:var(--s, 10px);
+    border-radius:50%;
+    box-shadow:0 0 16px var(--c, #ffd166);
+    animation:particle-burst var(--d, 900ms) cubic-bezier(.12,.72,.2,1) forwards;
+  }
+  .casino-particle.icon{
+    width:auto;
+    height:auto;
+    background:transparent;
+    box-shadow:none;
+    font-size:var(--s, 18px);
+    line-height:1;
+  }
+  @keyframes particle-burst{
+    0%{ transform:translate(-50%, -50%) scale(0.35) rotate(0deg); opacity:0; }
+    10%{ opacity:1; }
+    100%{ transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.9) rotate(var(--rot, 180deg)); opacity:0; }
+  }
+  footer{
+    max-width:900px;
+    margin:2rem auto 0;
+    padding:0 1.5rem;
+    text-align:center;
+    font-size:0.75rem;
+    color:var(--text-faint);
+    line-height:1.6;
+    position:relative;
+    z-index:1;
+  }
+  @media (max-width:760px){
+    .jar-layout{ grid-template-columns:1fr; }
+    .game-card{ padding:1.3rem; }
+    .tip-controls{ align-items:stretch; }
+    .tip-controls input,
+    .tip-controls button{ flex:1 1 130px; }
+  }
+</style>
+</head>
+<body>
+<div class="casino-ambient" aria-hidden="true">
+  <span class="ambient-scanline"></span>
+  <span class="ambient-chip" style="--x:6%;--s:34px;--d:18s;--delay:-1s;--drift:34vw;--rot:720deg;"></span>
+  <span class="ambient-chip" style="--x:19%;--s:22px;--d:15s;--delay:-8s;--drift:-18vw;--rot:-620deg;"></span>
+  <span class="ambient-chip" style="--x:39%;--s:30px;--d:21s;--delay:-4s;--drift:22vw;--rot:840deg;"></span>
+  <span class="ambient-chip" style="--x:62%;--s:24px;--d:17s;--delay:-10s;--drift:-28vw;--rot:-760deg;"></span>
+  <span class="ambient-chip" style="--x:84%;--s:38px;--d:24s;--delay:-13s;--drift:12vw;--rot:920deg;"></span>
+  <span class="ambient-card" style="--x:12%;--d:26s;--delay:-12s;--drift:24vw;--r0:-12deg;--r1:420deg;"></span>
+  <span class="ambient-card" style="--x:53%;--d:22s;--delay:-5s;--drift:-20vw;--r0:8deg;--r1:-390deg;"></span>
+  <span class="ambient-card" style="--x:76%;--d:28s;--delay:-18s;--drift:18vw;--r0:16deg;--r1:510deg;"></span>
+</div>
+
+<div class="marquee-frame">
+  <header>
+    <div class="lights"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <h1>Jerry's Global Tip Jar</h1>
+    <p class="tagline">the official floor attendant gratuity surveillance board</p>
+    <div class="fake-badge">synced from jerrys-global-tip-jar.json + live browser tips</div>
+  </header>
+</div>
+
+<main class="stage">
+  <section class="game-card">
+    <div class="jar-layout">
+      <div class="odometer">
+        <span class="label">global tips to Jerry</span>
+        <span class="value" id="tip-total">0.00</span>
+        <span class="sub" id="tip-source">loading jerrys-global-tip-jar.json...</span>
+      </div>
+      <div class="jerry-card">
+        <div class="jerry-face" id="jerry-face">:D</div>
+        <div class="jerry-title">Tip Jar Jerry</div>
+        <div class="jerry-line" id="jerry-line">Put chips in the jar. Jerry is pretending this is voluntary.</div>
+      </div>
+    </div>
+    <div class="tip-controls">
+      <button class="chip-btn" data-tip="1">+$1</button>
+      <button class="chip-btn" data-tip="5">+$5</button>
+      <button class="chip-btn" data-tip="25">+$25</button>
+      <input type="number" id="tip-input" value="1" min="0.01" step="0.01" aria-label="Tip amount">
+      <button class="action-btn" id="tip-btn">Tip Jerry</button>
+    </div>
+    <div class="status" id="status">Waiting for the next donation.</div>
+    <div class="feed" id="feed"></div>
+  </section>
+</main>
+
+<footer>
+  This is a static HTML page. The JSON file provides the shared seed amount; browser tips update live across local tabs with localStorage.
+</footer>
+
+<script>
+const TIP_JSON_URL = 'jerrys-global-tip-jar.json';
+const TIP_STORAGE_KEY = 'velvet-chip-jerry-global-tips';
+const TIP_EVENT_KEY = 'velvet-chip-jerry-global-tip-event';
+const totalEl = document.getElementById('tip-total');
+const sourceEl = document.getElementById('tip-source');
+const statusEl = document.getElementById('status');
+const feedEl = document.getElementById('feed');
+const inputEl = document.getElementById('tip-input');
+const tipBtn = document.getElementById('tip-btn');
+const jerryFace = document.getElementById('jerry-face');
+const jerryLine = document.getElementById('jerry-line');
+let jsonTotal = 0;
+let displayedTotal = 0;
+let targetTotal = 0;
+let lastJsonStamp = '';
+
+function money(n){
+  return Number(n || 0).toLocaleString(undefined, { minimumFractionDigits:2, maximumFractionDigits:2 });
+}
+function localTips(){
+  const value = parseFloat(localStorage.getItem(TIP_STORAGE_KEY));
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+function setLocalTips(value){
+  localStorage.setItem(TIP_STORAGE_KEY, Math.max(0, value).toFixed(2));
+}
+function setTarget(value, label){
+  targetTotal = Math.max(0, Math.round(value * 100) / 100);
+  if(label) sourceEl.textContent = label;
+}
+function addFeed(amount, source){
+  const row = document.createElement('div');
+  row.className = 'feed-line';
+  row.innerHTML = '<span>' + source + '</span><b>+' + money(amount) + '</b>';
+  feedEl.prepend(row);
+  while(feedEl.children.length > 6) feedEl.lastElementChild.remove();
+}
+function burstParticles(x, y, count){
+  const palette = ['#ffd166', '#63d7ff', '#e8c85a', '#ffffff'];
+  for(let i=0; i<count; i++){
+    const p = document.createElement('span');
+    const useIcon = Math.random() < 0.45;
+    p.className = 'casino-particle' + (useIcon ? ' icon' : '');
+    if(useIcon) p.textContent = Math.random() < 0.5 ? '$' : '◆';
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 40 + Math.random() * 130;
+    p.style.setProperty('--x', x + 'px');
+    p.style.setProperty('--y', y + 'px');
+    p.style.setProperty('--dx', Math.cos(angle) * distance + 'px');
+    p.style.setProperty('--dy', Math.sin(angle) * distance - 45 + 'px');
+    p.style.setProperty('--rot', (Math.random() * 540 - 270).toFixed(0) + 'deg');
+    p.style.setProperty('--s', (useIcon ? 14 + Math.random() * 14 : 5 + Math.random() * 8) + 'px');
+    p.style.setProperty('--d', (650 + Math.random() * 650).toFixed(0) + 'ms');
+    p.style.setProperty('--c', palette[Math.floor(Math.random() * palette.length)]);
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1400);
+  }
+}
+function refreshTarget(label){
+  setTarget(jsonTotal + localTips(), label);
+}
+async function loadJsonTotal(){
+  try{
+    const res = await fetch(TIP_JSON_URL + '?v=' + Date.now(), { cache:'no-store' });
+    if(!res.ok) throw new Error('JSON returned ' + res.status);
+    const data = await res.json();
+    const nextTotal = parseFloat(data.jerryGlobalTips);
+    const nextStamp = String(data.updatedAt || '');
+    if(Number.isFinite(nextTotal)){
+      const changed = nextTotal !== jsonTotal || nextStamp !== lastJsonStamp;
+      jsonTotal = Math.max(0, nextTotal);
+      lastJsonStamp = nextStamp;
+      refreshTarget(changed ? 'synced from JSON at ' + new Date().toLocaleTimeString() : null);
+    }
+  } catch(err){
+    sourceEl.textContent = 'JSON sync unavailable; showing local live tips.';
+    refreshTarget();
+  }
+}
+function donate(amount, source){
+  const clean = Math.round(parseFloat(amount) * 100) / 100;
+  if(!Number.isFinite(clean) || clean <= 0){
+    statusEl.textContent = 'Jerry rejected that sad little non-number.';
+    jerryFace.textContent = '>:(';
+    return;
+  }
+  setLocalTips(localTips() + clean);
+  localStorage.setItem(TIP_EVENT_KEY, JSON.stringify({ amount:clean, source:source || 'local donation', at:Date.now() }));
+  refreshTarget('live browser donation at ' + new Date().toLocaleTimeString());
+  statusEl.textContent = 'Jerry pocketed +' + money(clean) + ' chips and called it "compliance."';
+  jerryFace.textContent = '$D';
+  jerryLine.textContent = 'Another tip for the jar. Jerry is suddenly very professional.';
+  const rect = totalEl.getBoundingClientRect();
+  burstParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, 32);
+  addFeed(clean, source || 'This browser');
+}
+function animateTotal(){
+  const delta = targetTotal - displayedTotal;
+  if(Math.abs(delta) < 0.005) displayedTotal = targetTotal;
+  else displayedTotal += delta * 0.085;
+  totalEl.textContent = money(displayedTotal);
+  requestAnimationFrame(animateTotal);
+}
+document.querySelectorAll('[data-tip]').forEach(btn => {
+  btn.addEventListener('click', () => donate(btn.dataset.tip, 'Quick tip'));
+});
+tipBtn.addEventListener('click', () => donate(inputEl.value, 'Manual tip'));
+inputEl.addEventListener('keydown', event => {
+  if(event.key === 'Enter') donate(inputEl.value, 'Manual tip');
+});
+window.addEventListener('storage', event => {
+  if(event.key === TIP_STORAGE_KEY){
+    refreshTarget('live browser sync at ' + new Date().toLocaleTimeString());
+  }
+  if(event.key === TIP_EVENT_KEY && event.newValue){
+    try{
+      const data = JSON.parse(event.newValue);
+      if(data && Number.isFinite(data.amount)) addFeed(data.amount, 'Other casino tab');
+    } catch(err){}
+  }
+});
+loadJsonTotal();
+setInterval(loadJsonTotal, 3500);
+animateTotal();
+</script>
+</body>
+</html>
