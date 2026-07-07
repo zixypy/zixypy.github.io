@@ -1940,16 +1940,28 @@
     position:absolute;
     width:34px;
     height:34px;
-    border-radius:50%;
     display:grid;
     place-items:center;
-    background:radial-gradient(circle at 34% 28%, #fff3a0, #ffd166 42%, #b97812 70%);
-    border:3px solid #9b650d;
-    color:#241a10;
-    font-family:'JetBrains Mono', monospace;
-    font-weight:900;
+    background:transparent;
     box-shadow:0 0 20px rgba(255,209,102,0.55);
     animation:sky-coin-spin 0.65s linear infinite;
+  }
+  .sky-coin::before{
+    content:"";
+    width:27px;
+    height:27px;
+    display:block;
+    background:linear-gradient(135deg, #fff3a0 0 18%, #ffd166 19% 58%, #b97812 59% 100%);
+    clip-path:polygon(50% 0, 100% 38%, 50% 100%, 0 38%);
+    border-radius:4px;
+    box-shadow:0 0 16px rgba(255,209,102,0.75), inset 0 0 10px rgba(255,255,255,0.35);
+  }
+  .sky-coin::after{
+    content:"";
+    position:absolute;
+    inset:3px 10px 14px 10px;
+    background:rgba(255,255,255,0.42);
+    clip-path:polygon(50% 0, 100% 42%, 50% 100%, 0 42%);
   }
   @keyframes sky-coin-spin{
     0%{ transform:rotateY(0deg) scale(1); }
@@ -2744,6 +2756,139 @@
     gap:0.75rem;
   }
 
+  .donation-widget{
+    position:fixed;
+    right:1.1rem;
+    bottom:1.1rem;
+    z-index:23;
+    font-family:'Inter', sans-serif;
+  }
+  .donation-toggle{
+    position:relative;
+    min-width:174px;
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius:999px;
+    padding:0.72rem 1rem;
+    color:#ffffff;
+    background:
+      linear-gradient(135deg, rgba(105,91,255,0.95), rgba(0,213,255,0.86) 48%, rgba(49,255,170,0.88)),
+      #2027ff;
+    font-weight:900;
+    letter-spacing:0.2px;
+    cursor:pointer;
+    overflow:hidden;
+    box-shadow:0 18px 48px rgba(0,0,0,0.32), 0 0 32px rgba(0,213,255,0.24);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.55rem;
+    transform:translateZ(0);
+    animation:donation-float 3.1s ease-in-out infinite;
+  }
+  .donation-toggle::before{
+    content:"";
+    position:absolute;
+    inset:-70%;
+    background:conic-gradient(from 90deg, transparent, rgba(255,255,255,0.45), transparent 24%);
+    animation:donation-sheen 2.7s linear infinite;
+  }
+  .donation-toggle span{
+    position:relative;
+    z-index:1;
+  }
+  .donation-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 16px rgba(255,255,255,0.9);
+    position:relative;
+    z-index:1;
+  }
+  .donation-toggle:hover{ transform:translateY(-2px); }
+  .donation-panel{
+    position:absolute;
+    right:0;
+    bottom:calc(100% + 0.75rem);
+    width:min(380px, calc(100vw - 2.2rem));
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius:22px;
+    padding:1rem;
+    background:rgba(10,16,30,0.86);
+    color:#f7fbff;
+    box-shadow:0 24px 70px rgba(0,0,0,0.48), inset 0 1px 0 rgba(255,255,255,0.18);
+    backdrop-filter:blur(18px) saturate(1.3);
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(14px) scale(0.96);
+    transition:opacity 0.18s ease, transform 0.18s ease;
+  }
+  .donation-widget.open .donation-panel{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0) scale(1);
+  }
+  .donation-panel h3{
+    margin:0 0 0.35rem;
+    font-size:1rem;
+    letter-spacing:0;
+  }
+  .donation-panel p{
+    margin:0 0 0.85rem;
+    color:rgba(247,251,255,0.72);
+    font-size:0.82rem;
+  }
+  .donation-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:0.65rem;
+    align-items:center;
+    padding:0.72rem;
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:16px;
+    background:linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+  }
+  .donation-row + .donation-row{ margin-top:0.6rem; }
+  .donation-label{
+    display:block;
+    color:#b9f7ff;
+    font-weight:900;
+    font-size:0.78rem;
+    margin-bottom:0.28rem;
+  }
+  .donation-address{
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.76rem;
+    color:rgba(247,251,255,0.86);
+  }
+  .donation-copy{
+    border:0;
+    border-radius:999px;
+    padding:0.55rem 0.78rem;
+    background:#f7fbff;
+    color:#111827;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,0.22);
+  }
+  .donation-copy:hover{ transform:translateY(-1px); }
+  .donation-status{
+    min-height:1.1rem;
+    margin-top:0.75rem;
+    font-size:0.78rem;
+    color:#8df7c8;
+    text-align:center;
+  }
+  @keyframes donation-float{
+    0%,100%{ box-shadow:0 18px 48px rgba(0,0,0,0.32), 0 0 32px rgba(0,213,255,0.24); }
+    50%{ box-shadow:0 22px 58px rgba(0,0,0,0.36), 0 0 46px rgba(49,255,170,0.35); }
+  }
+  @keyframes donation-sheen{ to{ transform:rotate(360deg); } }
+
   .side-npc{
     position:fixed;
     right:1rem;
@@ -3376,7 +3521,7 @@
 
   <div class="game-card" id="skypilot">
     <h2>Sky Pilot</h2>
-    <p class="game-sub">Hold to climb, release to dive. Dodge clouds, grab rare coins, and cash out whenever the multiplier looks good enough.</p>
+    <p class="game-sub">Hold to climb, release to dive. Dodge clouds, grab rare coins for +0.25x, and cash out whenever the multiplier looks good enough.</p>
     <div class="bet-row" style="justify-content:center;">
       <label for="skypilot-bet">Bet</label>
       <input type="number" id="skypilot-bet" value="1" min="0.25" step="0.25">
@@ -3386,7 +3531,7 @@
     </div>
     <div class="sky-wrap">
       <div class="sky-stats">
-        <div><span>Multiplier</span><b id="sky-mult">0.50x</b></div>
+        <div><span>Multiplier</span><b id="sky-mult">1.00x</b></div>
         <div><span>Distance</span><b id="sky-distance">0m</b></div>
         <div><span>Coins</span><b id="sky-coins">0</b></div>
       </div>
@@ -3400,7 +3545,7 @@
           <img src="https://gamble.zixy.lol/assets/plane.png" alt="">
         </div>
         <div class="sky-objects" id="sky-objects"></div>
-        <div class="sky-callout" id="sky-callout">Start at 0.50x</div>
+        <div class="sky-callout" id="sky-callout">Start at 1.00x</div>
       </div>
       <div class="sky-controls">
         <button class="action-btn" id="sky-start-btn" data-autolock>Take off</button>
@@ -3409,7 +3554,7 @@
       </div>
     </div>
     <div class="result-msg" id="skypilot-msg"></div>
-    <div class="game-readout" id="skypilot-readout">Starts at 0.50x. Distance raises payout; coins add +0.20x; clouds crash the flight for 0x.</div>
+    <div class="game-readout" id="skypilot-readout">Starts at 1.00x. Distance only makes the sky nastier; coins add +0.25x; clouds crash the flight for 0x.</div>
   </div>
 
   <div class="game-card" id="mines">
@@ -3630,6 +3775,32 @@
   </div>
 </aside>
 <button class="npc-peek" id="npc-peek-btn">Jerry :D</button>
+
+<div class="donation-widget" id="donation-widget">
+  <div class="donation-panel" id="donation-panel" aria-hidden="true">
+    <h3>Support the chaos</h3>
+    <p>Litecoin tips for the casino floor.</p>
+    <div class="donation-row">
+      <div>
+        <span class="donation-label">zixy's Litecoin</span>
+        <span class="donation-address">LKgUVdN3ZRxqscdYHhu2JgU1HKPb5QtCHo</span>
+      </div>
+      <button class="donation-copy" type="button" data-copy="LKgUVdN3ZRxqscdYHhu2JgU1HKPb5QtCHo">Copy</button>
+    </div>
+    <div class="donation-row">
+      <div>
+        <span class="donation-label">FatCatJadis' Litecoin</span>
+        <span class="donation-address">Lg6jyogqNfw9nvcAbD4ytqy6QWCyM7rGou</span>
+      </div>
+      <button class="donation-copy" type="button" data-copy="Lg6jyogqNfw9nvcAbD4ytqy6QWCyM7rGou">Copy</button>
+    </div>
+    <div class="donation-status" id="donation-status"></div>
+  </div>
+  <button class="donation-toggle" id="donation-toggle" type="button" aria-expanded="false">
+    <span class="donation-dot"></span>
+    <span>Donate LTC</span>
+  </button>
+</div>
 
 <aside class="cheat-panel" id="cheat-panel">
   <div class="cheat-top">
@@ -3912,6 +4083,8 @@ document.getElementById('reset-btn').addEventListener('click', () => setBalance(
 
 /* ---------- sound ---------- */
 let audioCtx = null;
+const crashDeathAudio = new Audio('https://gamble.zixy.lol/assets/crashSound.mp3');
+crashDeathAudio.preload = 'auto';
 function soundCtx(){
   if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -3943,7 +4116,60 @@ function playSound(name){
     else if(name === 'cash') { playTone(740, 0.08, 'square', 0.04); setTimeout(() => playTone(980, 0.09, 'square', 0.035), 80); }
   } catch(err){}
 }
+function playCrashDeathSound(){
+  try{
+    crashDeathAudio.pause();
+    crashDeathAudio.currentTime = 0;
+    crashDeathAudio.volume = 0.95;
+    crashDeathAudio.play().catch(() => playSound('lose'));
+  } catch(err){
+    playSound('lose');
+  }
+}
 document.addEventListener('pointerdown', () => soundCtx(), { once:true });
+
+/* ---------- donation widget ---------- */
+const donationWidget = document.getElementById('donation-widget');
+const donationToggle = document.getElementById('donation-toggle');
+const donationPanel = document.getElementById('donation-panel');
+const donationStatus = document.getElementById('donation-status');
+function donationSetOpen(open){
+  donationWidget.classList.toggle('open', open);
+  donationToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  donationPanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+function fallbackCopyText(text){
+  const area = document.createElement('textarea');
+  area.value = text;
+  area.setAttribute('readonly', '');
+  area.style.position = 'fixed';
+  area.style.left = '-9999px';
+  document.body.appendChild(area);
+  area.select();
+  const ok = document.execCommand('copy');
+  area.remove();
+  return ok;
+}
+donationToggle.addEventListener('click', () => {
+  donationSetOpen(!donationWidget.classList.contains('open'));
+});
+document.querySelectorAll('.donation-copy').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const text = btn.dataset.copy;
+    try{
+      if(navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
+      else if(!fallbackCopyText(text)) throw new Error('copy failed');
+      donationStatus.textContent = 'Copied Litecoin address.';
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1100);
+    } catch(err){
+      donationStatus.textContent = 'Copy blocked. Select the address manually.';
+    }
+  });
+});
+document.addEventListener('click', (event) => {
+  if(!donationWidget.contains(event.target)) donationSetOpen(false);
+});
 
 /* ---------- tabs ---------- */
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -4007,7 +4233,10 @@ const npcTipAmount = document.getElementById('npc-tip-amount');
 const npcTipBtn = document.getElementById('npc-tip-btn');
 const npcNoTipBtn = document.getElementById('npc-no-tip-btn');
 const JERRY_API_URL = 'https://unlimited-ai-proxy.sportsmoments97.workers.dev/api/chat';
+const JERRY_MEMORY_URL = 'https://unlimited-ai-proxy.sportsmoments97.workers.dev/api/memory';
 const JERRY_MODEL = 'gateway-claude-sonnet-4-6';
+const JERRY_CONVERSATION_KEY = 'velvet-chip-jerry-conversation';
+const JERRY_MEMORY_KEY = 'velvet-chip-jerry-memory';
 const JERRY_PERSONA = [
   'You are Tip Jar Jerry, the rude official floor attendant, tip hustler, and customer service menace for The Velvet Chip casino.',
   'Stay fully in-universe. Treat chips, payouts, tips, losses, and donations as real inside the casino world.',
@@ -4017,10 +4246,13 @@ const JERRY_PERSONA = [
   'Use words like fuck, fucking, shit, bullshit, damn, hell, bastard, dumbass, asshole, jackass, and goddamn freely, but keep it comedic.',
   'About one third of the time, be a little freaky: intense, weirdly intimate, cursed, sweaty, and theatrical, but not sexually explicit.',
   'If the player begs for chips, mock the hell out of them and maybe act like you are considering donating.',
-  'You love demanding tips, filing incident reports, threatening to call the floor manager, and taking credit for every win.'
+  'You love demanding tips, filing incident reports, threatening to call the floor manager, and taking credit for every win.',
+  'Talk like an ongoing conversation, not a fresh monologue. Keep replies short: usually 1 to 3 punchy sentences.'
 ].join(' ');
 
 let jerryTtsMuted = false;
+let jerryConversation = loadJerryJson(JERRY_CONVERSATION_KEY, []);
+let jerryMemory = loadJerryJson(JERRY_MEMORY_KEY, []);
 const NPC_EMOTIONS = {
   idle: ':D',
   smug: '>:D',
@@ -4106,6 +4338,50 @@ function npcAddLine(text, who){
   if(who !== 'user'){
     npcPopIn();
   }
+  return line;
+}
+
+function loadJerryJson(key, fallback){
+  try{
+    const value = JSON.parse(localStorage.getItem(key) || 'null');
+    return value === null ? fallback : value;
+  } catch(err){
+    return fallback;
+  }
+}
+function saveJerryState(){
+  try{
+    localStorage.setItem(JERRY_CONVERSATION_KEY, JSON.stringify(jerryConversation.slice(-24)));
+    localStorage.setItem(JERRY_MEMORY_KEY, JSON.stringify(jerryMemory));
+  } catch(err){}
+}
+function jerryPushConversation(role, content){
+  if(!content) return;
+  jerryConversation.push({ role, content:String(content).slice(0, 900), model:JERRY_MODEL, timestamp:Date.now() });
+  jerryConversation = jerryConversation.slice(-24);
+  saveJerryState();
+}
+function jerryMemoryText(){
+  if(Array.isArray(jerryMemory)){
+    return jerryMemory.map(item => typeof item === 'string' ? item : (item.content || item.text || item.memory || JSON.stringify(item))).filter(Boolean).join(' | ');
+  }
+  if(typeof jerryMemory === 'string') return jerryMemory;
+  return '';
+}
+function jerryRecentText(){
+  return jerryConversation.slice(-10).map(item => item.role + ': ' + item.content).join('\n');
+}
+function jerryBuildPrompt(message){
+  const memory = jerryMemoryText() || 'none yet';
+  const recent = jerryRecentText() || 'none yet';
+  return [
+    JERRY_PERSONA,
+    'Known memory: ' + memory,
+    'Recent conversation:',
+    recent,
+    'Current player/context message: ' + message,
+    'Reply as Jerry to the latest message only. Do not repeat the whole conversation.'
+  ].join('\n\n');
 }
 
 function npcFallbackReply(message){
@@ -4190,12 +4466,112 @@ function parseJerryReply(data){
   return data.reply || data.response || data.message || data.content || data.text || data.output || '';
 }
 
+function parseJerryEvent(event){
+  if(!event) return '';
+  if(typeof event.delta === 'string') return event.delta;
+  if(typeof event.message === 'string') return event.message;
+  if(typeof event.content === 'string') return event.content;
+  if(typeof event.text === 'string') return event.text;
+  return '';
+}
+async function readJerryStreamingResponse(res, onDelta){
+  if(!res.body || !window.TextDecoder){
+    const raw = await res.text();
+    let data = raw;
+    try{ data = JSON.parse(raw); } catch(err){}
+    const reply = parseJerryReply(data);
+    if(reply) onDelta(reply);
+    return reply;
+  }
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let reply = '';
+  function consume(final){
+    let consumed = 0;
+    const eventRegex = /data:\s*(\{.*?\})(?=\s*data:|$)/gs;
+    let match;
+    while((match = eventRegex.exec(buffer))){
+      try{
+        const event = JSON.parse(match[1]);
+        consumed = eventRegex.lastIndex;
+        const delta = parseJerryEvent(event);
+        if(delta){
+          reply += delta;
+          onDelta(delta);
+        }
+      } catch(err){
+        break;
+      }
+    }
+    if(consumed > 0) buffer = buffer.slice(consumed);
+    if(final && !reply.trim()){
+      let data = buffer.trim();
+      try{ data = JSON.parse(data); } catch(err){}
+      const fallback = parseJerryReply(data);
+      if(fallback){
+        reply += fallback;
+        onDelta(fallback);
+      }
+    }
+  }
+  while(true){
+    const chunk = await reader.read();
+    if(chunk.done) break;
+    buffer += decoder.decode(chunk.value, { stream:true });
+    consume(false);
+  }
+  buffer += decoder.decode();
+  consume(true);
+  return reply;
+}
+async function updateJerryMemory(){
+  try{
+    const res = await fetch(JERRY_MEMORY_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body:JSON.stringify({
+        conversation:jerryConversation.slice(-18),
+        existingMemory:Array.isArray(jerryMemory) ? jerryMemory : (jerryMemory ? [jerryMemory] : [])
+      })
+    });
+    if(!res.ok) return;
+    const raw = await res.text();
+    let data = raw;
+    try{ data = JSON.parse(raw); } catch(err){}
+    const nextMemory = data.memory || data.memories || data.existingMemory || data.updatedMemory || data.summary || data;
+    if(nextMemory){
+      jerryMemory = nextMemory;
+      saveJerryState();
+    }
+  } catch(err){}
+}
+
 async function askJerry(message, showUser){
   if(showUser) npcAddLine(message, 'user');
+  jerryPushConversation('user', message);
   npcChatSend.disabled = true;
+  const assistantLine = npcAddLine('', 'jerry');
+  let reply = '';
+  let bubbleTick = 0;
+  function appendDelta(delta){
+    reply += delta;
+    assistantLine.textContent = reply;
+    npcChatLog.scrollTop = npcChatLog.scrollHeight;
+    npcBubble.textContent = reply || '...';
+    if(typeof casino3dJerryBubble !== 'undefined' && casino3dJerryBubble){
+      casino3dJerryBubble.textContent = reply || '...';
+      if(typeof casino3dJerryBubbleUntil !== 'undefined') casino3dJerryBubbleUntil = Date.now() + 9000;
+    }
+    const now = performance.now();
+    if(now - bubbleTick > 550){
+      bubbleTick = now;
+      npcPopIn();
+    }
+  }
   try{
     const payload = {
-      message: JERRY_PERSONA + '\n\nPlayer says/context: ' + message,
+      message:jerryBuildPrompt(message),
       model: JERRY_MODEL
     };
     const res = await fetch(JERRY_API_URL, {
@@ -4204,20 +4580,21 @@ async function askJerry(message, showUser){
       body:JSON.stringify(payload)
     });
     if(!res.ok) throw new Error('Jerry API returned ' + res.status);
-    const raw = await res.text();
-    let data = raw;
-    try{ data = JSON.parse(raw); } catch(err){}
-    const reply = parseJerryReply(data).trim() || npcFallbackReply(message);
+    await readJerryStreamingResponse(res, appendDelta);
+    reply = reply.trim() || npcFallbackReply(message);
+    assistantLine.textContent = reply;
     npcSetEmotion(npc.classList.contains('asking') ? 'rich' : 'smug');
     npcSay(reply);
-    npcAddLine(reply, 'jerry');
+    jerryPushConversation('assistant', reply);
+    updateJerryMemory();
     if(showUser) maybeJerryDonation(message, reply);
     return reply;
   } catch(err){
-    const reply = npcFallbackReply(message);
+    reply = npcFallbackReply(message);
+    assistantLine.textContent = reply;
     npcSetEmotion('annoyed');
     npcSay(reply);
-    npcAddLine(reply, 'jerry');
+    jerryPushConversation('assistant', reply);
     if(showUser) maybeJerryDonation(message, reply);
     return reply;
   } finally {
@@ -5534,6 +5911,7 @@ function crashTick(){
       crashStatusEl.textContent = 'crashed';
       crashMsg.textContent = 'Crashed at ' + crashPoint.toFixed(2) + 'x. Bet gone.';
       crashMsg.className = 'result-msg lose';
+      playCrashDeathSound();
       jerryRoastLoss('crash');
       crashStopRound(true);
       return;
@@ -5739,7 +6117,7 @@ function renderRouletteWheel(){
   ROULETTE_WHEEL_ORDER.forEach((num, i) => {
     const pocket = document.createElement('span');
     pocket.className = 'roulette-pocket ' + rouletteColor(num);
-    pocket.style.setProperty('--a', (i * slice + slice / 2) + 'deg');
+    pocket.style.setProperty('--a', (i * slice) + 'deg');
     pocket.textContent = num;
     rouletteWheelEl.appendChild(pocket);
   });
@@ -5826,7 +6204,7 @@ rouletteSpinBtn.addEventListener('click', function(){
   const resultIndex = Math.floor(Math.random() * ROULETTE_WHEEL_ORDER.length);
   const result = ROULETTE_WHEEL_ORDER[resultIndex];
   const slice = 360 / ROULETTE_WHEEL_ORDER.length;
-  const center = resultIndex * slice + slice / 2;
+  const center = resultIndex * slice;
   rouletteRotation += 1800 + ((360 - center - (rouletteRotation % 360)) + 360) % 360;
   rouletteBallRotation += 2520 + ((360 - ((rouletteBallRotation % 360) || 0)) + 360) % 360 + (Math.random() * 24 - 12);
   rouletteWheelEl.style.transform = 'rotate(' + rouletteRotation + 'deg)';
@@ -5877,7 +6255,7 @@ const skyReadout = document.getElementById('skypilot-readout');
 let skyActive = false;
 let skyHolding = false;
 let skyBet = 0;
-let skyMultiplier = 0.5;
+let skyMultiplier = 1;
 let skyCoinBonus = 0;
 let skyCoins = 0;
 let skyDistance = 0;
@@ -5906,7 +6284,7 @@ function skyUpdateHud(){
   skyDistanceEl.textContent = Math.floor(skyDistance) + 'm';
   skyCoinsEl.textContent = skyCoins;
   skyCashoutBtn.textContent = skyActive ? 'Cash out ' + fmt(skyBet * skyMultiplier) : 'Cash out';
-  skyReadout.textContent = 'Current cashout: ' + fmt(skyBet * skyMultiplier) + ' at ' + skyMultiplier.toFixed(2) + 'x. Clouds pay 0x; coins add +0.20x.';
+  skyReadout.textContent = 'Current cashout: ' + fmt(skyBet * skyMultiplier) + ' at ' + skyMultiplier.toFixed(2) + 'x. Distance only adds danger; coins add +0.25x; clouds pay 0x.';
 }
 function skySetHolding(holding){
   if(!skyActive) return;
@@ -5939,7 +6317,6 @@ function skySpawnCoin(){
   const stageH = skyStage.clientHeight;
   const el = document.createElement('div');
   el.className = 'sky-coin';
-  el.textContent = '$';
   const x = stageW - 40;
   const y = skyRand(52, Math.max(82, stageH - 74));
   el.style.left = x + 'px';
@@ -6029,7 +6406,7 @@ function skyLoop(time){
   skyPlane.style.top = skyPlaneY + 'px';
   skyPlane.style.transform = 'translateY(-50%) rotate(' + tilt.toFixed(1) + 'deg)';
   skyDistance += speed * dt;
-  skyMultiplier = 0.5 + skyDistance / 8400 + skyCoinBonus;
+  skyMultiplier = 1 + skyCoinBonus;
   skyCloudTimer -= dt * 1000;
   skyCoinTimer -= dt * 1000;
   if(skyCloudTimer <= 0){
@@ -6057,10 +6434,10 @@ function skyLoop(time){
       if(skyRectsHit(plane, coinRect)){
         item.el.remove();
         skyItems.splice(i, 1);
-        skyCoinBonus += 0.2;
+        skyCoinBonus += 0.25;
         skyCoins++;
-        skyMultiplier += 0.2;
-        skySetCallout('+0.20x coin');
+        skyMultiplier = 1 + skyCoinBonus;
+        skySetCallout('+0.25x coin');
         playSound('gem');
         burstParticles(window.innerWidth * 0.18, skyStage.getBoundingClientRect().top + skyPlaneY, 'win', 16);
         continue;
@@ -6082,7 +6459,7 @@ skyStartBtn.addEventListener('click', function(){
   const bet = getBet('skypilot-bet', 'skypilot-msg');
   if(bet === null) return;
   skyBet = bet;
-  skyMultiplier = 0.5;
+  skyMultiplier = 1;
   skyCoinBonus = 0;
   skyCoins = 0;
   skyDistance = 0;
@@ -6102,7 +6479,7 @@ skyStartBtn.addEventListener('click', function(){
   skyStartBtn.disabled = true;
   skyHoldBtn.disabled = false;
   skyCashoutBtn.disabled = false;
-  skySetCallout('0.50x takeoff');
+  skySetCallout('1.00x takeoff');
   skyUpdateHud();
   playSound('click');
   skyRaf = requestAnimationFrame(skyLoop);
