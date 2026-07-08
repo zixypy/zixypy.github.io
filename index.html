@@ -1901,25 +1901,87 @@
     font-size:0.8rem;
   }
   .craps-dice{
-    display:flex;
-    gap:1rem;
+    position:absolute;
+    left:16px;
+    right:16px;
+    top:54px;
+    bottom:16px;
+    overflow:hidden;
+    border-radius:12px;
+    perspective:720px;
+    perspective-origin:50% 42%;
   }
   .craps-die{
+    --x:0px;
+    --y:0px;
     width:84px;
     height:84px;
-    border-radius:14px;
-    background:#fff7cf;
-    color:var(--ink);
-    display:grid;
-    place-items:center;
-    font-family:'JetBrains Mono', monospace;
-    font-size:2.4rem;
-    font-weight:900;
-    box-shadow:0 12px 22px rgba(0,0,0,0.3);
+    position:absolute;
+    left:0;
+    top:0;
+    transform:translate3d(var(--x), var(--y), 0);
+    transform-style:preserve-3d;
+    transition:transform 0.16s cubic-bezier(.14,.74,.2,1);
+    filter:drop-shadow(0 18px 14px rgba(0,0,0,0.34));
+    will-change:transform;
   }
-  .craps-die.rolling{ animation:craps-roll 0.18s linear infinite; }
-  @keyframes craps-roll{
-    50%{ transform:translateY(-6px) rotate(8deg); }
+  .craps-die.rolling{
+    transition:transform 0.055s linear;
+  }
+  .craps-cube{
+    --rx:0deg;
+    --ry:0deg;
+    --rz:0deg;
+    position:absolute;
+    inset:0;
+    transform-style:preserve-3d;
+    transform:rotateX(var(--rx)) rotateY(var(--ry)) rotateZ(var(--rz));
+    transition:transform 0.22s cubic-bezier(.18,.72,.16,1);
+  }
+  .craps-die[data-value="1"] .craps-cube{ --rx:0deg; --ry:0deg; --rz:0deg; }
+  .craps-die[data-value="2"] .craps-cube{ --rx:-90deg; --ry:0deg; --rz:0deg; }
+  .craps-die[data-value="3"] .craps-cube{ --rx:0deg; --ry:-90deg; --rz:0deg; }
+  .craps-die[data-value="4"] .craps-cube{ --rx:0deg; --ry:90deg; --rz:0deg; }
+  .craps-die[data-value="5"] .craps-cube{ --rx:90deg; --ry:0deg; --rz:0deg; }
+  .craps-die[data-value="6"] .craps-cube{ --rx:0deg; --ry:180deg; --rz:0deg; }
+  .craps-die.rolling .craps-cube{
+    animation:craps-cube-tumble 0.28s linear infinite;
+  }
+  .craps-face{
+    position:absolute;
+    inset:0;
+    border-radius:14px;
+    background:
+      radial-gradient(circle at 28% 22%, rgba(255,255,255,0.96), transparent 18%),
+      linear-gradient(145deg, #fffaf0 0%, #f2dcad 100%);
+    border:2px solid rgba(36,26,16,0.28);
+    box-shadow:inset 0 -7px 14px rgba(36,26,16,0.18), inset 0 4px 12px rgba(255,255,255,0.7);
+    backface-visibility:hidden;
+  }
+  .craps-face-1{ transform:translateZ(42px); }
+  .craps-face-6{ transform:rotateY(180deg) translateZ(42px); }
+  .craps-face-3{ transform:rotateY(90deg) translateZ(42px); }
+  .craps-face-4{ transform:rotateY(-90deg) translateZ(42px); }
+  .craps-face-2{ transform:rotateX(90deg) translateZ(42px); }
+  .craps-face-5{ transform:rotateX(-90deg) translateZ(42px); }
+  .craps-pip{
+    position:absolute;
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#241a10;
+    box-shadow:inset 0 2px 3px rgba(255,255,255,0.18), 0 1px 2px rgba(0,0,0,0.28);
+  }
+  .craps-pip.tl{ left:18px; top:18px; }
+  .craps-pip.tr{ right:18px; top:18px; }
+  .craps-pip.ml{ left:18px; top:35px; }
+  .craps-pip.mr{ right:18px; top:35px; }
+  .craps-pip.bl{ left:18px; bottom:18px; }
+  .craps-pip.br{ right:18px; bottom:18px; }
+  .craps-pip.cc{ left:35px; top:35px; }
+  @keyframes craps-cube-tumble{
+    0%{ transform:rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    100%{ transform:rotateX(420deg) rotateY(560deg) rotateZ(220deg); }
   }
   .craps-bet-grid{
     display:grid;
@@ -3929,9 +3991,9 @@
       <div class="craps-layout">
         <div class="craps-felt">
           <div class="craps-point"><span id="craps-bet-label">Pass Line</span><span id="craps-point-label">point: off</span></div>
-          <div class="craps-dice">
-            <div class="craps-die" id="craps-die-a">1</div>
-            <div class="craps-die" id="craps-die-b">1</div>
+          <div class="craps-dice" id="craps-dice-stage">
+            <div class="craps-die" id="craps-die-a" data-value="1" role="img" aria-label="Die showing 1"></div>
+            <div class="craps-die" id="craps-die-b" data-value="1" role="img" aria-label="Die showing 1"></div>
           </div>
         </div>
         <div class="craps-bet-grid" id="craps-bet-grid">
@@ -4415,6 +4477,7 @@ themeToggle.addEventListener('click', () => {
 
 /* ---------- balance ---------- */
 const BALANCE_STORAGE_KEY = 'velvet-chip-balance';
+const CLEAN_BALANCE_STORAGE_KEY = 'velvet-chip-clean-balance';
 const JERRY_GLOBAL_TIP_API_URL = 'https://api.zixy.lol/jerrys-global-tip-jar.json';
 const JERRY_GLOBAL_TIP_CHANNEL = 'velvet-chip-jerry-global-tip-jar';
 let jerryGlobalTipChannel = null;
@@ -4429,11 +4492,36 @@ function loadStoredBalance(){
     return 10;
   }
 }
+function moneyRound(n){
+  return Math.max(0, Math.round((parseFloat(n) || 0) * 100) / 100);
+}
+function loadStoredCleanBalance(total){
+  try{
+    const stored = parseFloat(localStorage.getItem(CLEAN_BALANCE_STORAGE_KEY));
+    return Number.isFinite(stored) && stored >= 0 ? Math.min(moneyRound(total), moneyRound(stored)) : moneyRound(total);
+  } catch(err){
+    return moneyRound(total);
+  }
+}
 let balance = loadStoredBalance();
+let cleanBalance = loadStoredCleanBalance(balance);
+let activeTaintedWagers = 0;
 const balanceEl = document.getElementById('balance');
 const brokeBanner = document.getElementById('broke-banner');
 
 function fmt(n){ return '$' + n.toFixed(2); }
+function taintedBalance(){
+  return moneyRound(balance - cleanBalance);
+}
+function saveWalletState(){
+  try{
+    localStorage.setItem(BALANCE_STORAGE_KEY, balance.toFixed(2));
+    localStorage.setItem(CLEAN_BALANCE_STORAGE_KEY, Math.min(cleanBalance, balance).toFixed(2));
+  } catch(err){}
+}
+function cheatsCurrentlyOn(){
+  return typeof cheatsOn === 'function' && cheatsOn();
+}
 async function recordGlobalJerryTip(amount){
   const clean = Math.round(parseFloat(amount) * 100) / 100;
   if(!Number.isFinite(clean) || clean <= 0) return;
@@ -4563,10 +4651,41 @@ function flashActiveGame(kind){
   setTimeout(() => card.classList.remove(cls), 700);
 }
 
-function setBalance(n, bump){
+function setBalance(n, bump, opts){
+  const options = opts || {};
   const oldBalance = balance;
-  balance = Math.max(0, Math.round(n * 100) / 100);
-  try{ localStorage.setItem(BALANCE_STORAGE_KEY, balance.toFixed(2)); } catch(err){}
+  const oldClean = cleanBalance;
+  balance = moneyRound(n);
+  const delta = moneyRound(balance - oldBalance);
+  if(options.resetClean){
+    cleanBalance = balance;
+    activeTaintedWagers = 0;
+  } else if(balance < oldBalance){
+    const spend = moneyRound(oldBalance - balance);
+    let dirtySpent = 0;
+    let cleanSpent = 0;
+    if(options.cleanFirst){
+      cleanSpent = Math.min(oldClean, spend);
+      dirtySpent = moneyRound(spend - cleanSpent);
+    } else {
+      const oldTainted = moneyRound(oldBalance - oldClean);
+      dirtySpent = Math.min(oldTainted, spend);
+      cleanSpent = moneyRound(spend - dirtySpent);
+    }
+    cleanBalance = Math.max(0, moneyRound(oldClean - cleanSpent));
+    if(options.trackWager !== false && (dirtySpent > 0 || cheatsCurrentlyOn())){
+      activeTaintedWagers++;
+    }
+  } else if(balance > oldBalance){
+    if(options.tainted){
+      cleanBalance = Math.min(oldClean, balance);
+    } else {
+      cleanBalance = Math.min(balance, moneyRound(oldClean + delta));
+    }
+  } else {
+    cleanBalance = Math.min(cleanBalance, balance);
+  }
+  saveWalletState();
   balanceEl.textContent = fmt(balance);
   const casino3dCashEl = document.getElementById('casino3d-cash-value');
   if(casino3dCashEl) casino3dCashEl.textContent = fmt(balance);
@@ -4585,7 +4704,7 @@ function setBalance(n, bump){
   });
 }
 setBalance(balance);
-document.getElementById('reset-btn').addEventListener('click', () => setBalance(10, true));
+document.getElementById('reset-btn').addEventListener('click', () => setBalance(10, true, { resetClean:true, trackWager:false }));
 
 /* ---------- sound ---------- */
 let audioCtx = null;
@@ -4687,9 +4806,10 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.querySelectorAll('.game-card').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(btn.dataset.tab).classList.add('active');
-    if(btn.dataset.tab === 'beef' && typeof renderBeef === 'function') renderBeef();
+      if(btn.dataset.tab === 'beef' && typeof renderBeef === 'function') renderBeef();
+      if(btn.dataset.tab === 'craps' && typeof crapsCenterDice === 'function') requestAnimationFrame(crapsCenterDice);
+    });
   });
-});
 
 /* ---------- chip buttons ---------- */
 document.querySelectorAll('.chip-btn').forEach(btn => {
@@ -5111,7 +5231,9 @@ function npcCelebrate(payout, source){
 }
 
 function awardPayout(payout, source, isWin){
-  setBalance(balance + payout, true);
+  const payoutIsTainted = cheatsCurrentlyOn() || activeTaintedWagers > 0;
+  if(activeTaintedWagers > 0) activeTaintedWagers--;
+  setBalance(balance + payout, true, { tainted:payoutIsTainted, trackWager:false });
   if(isWin && payout > 0){
     flashActiveGame('win');
     playSound('win');
@@ -5123,6 +5245,9 @@ function awardPayout(payout, source, isWin){
   } else {
     playSound('cash');
   }
+}
+function settleNoPayout(){
+  if(activeTaintedWagers > 0) activeTaintedWagers--;
 }
 
 document.addEventListener('click', (event) => {
@@ -5794,19 +5919,23 @@ npcTipBtn.addEventListener('click', () => {
     askJerry('The player tried to tip you ' + fmt(tip) + ', but they only have ' + fmt(balance) + '. Mock them for trying to tip more than their chip stack.', false);
     return;
   }
-  setBalance(balance - tip, true);
-  recordGlobalJerryTip(tip);
+  const globalTip = Math.min(tip, cleanBalance);
+  const taintedTip = Math.max(0, moneyRound(tip - globalTip));
+  setBalance(balance - tip, true, { cleanFirst:true, trackWager:false });
+  if(globalTip > 0) recordGlobalJerryTip(globalTip);
   npc.classList.remove('asking');
   if(Math.random() < 0.0666){
     const delay = Math.floor(35000 + Math.random() * 215000);
     const gift = Math.round(tip * 777 * 100) / 100;
-    askJerry('The player tipped you ' + fmt(tip) + '. This tip secretly triggered the rare delayed 777x return, but do not reveal the exact payout. Tease that the casino floor may do something strange later.', false);
+    const taintNote = taintedTip > 0 ? ' Only ' + fmt(globalTip) + ' was clean enough for the global tip jar; ' + fmt(taintedTip) + ' was cheat-tainted and did not count.' : '';
+    askJerry('The player tipped you ' + fmt(tip) + '.' + taintNote + ' This tip secretly triggered the rare delayed 777x return, but do not reveal the exact payout. Tease that the casino floor may do something strange later.', false);
     setTimeout(() => {
-      setBalance(balance + gift, true);
+      setBalance(balance + gift, true, { tainted:taintedTip > 0, trackWager:false });
       askJerry('The delayed tip return just paid the player ' + fmt(gift) + ' from their original ' + fmt(tip) + ' tip. Celebrate rudely, take credit, and keep it short.', false);
     }, delay);
   } else {
-    askJerry('The player tipped you ' + fmt(tip) + '. It did not trigger the rare delayed return. Thank them rudely and gloat that you are keeping it.', false);
+    const taintNote = taintedTip > 0 ? ' Only ' + fmt(globalTip) + ' was clean enough for the global tip jar; ' + fmt(taintedTip) + ' was cheat-tainted and did not count.' : '';
+    askJerry('The player tipped you ' + fmt(tip) + '.' + taintNote + ' It did not trigger the rare delayed return. Thank them rudely and gloat that you are keeping it.', false);
   }
 });
 
@@ -6339,6 +6468,7 @@ function bjFinish(){
     bjMsg.textContent = 'Bust at ' + playerTotal + '. That hand is done.';
     bjMsg.className = 'result-msg lose';
     bjDealBtn.disabled = balance <= 0;
+    settleNoPayout();
     jerryRoastLoss('blackjack');
     return;
   }
@@ -6949,6 +7079,9 @@ let crapsPick = 'pass';
 let crapsPoint = null;
 let crapsActiveBet = 0;
 let crapsActivePick = '';
+const crapsDiceStage = document.getElementById('craps-dice-stage');
+const crapsDieA = document.getElementById('craps-die-a');
+const crapsDieB = document.getElementById('craps-die-b');
 const crapsBetNames = {
   pass:'Pass Line',
   dont:"Don't Pass",
@@ -6972,6 +7105,72 @@ document.querySelectorAll('.craps-bet').forEach(btn => {
 });
 function crapsRollDie(){
   return 1 + Math.floor(Math.random() * 6);
+}
+const CRAPS_PIPS = {
+  1:['cc'],
+  2:['tl','br'],
+  3:['tl','cc','br'],
+  4:['tl','tr','bl','br'],
+  5:['tl','tr','cc','bl','br'],
+  6:['tl','ml','bl','tr','mr','br']
+};
+function crapsBuildDie(el){
+  if(!el || el.dataset.built) return;
+  const cube = document.createElement('div');
+  cube.className = 'craps-cube';
+  for(let value=1; value<=6; value++){
+    const face = document.createElement('div');
+    face.className = 'craps-face craps-face-' + value;
+    CRAPS_PIPS[value].forEach(pos => {
+      const pip = document.createElement('span');
+      pip.className = 'craps-pip ' + pos;
+      face.appendChild(pip);
+    });
+    cube.appendChild(face);
+  }
+  el.appendChild(cube);
+  el.dataset.built = '1';
+}
+function crapsSetDieValue(el, value){
+  el.dataset.value = value;
+  el.setAttribute('aria-label', 'Die showing ' + value);
+}
+function crapsSetDiePosition(el, x, y){
+  el.style.setProperty('--x', Math.round(x) + 'px');
+  el.style.setProperty('--y', Math.round(y) + 'px');
+}
+function crapsRandomDicePositions(){
+  const dice = [crapsDieA, crapsDieB];
+  const dieSize = dice[0].offsetWidth || 84;
+  const stageW = crapsDiceStage.clientWidth || 220;
+  const stageH = crapsDiceStage.clientHeight || 150;
+  const maxX = Math.max(0, stageW - dieSize);
+  const maxY = Math.max(0, stageH - dieSize);
+  const rand = max => Math.random() * max;
+  const first = { x:rand(maxX), y:rand(maxY) };
+  let second = { x:rand(maxX), y:rand(maxY) };
+  for(let i=0; i<24; i++){
+    const dx = first.x - second.x;
+    const dy = first.y - second.y;
+    if(Math.sqrt(dx * dx + dy * dy) > dieSize * 0.82) break;
+    second = { x:rand(maxX), y:rand(maxY) };
+  }
+  return [first, second];
+}
+function crapsMoveDice(){
+  const positions = crapsRandomDicePositions();
+  crapsSetDiePosition(crapsDieA, positions[0].x, positions[0].y);
+  crapsSetDiePosition(crapsDieB, positions[1].x, positions[1].y);
+}
+function crapsCenterDice(){
+  if(!crapsDiceStage || !crapsDiceStage.clientWidth) return;
+  const dieSize = crapsDieA.offsetWidth || 84;
+  const gap = Math.min(26, Math.max(14, crapsDiceStage.clientWidth * 0.07));
+  const totalW = dieSize * 2 + gap;
+  const startX = Math.max(0, (crapsDiceStage.clientWidth - totalW) / 2);
+  const y = Math.max(0, (crapsDiceStage.clientHeight - dieSize) / 2);
+  crapsSetDiePosition(crapsDieA, startX, y);
+  crapsSetDiePosition(crapsDieB, startX + dieSize + gap, y);
 }
 function crapsFinish(payout, text, win){
   crapsPoint = null;
@@ -7001,24 +7200,24 @@ document.getElementById('craps-roll-btn').addEventListener('click', function(){
   }
   btn.disabled = true;
   playSound('click');
-  const dieA = document.getElementById('craps-die-a');
-  const dieB = document.getElementById('craps-die-b');
-  dieA.classList.add('rolling');
-  dieB.classList.add('rolling');
+  crapsDieA.classList.add('rolling');
+  crapsDieB.classList.add('rolling');
   let ticks = 0;
   const shaker = setInterval(() => {
-    dieA.textContent = crapsRollDie();
-    dieB.textContent = crapsRollDie();
+    crapsSetDieValue(crapsDieA, crapsRollDie());
+    crapsSetDieValue(crapsDieB, crapsRollDie());
+    crapsMoveDice();
     ticks++;
     if(ticks > 12){
       clearInterval(shaker);
-      dieA.classList.remove('rolling');
-      dieB.classList.remove('rolling');
+      crapsDieA.classList.remove('rolling');
+      crapsDieB.classList.remove('rolling');
       const a = crapsRollDie();
       const b = crapsRollDie();
       const sum = a + b;
-      dieA.textContent = a;
-      dieB.textContent = b;
+      crapsSetDieValue(crapsDieA, a);
+      crapsSetDieValue(crapsDieB, b);
+      crapsMoveDice();
       const bet = crapsActiveBet;
       const pick = crapsActivePick;
       const prefix = 'Rolled ' + a + ' + ' + b + ' = ' + sum + '. ';
@@ -7064,7 +7263,11 @@ document.getElementById('craps-roll-btn').addEventListener('click', function(){
     }
   }, 55);
 });
+crapsBuildDie(crapsDieA);
+crapsBuildDie(crapsDieB);
 crapsUpdateUi();
+requestAnimationFrame(crapsCenterDice);
+window.addEventListener('resize', crapsCenterDice);
 
 /* ---------- dragon tower ---------- */
 const DRAGON_ROWS = 7;
@@ -7603,6 +7806,7 @@ function onMineClick(i, tile){
     minesActive = false;
     minesMsg.textContent = 'Hit a mine. Round over.';
     minesMsg.className = 'result-msg lose';
+    settleNoPayout();
     jerryRoastLoss('mines');
     revealBoard();
     minesStartBtn.disabled = balance <= 0;
