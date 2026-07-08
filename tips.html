@@ -472,7 +472,7 @@
     <div class="lights"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <h1>Jerry's Global Tip Jar</h1>
     <p class="tagline">the official floor attendant gratuity surveillance board</p>
-    <div class="fake-badge">synced from jerrys-global-tip-jar.json + live browser tips</div>
+    <div class="fake-badge">synced from Hayden the Raspberry Pi</div>
   </header>
 </div>
 
@@ -482,7 +482,7 @@
       <div class="odometer">
         <span class="label">global tips to Jerry</span>
         <span class="value" id="tip-total">0.00</span>
-        <span class="sub" id="tip-source">loading jerrys-global-tip-jar.json...</span>
+        <span class="sub" id="tip-source">loading api.zixy.lol...</span>
       </div>
       <div class="jerry-card">
         <div class="jerry-face" id="jerry-face">:D</div>
@@ -503,13 +503,11 @@
 </main>
 
 <footer>
-  This is a static HTML page. The JSON file provides the shared seed amount; browser tips update live across local tabs with localStorage.
+  This page reads and writes the shared tip jar JSON on Hayden the Raspberry Pi. Your chip balance stays local to your browser.
 </footer>
 
 <script>
-const TIP_JSON_URL = 'https://gamble.zixy.lol/jerrys-global-tip-jar.json';
-const TIP_STORAGE_KEY = 'velvet-chip-jerry-global-tips';
-const TIP_EVENT_KEY = 'velvet-chip-jerry-global-tip-event';
+const TIP_API_URL = 'https://api.zixy.lol/jerrys-global-tip-jar.json';
 const BALANCE_STORAGE_KEY = 'velvet-chip-balance';
 const TIP_CHANNEL_NAME = 'velvet-chip-jerry-global-tip-jar';
 const totalEl = document.getElementById('tip-total');
@@ -524,10 +522,8 @@ const jerryLine = document.getElementById('jerry-line');
 let jsonTotal = 0;
 let displayedTotal = 0;
 let targetTotal = 0;
-let lastJsonStamp = '';
-let lastSeenTips = null;
+let lastUpdatedAt = '';
 let lastSeenBalance = null;
-let lastSeenTipEvent = localStorage.getItem(TIP_EVENT_KEY) || '';
 let lastHandledTipEventId = '';
 let tipChannel = null;
 
@@ -550,13 +546,6 @@ function setBalance(value){
 function refreshBalance(){
   walletEl.textContent = fmt(loadBalance());
 }
-function localTips(){
-  const value = parseFloat(localStorage.getItem(TIP_STORAGE_KEY));
-  return Number.isFinite(value) && value > 0 ? value : 0;
-}
-function setLocalTips(value){
-  localStorage.setItem(TIP_STORAGE_KEY, Math.max(0, value).toFixed(2));
-}
 function setTarget(value, label){
   targetTotal = Math.max(0, Math.round(value * 100) / 100);
   if(label) sourceEl.textContent = label;
@@ -569,16 +558,18 @@ function addFeed(amount, source){
   while(feedEl.children.length > 6) feedEl.lastElementChild.remove();
 }
 function handleTipEvent(data, sourceLabel){
-  if(!data || !Number.isFinite(parseFloat(data.amount))) return;
-  const amount = Math.round(parseFloat(data.amount) * 100) / 100;
-  const eventId = [amount.toFixed(2), data.source || '', data.at || ''].join('|');
+  if(!data) return;
+  const amount = Math.round(parseFloat(data.amount || data.amountAdded || 0) * 100) / 100;
+  const total = parseFloat(data.total || data.jerryGlobalTips);
+  const eventId = [amount.toFixed(2), Number.isFinite(total) ? total.toFixed(2) : '', data.source || '', data.at || data.updatedAt || ''].join('|');
   if(eventId && eventId === lastHandledTipEventId) return;
   lastHandledTipEventId = eventId;
-  refreshTarget(sourceLabel || 'live casino tip at ' + new Date().toLocaleTimeString());
-  statusEl.textContent = 'Jerry heard another +' + money(amount) + ' chips hit the jar.';
+  if(Number.isFinite(total)) setTarget(total, sourceLabel || 'live sync at ' + new Date().toLocaleTimeString());
+  else fetchTipTotal(sourceLabel || 'live sync at ' + new Date().toLocaleTimeString());
+  if(amount > 0) statusEl.textContent = 'Jerry heard another +' + money(amount) + ' chips hit the jar.';
   jerryFace.textContent = '$D';
   jerryLine.textContent = 'Jerry is counting the tips so loudly the cage can hear it.';
-  addFeed(amount, data.source || 'Casino tip');
+  if(amount > 0) addFeed(amount, data.source || 'Casino tip');
 }
 function burstParticles(x, y, count){
   const palette = ['#ffd166', '#63d7ff', '#e8c85a', '#ffffff'];
@@ -586,7 +577,7 @@ function burstParticles(x, y, count){
     const p = document.createElement('span');
     const useIcon = Math.random() < 0.45;
     p.className = 'casino-particle' + (useIcon ? ' icon' : '');
-    if(useIcon) p.textContent = Math.random() < 0.5 ? '$' : '◆';
+    if(useIcon) p.textContent = Math.random() < 0.5 ? '$' : '*';
     const angle = Math.random() * Math.PI * 2;
     const distance = 40 + Math.random() * 130;
     p.style.setProperty('--x', x + 'px');
@@ -601,28 +592,24 @@ function burstParticles(x, y, count){
     setTimeout(() => p.remove(), 1400);
   }
 }
-function refreshTarget(label){
-  setTarget(jsonTotal + localTips(), label);
-}
-async function loadJsonTotal(){
+async function fetchTipTotal(label){
   try{
-    const res = await fetch(TIP_JSON_URL + '?v=' + Date.now(), { cache:'no-store' });
-    if(!res.ok) throw new Error('JSON returned ' + res.status);
+    const res = await fetch(TIP_API_URL + '?v=' + Date.now(), { cache:'no-store' });
     const data = await res.json();
+    if(!res.ok || data.ok === false) throw new Error(data.error || 'API returned ' + res.status);
     const nextTotal = parseFloat(data.jerryGlobalTips);
-    const nextStamp = String(data.updatedAt || '');
+    const nextStamp = String(data.updatedAt || Date.now());
     if(Number.isFinite(nextTotal)){
-      const changed = nextTotal !== jsonTotal || nextStamp !== lastJsonStamp;
+      const changed = nextTotal !== jsonTotal || nextStamp !== lastUpdatedAt;
       jsonTotal = Math.max(0, nextTotal);
-      lastJsonStamp = nextStamp;
-      refreshTarget(changed ? 'synced from JSON at ' + new Date().toLocaleTimeString() : null);
+      lastUpdatedAt = nextStamp;
+      setTarget(jsonTotal, label || (changed ? 'synced from Pi JSON at ' + new Date().toLocaleTimeString() : null));
     }
   } catch(err){
-    sourceEl.textContent = 'JSON sync unavailable; showing local live tips.';
-    refreshTarget();
+    sourceEl.textContent = 'api.zixy.lol sync unavailable.';
   }
 }
-function donate(amount, source){
+async function donate(amount, source){
   const clean = Math.round(parseFloat(amount) * 100) / 100;
   if(!Number.isFinite(clean) || clean <= 0){
     statusEl.textContent = 'Jerry rejected that sad little non-number.';
@@ -636,38 +623,41 @@ function donate(amount, source){
     jerryLine.textContent = 'Jerry checked the cage ledger and found your wallet tragically hilarious.';
     return;
   }
-  setBalance(currentBalance - clean);
-  setLocalTips(localTips() + clean);
-  const event = { amount:clean, source:source || 'local donation', at:Date.now() };
-  localStorage.setItem(TIP_EVENT_KEY, JSON.stringify(event));
-  if(tipChannel) tipChannel.postMessage(event);
-  refreshTarget('live browser donation at ' + new Date().toLocaleTimeString());
-  statusEl.textContent = 'Jerry pocketed +' + money(clean) + ' chips and called it "compliance."';
-  jerryFace.textContent = '$D';
-  jerryLine.textContent = 'Another tip for the jar. Jerry is suddenly very professional.';
-  const rect = totalEl.getBoundingClientRect();
-  burstParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, 32);
-  addFeed(clean, source || 'This browser');
+  tipBtn.disabled = true;
+  statusEl.textContent = 'Jerry is receiving the tip...';
+  try{
+    const res = await fetch(TIP_API_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body:JSON.stringify({ amount:clean })
+    });
+    const data = await res.json();
+    if(!res.ok || data.ok === false) throw new Error(data.error || 'API returned ' + res.status);
+    setBalance(currentBalance - clean);
+    const total = parseFloat(data.jerryGlobalTips);
+    if(Number.isFinite(total)) setTarget(total, 'saved to Pi JSON at ' + new Date().toLocaleTimeString());
+    statusEl.textContent = 'Jerry pocketed +' + money(clean) + ' chips and called it "compliance."';
+    jerryFace.textContent = '$D';
+    jerryLine.textContent = 'Another tip for the jar. Jerry is suddenly very professional.';
+    const event = { amount:clean, source:source || 'This browser', total:data.jerryGlobalTips, updatedAt:data.updatedAt, at:Date.now() };
+    if(tipChannel) tipChannel.postMessage(event);
+    const rect = totalEl.getBoundingClientRect();
+    burstParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, 32);
+    addFeed(clean, source || 'This browser');
+  } catch(err){
+    statusEl.textContent = 'Tip failed: ' + err.message;
+    jerryFace.textContent = '>:(';
+    jerryLine.textContent = 'Jerry says the cage window is jammed until the Pi answers.';
+  } finally {
+    tipBtn.disabled = false;
+  }
 }
 function pollLiveState(){
-  const tips = localTips();
-  if(lastSeenTips === null) lastSeenTips = tips;
-  else if(tips !== lastSeenTips){
-    lastSeenTips = tips;
-    refreshTarget('live poll sync at ' + new Date().toLocaleTimeString());
-  }
   const balance = loadBalance();
   if(lastSeenBalance === null) lastSeenBalance = balance;
   else if(balance !== lastSeenBalance){
     lastSeenBalance = balance;
     refreshBalance();
-  }
-  const eventRaw = localStorage.getItem(TIP_EVENT_KEY) || '';
-  if(eventRaw && eventRaw !== lastSeenTipEvent){
-    lastSeenTipEvent = eventRaw;
-    try{
-      handleTipEvent(JSON.parse(eventRaw), 'live casino tip at ' + new Date().toLocaleTimeString());
-    } catch(err){}
   }
 }
 function animateTotal(){
@@ -685,33 +675,21 @@ inputEl.addEventListener('keydown', event => {
   if(event.key === 'Enter') donate(inputEl.value, 'Manual tip');
 });
 window.addEventListener('storage', event => {
-  if(event.key === TIP_STORAGE_KEY){
-    lastSeenTips = localTips();
-    refreshTarget('live browser sync at ' + new Date().toLocaleTimeString());
-  }
   if(event.key === BALANCE_STORAGE_KEY){
     lastSeenBalance = loadBalance();
     refreshBalance();
-  }
-  if(event.key === TIP_EVENT_KEY && event.newValue){
-    try{
-      const data = JSON.parse(event.newValue);
-      lastSeenTipEvent = event.newValue;
-      handleTipEvent(data, 'live casino tip at ' + new Date().toLocaleTimeString());
-    } catch(err){}
   }
 });
 try{
   tipChannel = new BroadcastChannel(TIP_CHANNEL_NAME);
   tipChannel.onmessage = event => {
     handleTipEvent(event.data, 'broadcast sync at ' + new Date().toLocaleTimeString());
-    lastSeenTips = localTips();
     lastSeenBalance = loadBalance();
   };
 } catch(err){}
-loadJsonTotal();
+fetchTipTotal();
 refreshBalance();
-setInterval(loadJsonTotal, 3500);
+setInterval(fetchTipTotal, 3500);
 setInterval(pollLiveState, 300);
 animateTotal();
 </script>
