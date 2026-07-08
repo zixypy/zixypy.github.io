@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<!-- saved from url=(0024)https://gamble.zixy.lol/ -->
-<html lang="en" data-theme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
 <title>The Velvet Chip - play money only</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="./The Velvet Chip - play money only_files/css2" rel="stylesheet">
-<link href="https://gamble.zixy.lol/assets/chip.png" type="image/png" rel="icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0f3d2e;
@@ -265,114 +264,6 @@
     50%{ opacity:1; }
     80%,100%{ transform:translateX(70%) rotate(8deg); opacity:0; }
   }
-
-  .home-screen{
-    max-width:1100px;
-    margin:2rem auto 0;
-    padding:0 1.5rem 1rem;
-  }
-  .home-screen.hidden{ display:none; }
-  .game-screen.hidden{ display:none; }
-  .home-intro{
-    text-align:center;
-    margin-bottom:1.5rem;
-  }
-  .home-intro h2{
-    font-family:'DM Serif Display', serif;
-    color:var(--brass-light);
-    font-size:clamp(1.4rem, 3.4vw, 1.9rem);
-    margin:0 0 0.4rem;
-  }
-  .home-intro p{
-    color:var(--text-muted);
-    font-size:0.92rem;
-    margin:0;
-  }
-  .home-grid{
-    display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:1rem;
-  }
-  @media (max-width:720px){
-    .home-grid{ grid-template-columns:1fr; }
-  }
-  .game-tile{
-    display:flex;
-    align-items:stretch;
-    height:132px;
-    border-radius:14px;
-    overflow:hidden;
-    border:1px solid var(--card-border);
-    background:var(--card-bg);
-    cursor:pointer;
-    padding:0;
-    margin:0;
-    text-align:left;
-    font-family:inherit;
-    transition:transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-    position:relative;
-  }
-  .game-tile:hover{
-    transform:translateY(-3px);
-    border-color:var(--brass);
-    box-shadow:0 12px 26px rgba(0,0,0,0.28);
-  }
-  .game-tile:hover .game-tile-img img{ transform:scale(1.08) rotate(-1deg); }
-  .game-tile-img{
-    position:relative;
-    width:46%;
-    min-width:120px;
-    flex-shrink:0;
-    overflow:hidden;
-    background:var(--ink);
-    /* a vertical cut through the middle, rotated 25deg to the right */
-    clip-path:polygon(0 0, 100% 0, calc(100% - 62px) 100%, 0 100%);
-  }
-  .game-tile-img img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-    transition:transform 0.3s ease;
-  }
-  .game-tile-img::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(105deg, transparent 45%, rgba(0,0,0,0.4) 100%);
-  }
-  .game-tile-name{
-    flex:1;
-    display:flex;
-    align-items:center;
-    min-width:0;
-    padding:0 1.15rem;
-  }
-  .game-tile-name span{
-    font-family:'DM Serif Display', serif;
-    font-size:1.18rem;
-    line-height:1.2;
-    color:var(--brass-light);
-  }
-  @media (max-width:480px){
-    .game-tile{ height:104px; }
-    .game-tile-img{ clip-path:polygon(0 0, 100% 0, calc(100% - 48px) 100%, 0 100%); }
-    .game-tile-name span{ font-size:1.02rem; }
-  }
-  .lobby-btn{
-    background:var(--card-bg);
-    border:1px solid var(--card-border);
-    color:var(--text);
-    padding:0.5rem 1rem;
-    border-radius:999px;
-    font-size:0.8rem;
-    font-weight:500;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    gap:0.4rem;
-  }
-  .lobby-btn:hover{ border-color:var(--brass); }
 
   .tabs{
     max-width:1100px;
@@ -1617,6 +1508,46 @@
     border:9px solid var(--brass);
     position:relative;
     overflow:hidden;
+    background:
+      radial-gradient(circle, transparent 0 34%, rgba(36,26,16,0.95) 34.5% 42%, transparent 42.5%),
+      conic-gradient(from -4.86deg,
+        #174f3c 0deg 9.73deg,
+        #6b1e2a 9.73deg 19.46deg,
+        #241a10 19.46deg 29.19deg,
+        #6b1e2a 29.19deg 38.92deg,
+        #241a10 38.92deg 48.65deg,
+        #6b1e2a 48.65deg 58.38deg,
+        #241a10 58.38deg 68.11deg,
+        #6b1e2a 68.11deg 77.84deg,
+        #241a10 77.84deg 87.57deg,
+        #6b1e2a 87.57deg 97.30deg,
+        #241a10 97.30deg 107.03deg,
+        #241a10 107.03deg 116.76deg,
+        #6b1e2a 116.76deg 126.49deg,
+        #241a10 126.49deg 136.22deg,
+        #6b1e2a 136.22deg 145.95deg,
+        #241a10 145.95deg 155.68deg,
+        #6b1e2a 155.68deg 165.41deg,
+        #241a10 165.41deg 175.14deg,
+        #6b1e2a 175.14deg 184.87deg,
+        #6b1e2a 184.87deg 194.60deg,
+        #241a10 194.60deg 204.33deg,
+        #6b1e2a 204.33deg 214.06deg,
+        #241a10 214.06deg 223.79deg,
+        #6b1e2a 223.79deg 233.52deg,
+        #241a10 233.52deg 243.25deg,
+        #6b1e2a 243.25deg 252.98deg,
+        #241a10 252.98deg 262.71deg,
+        #6b1e2a 262.71deg 272.44deg,
+        #241a10 272.44deg 282.17deg,
+        #241a10 282.17deg 291.90deg,
+        #6b1e2a 291.90deg 301.63deg,
+        #241a10 301.63deg 311.36deg,
+        #6b1e2a 311.36deg 321.09deg,
+        #241a10 321.09deg 330.82deg,
+        #6b1e2a 330.82deg 340.55deg,
+        #241a10 340.55deg 350.28deg,
+        #6b1e2a 350.28deg 360deg);
     box-shadow:inset 0 0 0 7px rgba(255,255,255,0.08), inset 0 0 38px rgba(0,0,0,0.48);
     transition:transform 4.5s cubic-bezier(.12,.72,.08,1);
   }
@@ -1668,7 +1599,29 @@
     left:50%;
     width:18px;
     height:18px;
-    display:none;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff 0 28%, #f0e6d2 29% 58%, #a9852b 59%);
+    border:2px solid rgba(36,26,16,0.65);
+    transform:translate(-50%, -50%) rotate(0deg) translateY(-176px);
+    transform-origin:center;
+    transition:transform 4.45s cubic-bezier(.08,.72,.06,1);
+    z-index:9;
+    box-shadow:0 0 16px rgba(255,255,255,0.55);
+  }
+  .roulette-ball.spinning{
+    box-shadow:0 0 22px rgba(255,255,255,0.7), 0 0 18px rgba(99,215,255,0.35);
+  }
+  .roulette-ball.spinning::after{
+    content:"";
+    position:absolute;
+    inset:-18px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.28);
+    animation:roulette-ball-pulse 0.45s ease-in-out infinite;
+  }
+  @keyframes roulette-ball-pulse{
+    0%,100%{ transform:scale(0.82); opacity:0.15; }
+    50%{ transform:scale(1.2); opacity:0.55; }
   }
   .roulette-panel{
     display:grid;
@@ -1739,6 +1692,316 @@
   @keyframes roulette-win-pop{
     0%,100%{ filter:brightness(1); }
     50%{ filter:brightness(1.35); box-shadow:0 0 34px rgba(255,209,102,0.4), inset 0 0 38px rgba(0,0,0,0.48); }
+  }
+
+  .pinball-wrap{
+    max-width:780px;
+    margin:1rem auto 1.25rem;
+    display:grid;
+    grid-template-columns:minmax(260px, 420px) 1fr;
+    gap:1rem;
+    align-items:center;
+  }
+  .pinball-cabinet{
+    position:relative;
+    width:420px;
+    height:520px;
+    border:8px solid var(--brass);
+    border-radius:34px 34px 18px 18px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 32% 24%, rgba(99,215,255,0.18), transparent 18%),
+      radial-gradient(circle at 72% 30%, rgba(255,209,102,0.2), transparent 18%),
+      linear-gradient(160deg, rgba(107,30,42,0.88), rgba(21,74,55,0.96) 52%, rgba(36,26,16,0.95));
+    box-shadow:inset 0 0 38px rgba(0,0,0,0.42), 0 20px 34px rgba(0,0,0,0.24);
+  }
+  .pinball-cabinet::before{
+    content:"PINBALL";
+    position:absolute;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    color:rgba(240,230,210,0.82);
+    font-family:'JetBrains Mono', monospace;
+    font-weight:900;
+    letter-spacing:2px;
+  }
+  .pinball-rail{
+    position:absolute;
+    right:28px;
+    top:54px;
+    bottom:42px;
+    width:28px;
+    border:2px solid rgba(240,230,210,0.36);
+    border-radius:999px;
+    background:rgba(36,26,16,0.38);
+  }
+  .pinball-plunger{
+    position:absolute;
+    right:31px;
+    bottom:48px;
+    width:22px;
+    height:82px;
+    border-radius:999px;
+    background:linear-gradient(#ffd166, #a97c0f);
+    transform-origin:bottom;
+  }
+  .pinball-cabinet.launching .pinball-plunger{ animation:plunger-pull 0.9s ease; }
+  @keyframes plunger-pull{
+    0%,100%{ transform:translateY(0); }
+    40%{ transform:translateY(42px); }
+  }
+  .pinball-bumper{
+    position:absolute;
+    width:76px;
+    height:76px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-weight:900;
+    background:radial-gradient(circle at 32% 28%, #fff7cf, #ffd166 44%, #a97c0f 75%);
+    box-shadow:0 0 20px rgba(255,209,102,0.34), inset 0 -8px 14px rgba(36,26,16,0.22);
+  }
+  .pinball-bumper.hit{ animation:pinball-bumper-hit 0.28s ease; }
+  .pinball-bumper.a{ left:74px; top:96px; }
+  .pinball-bumper.b{ right:94px; top:140px; }
+  .pinball-bumper.c{ left:138px; top:240px; }
+  @keyframes pinball-bumper-hit{
+    50%{ transform:scale(1.16); box-shadow:0 0 34px rgba(255,209,102,0.68), inset 0 -8px 14px rgba(36,26,16,0.22); }
+  }
+  .pinball-lane{
+    position:absolute;
+    bottom:98px;
+    width:124px;
+    height:18px;
+    border-radius:999px;
+    background:rgba(240,230,210,0.7);
+  }
+  .pinball-lane.left{ left:48px; transform:rotate(24deg); }
+  .pinball-lane.right{ right:68px; transform:rotate(-24deg); }
+  .pinball-ball{
+    position:absolute;
+    left:338px;
+    top:424px;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, #fff, #d8d8d8 55%, #777);
+    box-shadow:0 0 16px rgba(255,255,255,0.55);
+    transition:left 0.28s ease, top 0.28s ease;
+  }
+  .pinball-scoreboard{
+    display:grid;
+    gap:0.7rem;
+  }
+  .pinball-scoreboard div{
+    border:1px solid var(--tile-border);
+    border-radius:8px;
+    padding:0.75rem;
+    background:rgba(38,25,13,0.32);
+  }
+  .pinball-scoreboard span{
+    display:block;
+    color:var(--text-muted);
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.8px;
+  }
+  .pinball-scoreboard b{
+    color:var(--brass-light);
+    font-family:'JetBrains Mono', monospace;
+    font-size:1.35rem;
+  }
+
+  .baccarat-table{
+    max-width:840px;
+    margin:1rem auto 1.25rem;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+  }
+  .baccarat-hand{
+    border:1px solid var(--tile-border);
+    border-radius:8px;
+    background:rgba(38,25,13,0.32);
+    padding:0.9rem;
+  }
+  .baccarat-hand h3{
+    margin:0 0 0.75rem;
+    color:var(--brass-light);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.95rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+  }
+  .baccarat-total{
+    margin-top:0.65rem;
+    color:var(--text-muted);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .baccarat-bets{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(90px, 1fr));
+    gap:0.5rem;
+    max-width:520px;
+    margin:0 auto 1rem;
+  }
+  .baccarat-pick{
+    border:1px solid var(--tile-border);
+    border-radius:8px;
+    background:var(--tile-bg);
+    color:var(--text);
+    padding:0.75rem 0.6rem;
+    font-weight:900;
+    cursor:pointer;
+    transition:transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+  }
+  .baccarat-pick:hover{ transform:translateY(-2px); border-color:var(--brass); }
+  .baccarat-pick.active{
+    border-color:#63d7ff;
+    box-shadow:0 0 0 2px rgba(99,215,255,0.18), 0 0 18px rgba(99,215,255,0.24);
+  }
+
+  .craps-wrap{
+    max-width:840px;
+    margin:1rem auto 1.25rem;
+  }
+  .craps-layout{
+    display:grid;
+    grid-template-columns:minmax(220px, 320px) 1fr;
+    gap:1rem;
+    align-items:center;
+  }
+  .craps-felt{
+    border:4px solid var(--brass);
+    border-radius:18px;
+    padding:1rem;
+    background:
+      linear-gradient(90deg, rgba(240,230,210,0.08) 1px, transparent 1px),
+      linear-gradient(rgba(240,230,210,0.08) 1px, transparent 1px),
+      rgba(21,74,55,0.92);
+    background-size:36px 36px;
+    min-height:240px;
+    display:grid;
+    place-items:center;
+    position:relative;
+    box-shadow:inset 0 0 28px rgba(0,0,0,0.34);
+  }
+  .craps-point{
+    position:absolute;
+    top:16px;
+    left:16px;
+    right:16px;
+    display:flex;
+    justify-content:space-between;
+    color:var(--text-muted);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.8rem;
+  }
+  .craps-dice{
+    display:flex;
+    gap:1rem;
+  }
+  .craps-die{
+    width:84px;
+    height:84px;
+    border-radius:14px;
+    background:#fff7cf;
+    color:var(--ink);
+    display:grid;
+    place-items:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:2.4rem;
+    font-weight:900;
+    box-shadow:0 12px 22px rgba(0,0,0,0.3);
+  }
+  .craps-die.rolling{ animation:craps-roll 0.18s linear infinite; }
+  @keyframes craps-roll{
+    50%{ transform:translateY(-6px) rotate(8deg); }
+  }
+  .craps-bet-grid{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(110px, 1fr));
+    gap:0.5rem;
+  }
+  .craps-bet{
+    border:1px solid var(--tile-border);
+    border-radius:8px;
+    background:var(--tile-bg);
+    color:var(--text);
+    min-height:58px;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .craps-bet.active{
+    border-color:#63d7ff;
+    box-shadow:0 0 0 2px rgba(99,215,255,0.18), 0 0 18px rgba(99,215,255,0.24);
+  }
+
+  .dragon-wrap{
+    max-width:760px;
+    margin:1rem auto 1.25rem;
+  }
+  .dragon-stats{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:0.6rem;
+    margin-bottom:0.85rem;
+  }
+  .dragon-stats div{
+    background:rgba(38,25,13,0.36);
+    border:1px solid var(--tile-border);
+    border-radius:8px;
+    padding:0.55rem 0.75rem;
+  }
+  .dragon-stats span{
+    display:block;
+    color:var(--text-muted);
+    font-size:0.75rem;
+  }
+  .dragon-stats b{
+    color:var(--brass-light);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .dragon-tower{
+    display:grid;
+    gap:0.42rem;
+  }
+  .dragon-row{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(58px, 1fr));
+    gap:0.42rem;
+    opacity:0.5;
+  }
+  .dragon-row.current{ opacity:1; }
+  .dragon-tile{
+    min-height:58px;
+    border:1px solid var(--tile-border);
+    border-radius:8px;
+    background:linear-gradient(145deg, rgba(28,92,68,0.96), rgba(18,57,43,0.96));
+    color:var(--brass-light);
+    font-family:'JetBrains Mono', monospace;
+    font-weight:900;
+    cursor:pointer;
+    transition:transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+  }
+  .dragon-row.current .dragon-tile:hover{ transform:translateY(-2px); border-color:var(--brass); }
+  .dragon-tile:disabled{ cursor:default; }
+  .dragon-tile.safe{
+    background:linear-gradient(145deg, #276b4f, #174f3c);
+    border-color:rgba(255,209,102,0.7);
+  }
+  .dragon-tile.trap{
+    background:linear-gradient(145deg, #8b2134, #5f1724);
+    color:#fff7cf;
+    animation:dragon-trap 0.35s ease;
+  }
+  .dragon-tile.locked{ opacity:0.56; }
+  @keyframes dragon-trap{
+    25%{ transform:translateX(-4px); }
+    55%{ transform:translateX(4px); }
   }
 
   .sky-wrap{
@@ -2058,7 +2321,10 @@
   }
 
   @media (max-width:900px){
-    .roulette-wrap{ grid-template-columns:1fr; }
+    .roulette-wrap,
+    .pinball-wrap,
+    .craps-layout{ grid-template-columns:1fr; }
+    .pinball-scoreboard{ grid-template-columns:repeat(3, 1fr); }
   }
   @media (max-width:720px){
     .roulette-board{
@@ -2066,10 +2332,21 @@
       grid-template-rows:repeat(3, 48px);
     }
     .roulette-outside{ grid-template-columns:repeat(3, minmax(80px, 1fr)); }
+    .baccarat-table{ grid-template-columns:1fr; }
+    .baccarat-bets{ grid-template-columns:1fr; }
+    .craps-bet-grid{ grid-template-columns:1fr; }
     .sky-stage{ height:360px; }
   }
   @media (max-width:560px){
     .roulette-pocket{ transform:translate(-50%, -50%) rotate(var(--a)) translateY(-36vw) rotate(calc(-1 * var(--a))); }
+    .pinball-wrap{ overflow:hidden; }
+    .pinball-cabinet{
+      justify-self:center;
+      transform:scale(0.74);
+      margin:-68px auto -68px;
+    }
+    .pinball-scoreboard,
+    .dragon-stats{ grid-template-columns:1fr; }
     .sky-stats{ grid-template-columns:1fr; }
     .sky-plane{ left:5%; transform:translateY(-50%) scale(0.84); }
   }
@@ -3330,12 +3607,11 @@
   <button class="theme-toggle" id="theme-toggle">
     <span id="theme-icon">SUN</span><span id="theme-label">Light room</span>
   </button>
-  <button class="lobby-btn" id="lobby-btn" style="position:absolute; top:2rem; left:1.5rem;">🏠 Lobby</button>
   <header>
     <div class="lights">
       <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
     </div>
-    <h1 id="home-logo" style="cursor:pointer;">The Velvet Chip</h1>
+    <h1>The Velvet Chip</h1>
     <p class="tagline">all the thrill, none of the stakes</p>
     <div class="fake-badge">play money only - resets any time</div>
   </header>
@@ -3344,28 +3620,22 @@
 <div class="counter-wrap">
   <div class="odometer">
     <span class="label">chips</span>
-    <span class="value bump" id="balance">$10.00</span>
+    <span class="value" id="balance">$10.00</span>
   </div>
 </div>
-
-<div class="home-screen" id="home-screen">
-  <div class="home-intro">
-    <h2>Pick your poison</h2>
-    <p>Every table here runs on play money only. Tap a game to sit down.</p>
-  </div>
-  <div class="home-grid" id="home-grid"></div>
-</div>
-
-<div class="game-screen hidden" id="game-screen">
 
 <div class="tabs">
-  <button class="tab-btn" data-tab="slots">Slots</button>
+  <button class="tab-btn active" data-tab="slots">Slots</button>
   <button class="tab-btn" data-tab="dice">Dice</button>
   <button class="tab-btn" data-tab="cards">High card</button>
   <button class="tab-btn" data-tab="blackjack">Blackjack</button>
   <button class="tab-btn" data-tab="crash">Crash</button>
   <button class="tab-btn" data-tab="moneywheel">Money wheel</button>
-  <button class="tab-btn active" data-tab="roulette">Roulette</button>
+  <button class="tab-btn" data-tab="roulette">Roulette</button>
+  <button class="tab-btn" data-tab="pinball">Pinball</button>
+  <button class="tab-btn" data-tab="baccarat">Baccarat</button>
+  <button class="tab-btn" data-tab="craps">Craps</button>
+  <button class="tab-btn" data-tab="dragontower">Dragon tower</button>
   <button class="tab-btn" data-tab="skypilot">Sky pilot</button>
   <button class="tab-btn" data-tab="mines">Mines</button>
   <button class="tab-btn" data-tab="beef">Beef</button>
@@ -3378,7 +3648,7 @@
 
 <div class="stage">
 
-  <div class="game-card" id="slots">
+  <div class="game-card active" id="slots">
     <h2>Three of a kind</h2>
     <p class="game-sub">Match all three reels for the big payout. Two matching still pays.</p>
     <div class="bet-row">
@@ -3387,7 +3657,7 @@
       <button class="chip-btn" data-target="slots-bet" data-amt="1">+$1</button>
       <button class="chip-btn" data-target="slots-bet" data-amt="5">+$5</button>
       <button class="chip-btn" data-target="slots-bet" data-max="1">Max</button>
-      <button class="action-btn" id="spin-btn" data-autolock="" style="margin-left:auto;">Spin</button>
+      <button class="action-btn" id="spin-btn" data-autolock style="margin-left:auto;">Spin</button>
     </div>
     <div class="reels">
       <div class="reel" id="reel0">🍒</div>
@@ -3396,7 +3666,7 @@
     </div>
     <div class="result-msg" id="slots-msg"></div>
     <div class="payout-table">
-      🍒 🍒 🍒 -&gt; 10x &nbsp;-&nbsp; 🔔 🔔 🔔 -&gt; 15x &nbsp;-&nbsp; 💎 💎 💎 -&gt; 40x &nbsp;-&nbsp; 7 7 7 -&gt; 80x &nbsp;-&nbsp; any two matching -&gt; 1.5x
+      🍒 🍒 🍒 -> 10x &nbsp;-&nbsp; 🔔 🔔 🔔 -> 15x &nbsp;-&nbsp; 💎 💎 💎 -> 40x &nbsp;-&nbsp; 7 7 7 -> 80x &nbsp;-&nbsp; any two matching -> 1.5x
     </div>
     <div class="game-readout">Any payout: 54.0% - three of a kind: 5.3% - exactly two matching: 48.7%</div>
   </div>
@@ -3410,10 +3680,10 @@
         <button class="dice-mode-btn" type="button" data-dice-mode="over">Over</button>
       </div>
       <div class="slider-labels"><span id="dice-mode-label">Roll under</span><b id="dice-target-label">50.00</b></div>
-      <input type="range" id="dice-slider" min="2" max="98" value="50" step="0.5" style="--dice-fill: 50.00%;">
+      <input type="range" id="dice-slider" min="2" max="98" value="50" step="0.5">
       <div class="dice-stats">
-        <span>Win chance: <b id="dice-chance">50.0%</b></span>
-        <span>Payout: <b id="dice-mult">1.98x</b></span>
+        <span>Win chance: <b id="dice-chance">50%</b></span>
+        <span>Payout: <b id="dice-mult">1.94x</b></span>
       </div>
     </div>
     <div class="bet-row" style="justify-content:center;">
@@ -3427,7 +3697,7 @@
       <div class="dice-num" id="dice-result">--.--</div>
     </div>
     <div style="text-align:center;">
-      <button class="action-btn" id="roll-btn" data-autolock="">Roll</button>
+      <button class="action-btn" id="roll-btn" data-autolock>Roll</button>
     </div>
     <div class="result-msg" id="dice-msg"></div>
   </div>
@@ -3443,12 +3713,12 @@
       <button class="chip-btn" data-target="cards-bet" data-max="1">Max</button>
     </div>
     <div class="cards-display">
-      <div class="playing-card" id="player-card"><div class="card-center">?</div></div>
+      <div class="playing-card" id="player-card">?</div>
       <div class="vs">vs</div>
-      <div class="playing-card" id="house-card"><div class="card-center">?</div></div>
+      <div class="playing-card" id="house-card">?</div>
     </div>
     <div style="text-align:center;">
-      <button class="action-btn" id="deal-btn" data-autolock="">Deal</button>
+      <button class="action-btn" id="deal-btn" data-autolock>Deal</button>
     </div>
     <div class="result-msg" id="cards-msg"></div>
     <div class="game-readout">Win: 46.2% - push: 7.7% - payout: 1.90x</div>
@@ -3463,7 +3733,7 @@
       <button class="chip-btn" data-target="bj-bet" data-amt="1">+$1</button>
       <button class="chip-btn" data-target="bj-bet" data-amt="5">+$5</button>
       <button class="chip-btn" data-max="1" data-target="bj-bet">Max</button>
-      <button class="action-btn" id="bj-deal-btn" data-autolock="" style="margin-left:auto;">Deal</button>
+      <button class="action-btn" id="bj-deal-btn" data-autolock style="margin-left:auto;">Deal</button>
     </div>
     <div class="hand-row">
       <div class="hand-label">House</div>
@@ -3476,8 +3746,8 @@
       <div class="hand-total" id="bj-player-total">&nbsp;</div>
     </div>
     <div style="text-align:center; display:flex; gap:0.75rem; justify-content:center; margin-top:1rem;">
-      <button class="action-btn secondary" id="bj-hit-btn" disabled="">Hit</button>
-      <button class="action-btn secondary" id="bj-stand-btn" disabled="">Stand</button>
+      <button class="action-btn secondary" id="bj-hit-btn" disabled>Hit</button>
+      <button class="action-btn secondary" id="bj-stand-btn" disabled>Stand</button>
     </div>
     <div class="result-msg" id="bj-msg"></div>
     <div class="game-readout">Blackjack: 2.5x - normal win: 2.00x - push: 1.00x - bust: 0x</div>
@@ -3489,12 +3759,12 @@
     <div class="crash-display">
       <svg class="crash-graph" id="crash-graph" viewBox="0 0 400 220" preserveAspectRatio="none">
         <line class="crash-baseline" x1="0" y1="190" x2="400" y2="190"></line>
-        <polyline id="crash-line-main" points=""></polyline>
-        <polyline id="crash-line-ghost" points=""></polyline>
-        <circle class="crash-cashout-dot" id="crash-cashout-dot" r="0" style="display: block;" cx="30.98833957230756" cy="188.99289619165393"></circle>
+        <polyline id="crash-line-main"></polyline>
+        <polyline id="crash-line-ghost"></polyline>
+        <circle class="crash-cashout-dot" id="crash-cashout-dot" r="5"></circle>
       </svg>
-      <div class="crash-mult" id="crash-mult" style=""></div>
-      <div class="crash-status" id="crash-status"></div>
+      <div class="crash-mult" id="crash-mult">1.00x</div>
+      <div class="crash-status" id="crash-status">place a bet to launch</div>
     </div>
     <div class="bet-row" style="justify-content:center;">
       <label for="crash-bet">Bet</label>
@@ -3504,11 +3774,11 @@
       <button class="chip-btn" data-max="1" data-target="crash-bet">Max</button>
     </div>
     <div style="text-align:center; display:flex; gap:0.75rem; justify-content:center;">
-      <button class="action-btn" id="crash-launch-btn" data-autolock="">Launch</button>
-      <button class="action-btn cashout" id="crash-cashout-btn" disabled="">Cash out</button>
-      <button class="action-btn secondary" id="crash-skip-btn" style="display: none;">Skip reveal</button>
+      <button class="action-btn" id="crash-launch-btn" data-autolock>Launch</button>
+      <button class="action-btn cashout" id="crash-cashout-btn" disabled>Cash out</button>
+      <button class="action-btn secondary" id="crash-skip-btn" style="display:none;">Skip reveal</button>
     </div>
-    <div class="result-msg win" id="crash-msg"></div>
+    <div class="result-msg" id="crash-msg"></div>
     <div class="game-readout" id="crash-odds">Cash out at 2.00x: about 49.5% - payout: 2.00x</div>
   </div>
 
@@ -3530,18 +3800,18 @@
       </div>
       <div class="money-wheel-stage">
         <div class="money-wheel-pointer"></div>
-        <div class="money-wheel" id="moneywheel-wheel"><span class="money-wheel-label" style="--a: 22.5deg;">2x</span><span class="money-wheel-label" style="--a: 67.5deg;">3x</span><span class="money-wheel-label" style="--a: 112.5deg;">5x</span><span class="money-wheel-label" style="--a: 157.5deg;">10x</span><span class="money-wheel-label" style="--a: 202.5deg;">2x</span><span class="money-wheel-label" style="--a: 247.5deg;">3x</span><span class="money-wheel-label" style="--a: 292.5deg;">5x</span><span class="money-wheel-label" style="--a: 337.5deg;">10x</span></div>
+        <div class="money-wheel" id="moneywheel-wheel"></div>
       </div>
-      <div class="money-wheel-result" id="moneywheel-result"></div>
+      <div class="money-wheel-result" id="moneywheel-result">Selected 2x</div>
     </div>
     <div style="text-align:center;">
-      <button class="action-btn" id="moneywheel-spin-btn" data-autolock="">Spin</button>
+      <button class="action-btn" id="moneywheel-spin-btn" data-autolock>Spin</button>
     </div>
     <div class="result-msg" id="moneywheel-msg"></div>
     <div class="game-readout" id="moneywheel-readout">Wheel slices: two each - 2x 25.0% - 3x 25.0% - 5x 25.0% - 10x 25.0%</div>
   </div>
 
-  <div class="game-card active" id="roulette">
+  <div class="game-card" id="roulette">
     <h2>Roulette</h2>
     <p class="game-sub">Pick a number or an outside bet, then spin the wheel. Number hits pay big; color, parity, and range bets pay steady.</p>
     <div class="bet-row" style="justify-content:center;">
@@ -3554,27 +3824,157 @@
     <div class="roulette-wrap">
       <div class="roulette-wheel-stage">
         <div class="roulette-pointer"></div>
-        <div class="roulette-wheel" id="roulette-wheel" style="transform: rotate(7871.35deg);"><span class="roulette-pocket green" style="--a: 0deg;">0</span><span class="roulette-pocket red" style="--a: 9.72972972972973deg;">32</span><span class="roulette-pocket black" style="--a: 19.45945945945946deg;">15</span><span class="roulette-pocket red" style="--a: 29.18918918918919deg;">19</span><span class="roulette-pocket black" style="--a: 38.91891891891892deg;">4</span><span class="roulette-pocket red" style="--a: 48.648648648648646deg;">21</span><span class="roulette-pocket black" style="--a: 58.37837837837838deg;">2</span><span class="roulette-pocket red" style="--a: 68.10810810810811deg;">25</span><span class="roulette-pocket black" style="--a: 77.83783783783784deg;">17</span><span class="roulette-pocket red" style="--a: 87.56756756756756deg;">34</span><span class="roulette-pocket black" style="--a: 97.29729729729729deg;">6</span><span class="roulette-pocket red" style="--a: 107.02702702702703deg;">27</span><span class="roulette-pocket black" style="--a: 116.75675675675676deg;">13</span><span class="roulette-pocket red" style="--a: 126.48648648648648deg;">36</span><span class="roulette-pocket black" style="--a: 136.21621621621622deg;">11</span><span class="roulette-pocket red" style="--a: 145.94594594594594deg;">30</span><span class="roulette-pocket black" style="--a: 155.67567567567568deg;">8</span><span class="roulette-pocket red" style="--a: 165.40540540540542deg;">23</span><span class="roulette-pocket black" style="--a: 175.13513513513513deg;">10</span><span class="roulette-pocket red" style="--a: 184.86486486486487deg;">5</span><span class="roulette-pocket black" style="--a: 194.59459459459458deg;">24</span><span class="roulette-pocket red" style="--a: 204.32432432432432deg;">16</span><span class="roulette-pocket black" style="--a: 214.05405405405406deg;">33</span><span class="roulette-pocket red" style="--a: 223.78378378378378deg;">1</span><span class="roulette-pocket black" style="--a: 233.51351351351352deg;">20</span><span class="roulette-pocket red" style="--a: 243.24324324324326deg;">14</span><span class="roulette-pocket black" style="--a: 252.97297297297297deg;">31</span><span class="roulette-pocket red" style="--a: 262.7027027027027deg;">9</span><span class="roulette-pocket black" style="--a: 272.43243243243245deg;">22</span><span class="roulette-pocket red" style="--a: 282.1621621621622deg;">18</span><span class="roulette-pocket black" style="--a: 291.8918918918919deg;">29</span><span class="roulette-pocket red" style="--a: 301.6216216216216deg;">7</span><span class="roulette-pocket black" style="--a: 311.35135135135135deg;">28</span><span class="roulette-pocket red" style="--a: 321.0810810810811deg;">12</span><span class="roulette-pocket black" style="--a: 330.81081081081084deg;">35</span><span class="roulette-pocket red" style="--a: 340.5405405405405deg;">3</span><span class="roulette-pocket black" style="--a: 350.27027027027026deg;">26</span></div>
-        <div class="roulette-ball" id="roulette-ball" style="transform: translate(-50%, -50%) rotate(10800.6deg) translateY(-176px);"></div>
+        <div class="roulette-wheel" id="roulette-wheel"></div>
+        <div class="roulette-ball" id="roulette-ball"></div>
       </div>
       <div class="roulette-panel">
-        <div class="roulette-selection" id="roulette-selection"><strong></strong></div>
-        <div class="roulette-board" id="roulette-board"><button class="roulette-number green zero" type="button" data-roulette-type="number" data-roulette-value="0">0</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="1" style="grid-area: 3 / 2;">1</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="2" style="grid-area: 2 / 2;">2</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="3" style="grid-area: 1 / 2;">3</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="4" style="grid-area: 3 / 3;">4</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="5" style="grid-area: 2 / 3;">5</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="6" style="grid-area: 1 / 3;">6</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="7" style="grid-area: 3 / 4;">7</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="8" style="grid-area: 2 / 4;">8</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="9" style="grid-area: 1 / 4;">9</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="10" style="grid-area: 3 / 5;">10</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="11" style="grid-area: 2 / 5;">11</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="12" style="grid-area: 1 / 5;">12</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="13" style="grid-area: 3 / 6;">13</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="14" style="grid-area: 2 / 6;">14</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="15" style="grid-area: 1 / 6;">15</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="16" style="grid-area: 3 / 7;">16</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="17" style="grid-area: 2 / 7;">17</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="18" style="grid-area: 1 / 7;">18</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="19" style="grid-area: 3 / 8;">19</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="20" style="grid-area: 2 / 8;">20</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="21" style="grid-area: 1 / 8;">21</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="22" style="grid-area: 3 / 9;">22</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="23" style="grid-area: 2 / 9;">23</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="24" style="grid-area: 1 / 9;">24</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="25" style="grid-area: 3 / 10;">25</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="26" style="grid-area: 2 / 10;">26</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="27" style="grid-area: 1 / 10;">27</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="28" style="grid-area: 3 / 11;">28</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="29" style="grid-area: 2 / 11;">29</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="30" style="grid-area: 1 / 11;">30</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="31" style="grid-area: 3 / 12;">31</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="32" style="grid-area: 2 / 12;">32</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="33" style="grid-area: 1 / 12;">33</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="34" style="grid-area: 3 / 13;">34</button><button class="roulette-number black" type="button" data-roulette-type="number" data-roulette-value="35" style="grid-area: 2 / 13;">35</button><button class="roulette-number red" type="button" data-roulette-type="number" data-roulette-value="36" style="grid-area: 1 / 13;">36</button></div>
+        <div class="roulette-selection" id="roulette-selection">Selected red - hit chance 48.6%</div>
+        <div class="roulette-board" id="roulette-board"></div>
         <div class="roulette-outside" id="roulette-outside">
           <button class="roulette-bet-option" type="button" data-roulette-type="range" data-roulette-value="low">1-18</button>
           <button class="roulette-bet-option" type="button" data-roulette-type="parity" data-roulette-value="even">Even</button>
           <button class="roulette-bet-option red" type="button" data-roulette-type="color" data-roulette-value="red">Red</button>
-          <button class="roulette-bet-option black selected" type="button" data-roulette-type="color" data-roulette-value="black">Black</button>
+          <button class="roulette-bet-option black" type="button" data-roulette-type="color" data-roulette-value="black">Black</button>
           <button class="roulette-bet-option" type="button" data-roulette-type="parity" data-roulette-value="odd">Odd</button>
           <button class="roulette-bet-option" type="button" data-roulette-type="range" data-roulette-value="high">19-36</button>
         </div>
       </div>
     </div>
     <div style="text-align:center;">
-      <button class="action-btn" id="roulette-spin-btn" data-autolock="">Spin</button>
+      <button class="action-btn" id="roulette-spin-btn" data-autolock>Spin</button>
     </div>
-    <div class="result-msg lose" id="roulette-msg"></div>
-    <div class="game-readout" id="roulette-readout">Combined raw coverage: 48.6%. Numbers pay 36.00x; outside bets pay 2.00x.</div>
+    <div class="result-msg" id="roulette-msg"></div>
+    <div class="game-readout" id="roulette-readout">Number: 2.7% - pays 36.00x. Outside bets: 48.6% - pay 2.00x.</div>
+  </div>
+
+  <div class="game-card" id="pinball">
+    <h2>Pinball</h2>
+    <p class="game-sub">Launch the ball into bumpers, lanes, and bonuses. The final score turns into a multiplier.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="pinball-bet">Bet</label>
+      <input type="number" id="pinball-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="pinball-bet" data-amt="1">+$1</button>
+      <button class="chip-btn" data-target="pinball-bet" data-amt="5">+$5</button>
+      <button class="chip-btn" data-target="pinball-bet" data-max="1">Max</button>
+    </div>
+    <div class="pinball-wrap">
+      <div class="pinball-cabinet" id="pinball-cabinet">
+        <div class="pinball-rail"></div>
+        <div class="pinball-plunger"></div>
+        <div class="pinball-bumper a" data-pinball-bumper="A">A</div>
+        <div class="pinball-bumper b" data-pinball-bumper="B">B</div>
+        <div class="pinball-bumper c" data-pinball-bumper="C">C</div>
+        <div class="pinball-lane left"></div>
+        <div class="pinball-lane right"></div>
+        <div class="pinball-ball" id="pinball-ball"></div>
+      </div>
+      <div class="pinball-scoreboard">
+        <div><span>Score</span><b id="pinball-score">0</b></div>
+        <div><span>Multiplier</span><b id="pinball-mult">0.00x</b></div>
+        <div><span>Best hit</span><b id="pinball-best">Ready</b></div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="action-btn" id="pinball-launch-btn" data-autolock>Launch</button>
+    </div>
+    <div class="result-msg" id="pinball-msg"></div>
+    <div class="game-readout">Bumpers build score. A drain can still pay a tiny save; a jackpot lane can spike the run.</div>
+  </div>
+
+  <div class="game-card" id="baccarat">
+    <h2>Baccarat</h2>
+    <p class="game-sub">Bet Player, Banker, or Tie. Closest hand to nine wins after the house drawing rules.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="baccarat-bet">Bet</label>
+      <input type="number" id="baccarat-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="baccarat-bet" data-amt="1">+$1</button>
+      <button class="chip-btn" data-target="baccarat-bet" data-amt="5">+$5</button>
+      <button class="chip-btn" data-target="baccarat-bet" data-max="1">Max</button>
+    </div>
+    <div class="baccarat-bets" id="baccarat-bets">
+      <button class="baccarat-pick active" type="button" data-baccarat-bet="player">Player<br>2.00x</button>
+      <button class="baccarat-pick" type="button" data-baccarat-bet="banker">Banker<br>1.95x</button>
+      <button class="baccarat-pick" type="button" data-baccarat-bet="tie">Tie<br>9.00x</button>
+    </div>
+    <div class="baccarat-table">
+      <div class="baccarat-hand">
+        <h3>Player</h3>
+        <div class="hand-cards" id="baccarat-player-cards"></div>
+        <div class="baccarat-total" id="baccarat-player-total">total: --</div>
+      </div>
+      <div class="baccarat-hand">
+        <h3>Banker</h3>
+        <div class="hand-cards" id="baccarat-banker-cards"></div>
+        <div class="baccarat-total" id="baccarat-banker-total">total: --</div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="action-btn" id="baccarat-deal-btn" data-autolock>Deal</button>
+    </div>
+    <div class="result-msg" id="baccarat-msg"></div>
+    <div class="game-readout">Player and Banker bets push on Tie. Banker pays 1.95x with commission baked in.</div>
+  </div>
+
+  <div class="game-card" id="craps">
+    <h2>Craps</h2>
+    <p class="game-sub">Choose a wager, roll two dice, and let the table settle the result.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="craps-bet">Bet</label>
+      <input type="number" id="craps-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="craps-bet" data-amt="1">+$1</button>
+      <button class="chip-btn" data-target="craps-bet" data-amt="5">+$5</button>
+      <button class="chip-btn" data-target="craps-bet" data-max="1">Max</button>
+    </div>
+    <div class="craps-wrap">
+      <div class="craps-layout">
+        <div class="craps-felt">
+          <div class="craps-point"><span id="craps-bet-label">Pass Line</span><span id="craps-point-label">point: off</span></div>
+          <div class="craps-dice">
+            <div class="craps-die" id="craps-die-a">1</div>
+            <div class="craps-die" id="craps-die-b">1</div>
+          </div>
+        </div>
+        <div class="craps-bet-grid" id="craps-bet-grid">
+          <button class="craps-bet active" type="button" data-craps-bet="pass">Pass Line</button>
+          <button class="craps-bet" type="button" data-craps-bet="dont">Don't Pass</button>
+          <button class="craps-bet" type="button" data-craps-bet="field">Field</button>
+          <button class="craps-bet" type="button" data-craps-bet="any7">Any 7</button>
+          <button class="craps-bet" type="button" data-craps-bet="hard4">Hard 4</button>
+          <button class="craps-bet" type="button" data-craps-bet="hard10">Hard 10</button>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="action-btn" id="craps-roll-btn" data-autolock>Roll</button>
+    </div>
+    <div class="result-msg" id="craps-msg"></div>
+    <div class="game-readout" id="craps-readout">Pass line and Don't Pass play a point. Field, Any 7, and hardways settle in one roll.</div>
+  </div>
+
+  <div class="game-card" id="dragontower">
+    <h2>Dragon Tower</h2>
+    <p class="game-sub">Climb seven rows of four buttons from bottom to top. One hidden trap in every row ends the round.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="dragon-bet">Bet</label>
+      <input type="number" id="dragon-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="dragon-bet" data-amt="1">+$1</button>
+      <button class="chip-btn" data-target="dragon-bet" data-amt="5">+$5</button>
+      <button class="chip-btn" data-target="dragon-bet" data-max="1">Max</button>
+    </div>
+    <div class="dragon-wrap">
+      <div class="dragon-stats">
+        <div><span>Row</span><b id="dragon-row-stat">0 / 7</b></div>
+        <div><span>Multiplier</span><b id="dragon-mult-stat">1.00x</b></div>
+        <div><span>Cashout</span><b id="dragon-cash-stat">$0.00</b></div>
+      </div>
+      <div class="dragon-tower" id="dragon-tower"></div>
+    </div>
+    <div style="text-align:center; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+      <button class="action-btn" id="dragon-start-btn" data-autolock>Start climb</button>
+      <button class="action-btn cashout" id="dragon-cashout-btn" disabled>Cash out</button>
+    </div>
+    <div class="result-msg" id="dragon-msg"></div>
+    <div class="game-readout" id="dragon-readout">Each safe pick has a 75.0% chance. Multipliers grow exponentially as you climb.</div>
   </div>
 
   <div class="game-card" id="skypilot">
@@ -3588,7 +3988,7 @@
       <button class="chip-btn" data-target="skypilot-bet" data-max="1">Max</button>
       <label for="sky-risk">Level</label>
       <select id="sky-risk">
-        <option value="easy" selected="">Easy</option>
+        <option value="easy" selected>Easy</option>
         <option value="medium">Medium</option>
         <option value="hard">Hard</option>
       </select>
@@ -3606,19 +4006,19 @@
         <div class="sky-danger top"></div>
         <div class="sky-danger bottom"></div>
         <div class="sky-plane" id="sky-plane">
-          <img src="assets/plane.png" alt="">
+          <img src="https://gamble.zixy.lol/assets/plane.png" alt="">
         </div>
         <div class="sky-objects" id="sky-objects"></div>
         <div class="sky-callout" id="sky-callout">Start at 0.00x</div>
       </div>
       <div class="sky-controls">
-        <button class="action-btn" id="sky-start-btn" data-autolock="">Take off</button>
-        <button class="action-btn secondary sky-hold-btn" id="sky-hold-btn" disabled="">Hold to climb</button>
-        <button class="action-btn cashout" id="sky-cashout-btn" disabled="">Cash out</button>
+        <button class="action-btn" id="sky-start-btn" data-autolock>Take off</button>
+        <button class="action-btn secondary sky-hold-btn" id="sky-hold-btn" disabled>Hold to climb</button>
+        <button class="action-btn cashout" id="sky-cashout-btn" disabled>Cash out</button>
       </div>
     </div>
     <div class="result-msg" id="skypilot-msg"></div>
-    <div class="game-readout" id="skypilot-readout">Easy: 1x clouds, coins add +0.25x. Current cashout: $0.00 at 0.00x.</div>
+    <div class="game-readout" id="skypilot-readout">Starts at 0.00x. Easy coins add +0.25x; Medium adds +0.50x with 2x clouds; Hard adds +0.75x with 3x clouds.</div>
   </div>
 
   <div class="game-card" id="mines">
@@ -3626,18 +4026,18 @@
     <p class="game-sub">Pick how many mines to hide in the 5x5 grid, then reveal tiles. Each gem raises your multiplier - cash out whenever you like.</p>
     <div class="mines-config">
       <label for="mines-count">Mines</label>
-      <select id="mines-count"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option></select>
+      <select id="mines-count"></select>
       <label for="mines-bet">Bet</label>
       <input type="number" id="mines-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="mines-bet" data-amt="1">+$1</button>
       <button class="chip-btn" data-max="1" data-target="mines-bet">Max</button>
     </div>
     <div class="mines-multiplier" id="mines-mult">1.00x</div>
-    <div class="game-readout" id="mines-readout">First pick safe: 88.0% - after 1 gem: 1.10x</div>
-    <div class="mines-grid" id="mines-grid"><div class="mine-tile disabled" data-i="0" style="--tile-i: 0;"></div><div class="mine-tile disabled" data-i="1" style="--tile-i: 1;"></div><div class="mine-tile disabled" data-i="2" style="--tile-i: 2;"></div><div class="mine-tile disabled" data-i="3" style="--tile-i: 3;"></div><div class="mine-tile disabled" data-i="4" style="--tile-i: 4;"></div><div class="mine-tile disabled" data-i="5" style="--tile-i: 5;"></div><div class="mine-tile disabled" data-i="6" style="--tile-i: 6;"></div><div class="mine-tile disabled" data-i="7" style="--tile-i: 7;"></div><div class="mine-tile disabled" data-i="8" style="--tile-i: 8;"></div><div class="mine-tile disabled" data-i="9" style="--tile-i: 9;"></div><div class="mine-tile disabled" data-i="10" style="--tile-i: 10;"></div><div class="mine-tile disabled" data-i="11" style="--tile-i: 11;"></div><div class="mine-tile disabled" data-i="12" style="--tile-i: 12;"></div><div class="mine-tile disabled" data-i="13" style="--tile-i: 13;"></div><div class="mine-tile disabled" data-i="14" style="--tile-i: 14;"></div><div class="mine-tile disabled" data-i="15" style="--tile-i: 15;"></div><div class="mine-tile disabled" data-i="16" style="--tile-i: 16;"></div><div class="mine-tile disabled" data-i="17" style="--tile-i: 17;"></div><div class="mine-tile disabled" data-i="18" style="--tile-i: 18;"></div><div class="mine-tile disabled" data-i="19" style="--tile-i: 19;"></div><div class="mine-tile disabled" data-i="20" style="--tile-i: 20;"></div><div class="mine-tile disabled" data-i="21" style="--tile-i: 21;"></div><div class="mine-tile disabled" data-i="22" style="--tile-i: 22;"></div><div class="mine-tile disabled" data-i="23" style="--tile-i: 23;"></div><div class="mine-tile disabled" data-i="24" style="--tile-i: 24;"></div></div>
+    <div class="game-readout" id="mines-readout">Start a round to see safe chance and payout.</div>
+    <div class="mines-grid" id="mines-grid"></div>
     <div class="mines-actions">
-      <button class="action-btn" id="mines-start-btn" data-autolock="">Start round</button>
-      <button class="action-btn cashout" id="mines-cashout-btn" disabled="">Cash out</button>
+      <button class="action-btn" id="mines-start-btn" data-autolock>Start round</button>
+      <button class="action-btn cashout" id="mines-cashout-btn" disabled>Cash out</button>
     </div>
     <div class="result-msg" id="mines-msg"></div>
   </div>
@@ -3655,9 +4055,9 @@
       <div class="beef-stats">
         <div class="beef-stat"><span>Step</span><b id="beef-step-stat">0 / 5</b></div>
         <div class="beef-stat"><span>Multiplier</span><b id="beef-mult-stat">1.00x</b></div>
-        <div class="beef-stat"><span>Next pass</span><b id="beef-prob-stat">95.0%</b></div>
+        <div class="beef-stat"><span>Next pass</span><b id="beef-prob-stat">95%</b></div>
       </div>
-      <div class="beef-road" id="beef-road" style="--cow-left: 7.00%;">
+      <div class="beef-road" id="beef-road">
         <div class="beef-sidewalk"></div>
         <div class="beef-hotdog"></div>
         <div class="beef-nosign"></div>
@@ -3669,16 +4069,16 @@
           <div class="beef-cow-leg a"></div>
           <div class="beef-cow-leg b"></div>
         </div>
-        <div class="beef-checkpoints" id="beef-checkpoints"><div class="beef-step">1.05x</div><div class="beef-step">1.15x</div><div class="beef-step">1.40x</div><div class="beef-step">2.00x</div><div class="beef-step">5.00x</div></div>
+        <div class="beef-checkpoints" id="beef-checkpoints"></div>
       </div>
     </div>
     <div class="game-readout" id="beef-readout">At the starting line. Go for 1.05x or wait for Jerry to judge you.</div>
     <div style="text-align:center; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
       <button class="action-btn" id="beef-go-btn">Go</button>
-      <button class="action-btn cashout" id="beef-bank-btn" disabled="">Bank</button>
+      <button class="action-btn cashout" id="beef-bank-btn" disabled>Bank</button>
     </div>
     <div class="result-msg" id="beef-msg"></div>
-    <div class="odds-table beef-odds" id="beef-odds"><div class="odds-row"><span>Step 1</span><b>95.0%</b><span class="odds-pay">1.05x reward</span></div><div class="odds-row"><span>Step 2</span><b>90.0%</b><span class="odds-pay">1.15x reward</span></div><div class="odds-row"><span>Step 3</span><b>80.0%</b><span class="odds-pay">1.40x reward</span></div><div class="odds-row"><span>Step 4</span><b>65.0%</b><span class="odds-pay">2.00x reward</span></div><div class="odds-row"><span>Step 5</span><b>45.0%</b><span class="odds-pay">5.00x reward</span></div></div>
+    <div class="odds-table beef-odds" id="beef-odds"></div>
   </div>
 
   <div class="game-card" id="keno">
@@ -3691,18 +4091,18 @@
       <button class="chip-btn" data-target="keno-bet" data-max="1">Max</button>
       <label for="keno-risk">Level</label>
       <select id="keno-risk">
-        <option value="low" selected="">Low</option>
+        <option value="low" selected>Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
       <button class="action-btn secondary" id="keno-quick-btn">Quick pick</button>
       <button class="action-btn secondary" id="keno-clear-btn">Clear</button>
     </div>
-    <div class="keno-grid" id="keno-grid"><button type="button" data-n="1" class="keno-num" style="--keno-i: 1;">1</button><button type="button" data-n="2" class="keno-num" style="--keno-i: 2;">2</button><button type="button" data-n="3" class="keno-num" style="--keno-i: 3;">3</button><button type="button" data-n="4" class="keno-num" style="--keno-i: 4;">4</button><button type="button" data-n="5" class="keno-num" style="--keno-i: 5;">5</button><button type="button" data-n="6" class="keno-num" style="--keno-i: 6;">6</button><button type="button" data-n="7" class="keno-num" style="--keno-i: 7;">7</button><button type="button" data-n="8" class="keno-num" style="--keno-i: 8;">8</button><button type="button" data-n="9" class="keno-num" style="--keno-i: 9;">9</button><button type="button" data-n="10" class="keno-num" style="--keno-i: 10;">10</button><button type="button" data-n="11" class="keno-num" style="--keno-i: 11;">11</button><button type="button" data-n="12" class="keno-num" style="--keno-i: 12;">12</button><button type="button" data-n="13" class="keno-num" style="--keno-i: 13;">13</button><button type="button" data-n="14" class="keno-num" style="--keno-i: 14;">14</button><button type="button" data-n="15" class="keno-num" style="--keno-i: 15;">15</button><button type="button" data-n="16" class="keno-num" style="--keno-i: 16;">16</button><button type="button" data-n="17" class="keno-num" style="--keno-i: 17;">17</button><button type="button" data-n="18" class="keno-num" style="--keno-i: 18;">18</button><button type="button" data-n="19" class="keno-num" style="--keno-i: 19;">19</button><button type="button" data-n="20" class="keno-num" style="--keno-i: 20;">20</button><button type="button" data-n="21" class="keno-num" style="--keno-i: 21;">21</button><button type="button" data-n="22" class="keno-num" style="--keno-i: 22;">22</button><button type="button" data-n="23" class="keno-num" style="--keno-i: 23;">23</button><button type="button" data-n="24" class="keno-num" style="--keno-i: 24;">24</button><button type="button" data-n="25" class="keno-num" style="--keno-i: 25;">25</button><button type="button" data-n="26" class="keno-num" style="--keno-i: 26;">26</button><button type="button" data-n="27" class="keno-num" style="--keno-i: 27;">27</button><button type="button" data-n="28" class="keno-num" style="--keno-i: 28;">28</button><button type="button" data-n="29" class="keno-num" style="--keno-i: 29;">29</button><button type="button" data-n="30" class="keno-num" style="--keno-i: 30;">30</button><button type="button" data-n="31" class="keno-num" style="--keno-i: 31;">31</button><button type="button" data-n="32" class="keno-num" style="--keno-i: 32;">32</button><button type="button" data-n="33" class="keno-num" style="--keno-i: 33;">33</button><button type="button" data-n="34" class="keno-num" style="--keno-i: 34;">34</button><button type="button" data-n="35" class="keno-num" style="--keno-i: 35;">35</button><button type="button" data-n="36" class="keno-num" style="--keno-i: 36;">36</button><button type="button" data-n="37" class="keno-num" style="--keno-i: 37;">37</button><button type="button" data-n="38" class="keno-num" style="--keno-i: 38;">38</button><button type="button" data-n="39" class="keno-num" style="--keno-i: 39;">39</button><button type="button" data-n="40" class="keno-num" style="--keno-i: 40;">40</button></div>
-    <div class="game-readout" id="keno-readout">0 picked - draw 10 - Low</div>
-    <div class="odds-table" id="keno-odds"><div class="odds-row"><span>Pick numbers</span><b>--</b><span class="odds-pay">Odds and payouts appear here.</span></div></div>
+    <div class="keno-grid" id="keno-grid"></div>
+    <div class="game-readout" id="keno-readout">0 picked - draw 10</div>
+    <div class="odds-table" id="keno-odds"></div>
     <div style="text-align:center;">
-      <button class="action-btn" id="keno-draw-btn" data-autolock="">Draw</button>
+      <button class="action-btn" id="keno-draw-btn" data-autolock>Draw</button>
     </div>
     <div class="result-msg" id="keno-msg"></div>
   </div>
@@ -3716,16 +4116,16 @@
       <button class="chip-btn" data-target="plinko-bet" data-amt="1">+$1</button>
       <button class="chip-btn" data-target="plinko-bet" data-max="1">Max</button>
       <label for="plinko-rows">Rows</label>
-      <select id="plinko-rows"><option>8</option><option selected="">12</option><option>16</option></select>
+      <select id="plinko-rows"><option>8</option><option selected>12</option><option>16</option></select>
       <label for="plinko-risk">Risk</label>
-      <select id="plinko-risk"><option value="low">Low</option><option value="medium" selected="">Medium</option><option value="high">High</option></select>
+      <select id="plinko-risk"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select>
     </div>
-    <div class="plinko-board" id="plinko-board"><div class="plinko-pegs"><div class="plinko-row" style="--peg-count: 1; --row-width: 8.333%;"><span class="plinko-peg path" data-row="0" data-col="0" style="--peg-row: 0; --peg-col: 0;"></span></div><div class="plinko-row" style="--peg-count: 2; --row-width: 16.667%;"><span class="plinko-peg" data-row="1" data-col="0" style="--peg-row: 1; --peg-col: 0;"></span><span class="plinko-peg path" data-row="1" data-col="1" style="--peg-row: 1; --peg-col: 1;"></span></div><div class="plinko-row" style="--peg-count: 3; --row-width: 25.000%;"><span class="plinko-peg" data-row="2" data-col="0" style="--peg-row: 2; --peg-col: 0;"></span><span class="plinko-peg" data-row="2" data-col="1" style="--peg-row: 2; --peg-col: 1;"></span><span class="plinko-peg path" data-row="2" data-col="2" style="--peg-row: 2; --peg-col: 2;"></span></div><div class="plinko-row" style="--peg-count: 4; --row-width: 33.333%;"><span class="plinko-peg" data-row="3" data-col="0" style="--peg-row: 3; --peg-col: 0;"></span><span class="plinko-peg" data-row="3" data-col="1" style="--peg-row: 3; --peg-col: 1;"></span><span class="plinko-peg path" data-row="3" data-col="2" style="--peg-row: 3; --peg-col: 2;"></span><span class="plinko-peg" data-row="3" data-col="3" style="--peg-row: 3; --peg-col: 3;"></span></div><div class="plinko-row" style="--peg-count: 5; --row-width: 41.667%;"><span class="plinko-peg" data-row="4" data-col="0" style="--peg-row: 4; --peg-col: 0;"></span><span class="plinko-peg" data-row="4" data-col="1" style="--peg-row: 4; --peg-col: 1;"></span><span class="plinko-peg" data-row="4" data-col="2" style="--peg-row: 4; --peg-col: 2;"></span><span class="plinko-peg path" data-row="4" data-col="3" style="--peg-row: 4; --peg-col: 3;"></span><span class="plinko-peg" data-row="4" data-col="4" style="--peg-row: 4; --peg-col: 4;"></span></div><div class="plinko-row" style="--peg-count: 6; --row-width: 50.000%;"><span class="plinko-peg" data-row="5" data-col="0" style="--peg-row: 5; --peg-col: 0;"></span><span class="plinko-peg" data-row="5" data-col="1" style="--peg-row: 5; --peg-col: 1;"></span><span class="plinko-peg" data-row="5" data-col="2" style="--peg-row: 5; --peg-col: 2;"></span><span class="plinko-peg" data-row="5" data-col="3" style="--peg-row: 5; --peg-col: 3;"></span><span class="plinko-peg path" data-row="5" data-col="4" style="--peg-row: 5; --peg-col: 4;"></span><span class="plinko-peg" data-row="5" data-col="5" style="--peg-row: 5; --peg-col: 5;"></span></div><div class="plinko-row" style="--peg-count: 7; --row-width: 58.333%;"><span class="plinko-peg" data-row="6" data-col="0" style="--peg-row: 6; --peg-col: 0;"></span><span class="plinko-peg" data-row="6" data-col="1" style="--peg-row: 6; --peg-col: 1;"></span><span class="plinko-peg" data-row="6" data-col="2" style="--peg-row: 6; --peg-col: 2;"></span><span class="plinko-peg" data-row="6" data-col="3" style="--peg-row: 6; --peg-col: 3;"></span><span class="plinko-peg" data-row="6" data-col="4" style="--peg-row: 6; --peg-col: 4;"></span><span class="plinko-peg path" data-row="6" data-col="5" style="--peg-row: 6; --peg-col: 5;"></span><span class="plinko-peg" data-row="6" data-col="6" style="--peg-row: 6; --peg-col: 6;"></span></div><div class="plinko-row" style="--peg-count: 8; --row-width: 66.667%;"><span class="plinko-peg" data-row="7" data-col="0" style="--peg-row: 7; --peg-col: 0;"></span><span class="plinko-peg" data-row="7" data-col="1" style="--peg-row: 7; --peg-col: 1;"></span><span class="plinko-peg" data-row="7" data-col="2" style="--peg-row: 7; --peg-col: 2;"></span><span class="plinko-peg" data-row="7" data-col="3" style="--peg-row: 7; --peg-col: 3;"></span><span class="plinko-peg" data-row="7" data-col="4" style="--peg-row: 7; --peg-col: 4;"></span><span class="plinko-peg" data-row="7" data-col="5" style="--peg-row: 7; --peg-col: 5;"></span><span class="plinko-peg path" data-row="7" data-col="6" style="--peg-row: 7; --peg-col: 6;"></span><span class="plinko-peg" data-row="7" data-col="7" style="--peg-row: 7; --peg-col: 7;"></span></div><div class="plinko-row" style="--peg-count: 9; --row-width: 75.000%;"><span class="plinko-peg" data-row="8" data-col="0" style="--peg-row: 8; --peg-col: 0;"></span><span class="plinko-peg" data-row="8" data-col="1" style="--peg-row: 8; --peg-col: 1;"></span><span class="plinko-peg" data-row="8" data-col="2" style="--peg-row: 8; --peg-col: 2;"></span><span class="plinko-peg" data-row="8" data-col="3" style="--peg-row: 8; --peg-col: 3;"></span><span class="plinko-peg" data-row="8" data-col="4" style="--peg-row: 8; --peg-col: 4;"></span><span class="plinko-peg" data-row="8" data-col="5" style="--peg-row: 8; --peg-col: 5;"></span><span class="plinko-peg" data-row="8" data-col="6" style="--peg-row: 8; --peg-col: 6;"></span><span class="plinko-peg path" data-row="8" data-col="7" style="--peg-row: 8; --peg-col: 7;"></span><span class="plinko-peg" data-row="8" data-col="8" style="--peg-row: 8; --peg-col: 8;"></span></div><div class="plinko-row" style="--peg-count: 10; --row-width: 83.333%;"><span class="plinko-peg" data-row="9" data-col="0" style="--peg-row: 9; --peg-col: 0;"></span><span class="plinko-peg" data-row="9" data-col="1" style="--peg-row: 9; --peg-col: 1;"></span><span class="plinko-peg" data-row="9" data-col="2" style="--peg-row: 9; --peg-col: 2;"></span><span class="plinko-peg" data-row="9" data-col="3" style="--peg-row: 9; --peg-col: 3;"></span><span class="plinko-peg" data-row="9" data-col="4" style="--peg-row: 9; --peg-col: 4;"></span><span class="plinko-peg" data-row="9" data-col="5" style="--peg-row: 9; --peg-col: 5;"></span><span class="plinko-peg" data-row="9" data-col="6" style="--peg-row: 9; --peg-col: 6;"></span><span class="plinko-peg path" data-row="9" data-col="7" style="--peg-row: 9; --peg-col: 7;"></span><span class="plinko-peg" data-row="9" data-col="8" style="--peg-row: 9; --peg-col: 8;"></span><span class="plinko-peg" data-row="9" data-col="9" style="--peg-row: 9; --peg-col: 9;"></span></div><div class="plinko-row" style="--peg-count: 11; --row-width: 91.667%;"><span class="plinko-peg" data-row="10" data-col="0" style="--peg-row: 10; --peg-col: 0;"></span><span class="plinko-peg" data-row="10" data-col="1" style="--peg-row: 10; --peg-col: 1;"></span><span class="plinko-peg" data-row="10" data-col="2" style="--peg-row: 10; --peg-col: 2;"></span><span class="plinko-peg" data-row="10" data-col="3" style="--peg-row: 10; --peg-col: 3;"></span><span class="plinko-peg" data-row="10" data-col="4" style="--peg-row: 10; --peg-col: 4;"></span><span class="plinko-peg" data-row="10" data-col="5" style="--peg-row: 10; --peg-col: 5;"></span><span class="plinko-peg" data-row="10" data-col="6" style="--peg-row: 10; --peg-col: 6;"></span><span class="plinko-peg" data-row="10" data-col="7" style="--peg-row: 10; --peg-col: 7;"></span><span class="plinko-peg path" data-row="10" data-col="8" style="--peg-row: 10; --peg-col: 8;"></span><span class="plinko-peg" data-row="10" data-col="9" style="--peg-row: 10; --peg-col: 9;"></span><span class="plinko-peg" data-row="10" data-col="10" style="--peg-row: 10; --peg-col: 10;"></span></div><div class="plinko-row" style="--peg-count: 12; --row-width: 100.000%;"><span class="plinko-peg" data-row="11" data-col="0" style="--peg-row: 11; --peg-col: 0;"></span><span class="plinko-peg" data-row="11" data-col="1" style="--peg-row: 11; --peg-col: 1;"></span><span class="plinko-peg" data-row="11" data-col="2" style="--peg-row: 11; --peg-col: 2;"></span><span class="plinko-peg" data-row="11" data-col="3" style="--peg-row: 11; --peg-col: 3;"></span><span class="plinko-peg" data-row="11" data-col="4" style="--peg-row: 11; --peg-col: 4;"></span><span class="plinko-peg" data-row="11" data-col="5" style="--peg-row: 11; --peg-col: 5;"></span><span class="plinko-peg" data-row="11" data-col="6" style="--peg-row: 11; --peg-col: 6;"></span><span class="plinko-peg" data-row="11" data-col="7" style="--peg-row: 11; --peg-col: 7;"></span><span class="plinko-peg path" data-row="11" data-col="8" style="--peg-row: 11; --peg-col: 8;"></span><span class="plinko-peg" data-row="11" data-col="9" style="--peg-row: 11; --peg-col: 9;"></span><span class="plinko-peg" data-row="11" data-col="10" style="--peg-row: 11; --peg-col: 10;"></span><span class="plinko-peg" data-row="11" data-col="11" style="--peg-row: 11; --peg-col: 11;"></span></div></div><div class="plinko-buckets" style="grid-template-columns: repeat(13, minmax(0px, 1fr));"><div class="plinko-bucket" data-slot="0">5.0x</div><div class="plinko-bucket" data-slot="1">3.0x</div><div class="plinko-bucket" data-slot="2">1.8x</div><div class="plinko-bucket" data-slot="3">1.3x</div><div class="plinko-bucket" data-slot="4">0.9x</div><div class="plinko-bucket" data-slot="5">0.6x</div><div class="plinko-bucket" data-slot="6">0.3x</div><div class="plinko-bucket" data-slot="7">0.6x</div><div class="plinko-bucket" data-slot="8">0.9x</div><div class="plinko-bucket hit" data-slot="9">1.3x</div><div class="plinko-bucket" data-slot="10">1.8x</div><div class="plinko-bucket" data-slot="11">3.0x</div><div class="plinko-bucket" data-slot="12">5.0x</div></div></div>
-    <div class="odds-table" id="plinko-odds"><div class="odds-row"><span>Slot 0</span><b>&lt;0.1%</b><span class="odds-pay">5.00x</span></div><div class="odds-row"><span>Slot 1</span><b>0.29%</b><span class="odds-pay">3.00x</span></div><div class="odds-row"><span>Slot 2</span><b>1.6%</b><span class="odds-pay">1.77x</span></div><div class="odds-row"><span>Slot 3</span><b>5.4%</b><span class="odds-pay">1.30x</span></div><div class="odds-row"><span>Slot 4</span><b>12.1%</b><span class="odds-pay">0.90x</span></div><div class="odds-row"><span>Slot 5</span><b>19.3%</b><span class="odds-pay">0.57x</span></div><div class="odds-row"><span>Slot 6</span><b>22.6%</b><span class="odds-pay">0.30x</span></div><div class="odds-row"><span>Slot 7</span><b>19.3%</b><span class="odds-pay">0.57x</span></div><div class="odds-row"><span>Slot 8</span><b>12.1%</b><span class="odds-pay">0.90x</span></div><div class="odds-row"><span>Slot 9</span><b>5.4%</b><span class="odds-pay">1.30x</span></div><div class="odds-row"><span>Slot 10</span><b>1.6%</b><span class="odds-pay">1.77x</span></div><div class="odds-row"><span>Slot 11</span><b>0.29%</b><span class="odds-pay">3.00x</span></div><div class="odds-row"><span>Slot 12</span><b>&lt;0.1%</b><span class="odds-pay">5.00x</span></div></div>
+    <div class="plinko-board" id="plinko-board"></div>
+    <div class="odds-table" id="plinko-odds"></div>
     <div style="text-align:center;">
-      <button class="action-btn" id="plinko-drop-btn" data-autolock="">Drop</button>
+      <button class="action-btn" id="plinko-drop-btn" data-autolock>Drop</button>
     </div>
-    <div class="result-msg win" id="plinko-msg"></div>
+    <div class="result-msg" id="plinko-msg"></div>
   </div>
 
   <div class="game-card" id="poker">
@@ -3739,11 +4139,11 @@
       <label for="poker-table">Table</label>
       <select id="poker-table"><option value="jacks">Jacks or better</option><option value="tens">Tens or better</option></select>
     </div>
-    <div class="hand-cards poker-hand" id="poker-hand"><div class="playing-card"><div class="card-center">?</div></div><div class="playing-card"><div class="card-center">?</div></div><div class="playing-card"><div class="card-center">?</div></div><div class="playing-card"><div class="card-center">?</div></div><div class="playing-card"><div class="card-center">?</div></div></div>
+    <div class="hand-cards poker-hand" id="poker-hand"></div>
     <div class="game-readout">Tap cards to hold before drawing.</div>
     <div style="text-align:center; display:flex; gap:0.75rem; justify-content:center;">
-      <button class="action-btn" id="poker-deal-btn" data-autolock="">Deal</button>
-      <button class="action-btn secondary" id="poker-draw-btn" disabled="">Draw</button>
+      <button class="action-btn" id="poker-deal-btn" data-autolock>Deal</button>
+      <button class="action-btn secondary" id="poker-draw-btn" disabled>Draw</button>
     </div>
     <div class="result-msg" id="poker-msg"></div>
     <div class="payout-table">Royal 250x - Straight flush 50x - Quads 25x - Full house 9x - Flush 6x - Straight 4x - Trips 3x - Two pair 2x - Pair pays by table</div>
@@ -3760,37 +4160,35 @@
       <button class="chip-btn" data-target="poplock-bet" data-max="1">Max</button>
       <label for="poplock-risk">Level</label>
       <select id="poplock-risk">
-        <option value="low" selected="">Low</option>
+        <option value="low" selected>Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
     </div>
     <div class="poplock-wrap">
-      <div class="poplock-jackpot"><span>progressive</span><b id="poplock-jackpot">$81.25</b></div>
+      <div class="poplock-jackpot"><span>progressive</span><b id="poplock-jackpot">$125.00</b></div>
       <div class="poplock-machine" id="poplock-machine">
         <svg class="poplock-dial" id="poplock-dial" viewBox="0 0 240 240" role="img" aria-label="Pop the Lock dial">
           <circle class="poplock-face" cx="120" cy="120" r="104"></circle>
           <circle class="poplock-inner" cx="120" cy="120" r="58"></circle>
-          <g id="poplock-ticks"><line x1="120.00" y1="33.00" x2="120.00" y2="19.00" class="poplock-tick major"></line><line x1="129.62" y1="28.50" x2="130.56" y2="19.55" class="poplock-tick"></line><line x1="139.13" y1="30.01" x2="141.00" y2="21.21" class="poplock-tick"></line><line x1="148.43" y1="32.50" x2="151.21" y2="23.94" class="poplock-tick"></line><line x1="157.42" y1="35.95" x2="161.08" y2="27.73" class="poplock-tick"></line><line x1="163.50" y1="44.66" x2="170.50" y2="32.53" class="poplock-tick major"></line><line x1="174.08" y1="45.57" x2="179.37" y2="38.29" class="poplock-tick"></line><line x1="181.56" y1="51.63" x2="187.58" y2="44.94" class="poplock-tick"></line><line x1="188.37" y1="58.44" x2="195.06" y2="52.42" class="poplock-tick"></line><line x1="194.43" y1="65.92" x2="201.71" y2="60.63" class="poplock-tick"></line><line x1="195.34" y1="76.50" x2="207.47" y2="69.50" class="poplock-tick major"></line><line x1="204.05" y1="82.58" x2="212.27" y2="78.92" class="poplock-tick"></line><line x1="207.50" y1="91.57" x2="216.06" y2="88.79" class="poplock-tick"></line><line x1="209.99" y1="100.87" x2="218.79" y2="99.00" class="poplock-tick"></line><line x1="211.50" y1="110.38" x2="220.45" y2="109.44" class="poplock-tick"></line><line x1="207.00" y1="120.00" x2="221.00" y2="120.00" class="poplock-tick major"></line><line x1="211.50" y1="129.62" x2="220.45" y2="130.56" class="poplock-tick"></line><line x1="209.99" y1="139.13" x2="218.79" y2="141.00" class="poplock-tick"></line><line x1="207.50" y1="148.43" x2="216.06" y2="151.21" class="poplock-tick"></line><line x1="204.05" y1="157.42" x2="212.27" y2="161.08" class="poplock-tick"></line><line x1="195.34" y1="163.50" x2="207.47" y2="170.50" class="poplock-tick major"></line><line x1="194.43" y1="174.08" x2="201.71" y2="179.37" class="poplock-tick"></line><line x1="188.37" y1="181.56" x2="195.06" y2="187.58" class="poplock-tick"></line><line x1="181.56" y1="188.37" x2="187.58" y2="195.06" class="poplock-tick"></line><line x1="174.08" y1="194.43" x2="179.37" y2="201.71" class="poplock-tick"></line><line x1="163.50" y1="195.34" x2="170.50" y2="207.47" class="poplock-tick major"></line><line x1="157.42" y1="204.05" x2="161.08" y2="212.27" class="poplock-tick"></line><line x1="148.43" y1="207.50" x2="151.21" y2="216.06" class="poplock-tick"></line><line x1="139.13" y1="209.99" x2="141.00" y2="218.79" class="poplock-tick"></line><line x1="129.62" y1="211.50" x2="130.56" y2="220.45" class="poplock-tick"></line><line x1="120.00" y1="207.00" x2="120.00" y2="221.00" class="poplock-tick major"></line><line x1="110.38" y1="211.50" x2="109.44" y2="220.45" class="poplock-tick"></line><line x1="100.87" y1="209.99" x2="99.00" y2="218.79" class="poplock-tick"></line><line x1="91.57" y1="207.50" x2="88.79" y2="216.06" class="poplock-tick"></line><line x1="82.58" y1="204.05" x2="78.92" y2="212.27" class="poplock-tick"></line><line x1="76.50" y1="195.34" x2="69.50" y2="207.47" class="poplock-tick major"></line><line x1="65.92" y1="194.43" x2="60.63" y2="201.71" class="poplock-tick"></line><line x1="58.44" y1="188.37" x2="52.42" y2="195.06" class="poplock-tick"></line><line x1="51.63" y1="181.56" x2="44.94" y2="187.58" class="poplock-tick"></line><line x1="45.57" y1="174.08" x2="38.29" y2="179.37" class="poplock-tick"></line><line x1="44.66" y1="163.50" x2="32.53" y2="170.50" class="poplock-tick major"></line><line x1="35.95" y1="157.42" x2="27.73" y2="161.08" class="poplock-tick"></line><line x1="32.50" y1="148.43" x2="23.94" y2="151.21" class="poplock-tick"></line><line x1="30.01" y1="139.13" x2="21.21" y2="141.00" class="poplock-tick"></line><line x1="28.50" y1="129.62" x2="19.55" y2="130.56" class="poplock-tick"></line><line x1="33.00" y1="120.00" x2="19.00" y2="120.00" class="poplock-tick major"></line><line x1="28.50" y1="110.38" x2="19.55" y2="109.44" class="poplock-tick"></line><line x1="30.01" y1="100.87" x2="21.21" y2="99.00" class="poplock-tick"></line><line x1="32.50" y1="91.57" x2="23.94" y2="88.79" class="poplock-tick"></line><line x1="35.95" y1="82.58" x2="27.73" y2="78.92" class="poplock-tick"></line><line x1="44.66" y1="76.50" x2="32.53" y2="69.50" class="poplock-tick major"></line><line x1="45.57" y1="65.92" x2="38.29" y2="60.63" class="poplock-tick"></line><line x1="51.63" y1="58.44" x2="44.94" y2="52.42" class="poplock-tick"></line><line x1="58.44" y1="51.63" x2="52.42" y2="44.94" class="poplock-tick"></line><line x1="65.92" y1="45.57" x2="60.63" y2="38.29" class="poplock-tick"></line><line x1="76.50" y1="44.66" x2="69.50" y2="32.53" class="poplock-tick major"></line><line x1="82.58" y1="35.95" x2="78.92" y2="27.73" class="poplock-tick"></line><line x1="91.57" y1="32.50" x2="88.79" y2="23.94" class="poplock-tick"></line><line x1="100.87" y1="30.01" x2="99.00" y2="21.21" class="poplock-tick"></line><line x1="110.38" y1="28.50" x2="109.44" y2="19.55" class="poplock-tick"></line></g>
+          <g id="poplock-ticks"></g>
           <g id="poplock-lit"></g>
-          <circle class="poplock-target" id="poplock-target" cx="64.01" cy="182.62" r="8"></circle>
-          <line class="poplock-swiper" id="poplock-swiper" x1="120" y1="120" x2="116.99" y2="206.95"></line>
+          <circle class="poplock-target" id="poplock-target" cx="120" cy="30" r="8"></circle>
+          <line class="poplock-swiper" id="poplock-swiper" x1="120" y1="120" x2="120" y2="36"></line>
           <circle class="poplock-center" cx="120" cy="120" r="42"></circle>
           <text class="poplock-center-text" id="poplock-center-text" x="120" y="112">PRESS</text>
           <text class="poplock-progress-text" id="poplock-progress-text" x="120" y="139">50</text>
         </svg>
       </div>
     </div>
-    <div class="game-readout" id="poplock-readout">Low - 50 locks left - window 13.0deg - speed 65deg/s clockwise - jackpot $81.25</div>
+    <div class="game-readout" id="poplock-readout">50 locks left - window 13.0deg - jackpot $125.00</div>
     <div class="poplock-button-row">
       <button class="action-btn" id="poplock-btn">Start</button>
       <span class="poplock-hotkey">Space hits - P cashes out</span>
     </div>
-    <div class="result-msg win" id="poplock-msg"></div>
+    <div class="result-msg" id="poplock-msg"></div>
     <div class="game-readout" id="poplock-level-readout">Low: 0.5x speed/payout - Medium: 1x speed/payout - High: 2x speed/payout</div>
   </div>
-
-</div>
 
 </div>
 
@@ -3808,7 +4206,7 @@
     </div>
     <button class="casino3d-exit" id="casino3d-exit">Exit 3D</button>
   </div>
-  <div class="casino3d-jerry-bubble" id="casino3d-jerry-bubble"></div>
+  <div class="casino3d-jerry-bubble" id="casino3d-jerry-bubble">Jerry comms connecting...</div>
   <div class="casino3d-prompt" id="casino3d-prompt"></div>
   <div class="casino3d-cash"><span>cash</span><b id="casino3d-cash-value">$10.00</b></div>
   <div class="casino3d-chat" id="casino3d-chat">
@@ -3832,14 +4230,16 @@
   </div>
 </div>
 
-<aside class="side-npc pop" id="side-npc" aria-live="polite">
+<aside class="side-npc" id="side-npc" aria-live="polite">
   <div class="npc-header">
-    <div class="npc-face" id="npc-face">&gt;:D</div>
+    <div class="npc-face" id="npc-face">:D</div>
     <div class="npc-name">Tip Jar Jerry</div>
     <button class="npc-hide" id="npc-hide-btn" title="Hide Jerry">x</button>
   </div>
   <div class="npc-bubble" id="npc-bubble"></div>
-  <div class="npc-chat-log" id="npc-chat-log"></div>
+  <div class="npc-chat-log" id="npc-chat-log">
+    <div class="npc-chat-line">Tip Jar Jerry, floor attendant. Ask fast, genius, I have compliance paperwork and a migraine.</div>
+  </div>
   <form class="npc-chat-form" id="npc-chat-form">
     <input id="npc-chat-input" autocomplete="off" placeholder="annoy Jerry">
     <button id="npc-chat-send">Send</button>
@@ -3850,7 +4250,7 @@
     <button class="no-tip" id="npc-no-tip-btn">No</button>
   </div>
 </aside>
-<button class="npc-peek" id="npc-peek-btn">Muted Jerry &gt;:D</button>
+<button class="npc-peek" id="npc-peek-btn">Jerry :D</button>
 
 <div class="donation-widget" id="donation-widget">
   <div class="donation-panel" id="donation-panel" aria-hidden="true">
@@ -3878,7 +4278,7 @@
   </button>
 </div>
 
-<aside class="cheat-panel hidden" id="cheat-panel">
+<aside class="cheat-panel" id="cheat-panel">
   <div class="cheat-top">
     <div class="cheat-title">Cheat mode</div>
     <div class="cheat-header-actions">
@@ -3892,9 +4292,9 @@
       <div class="cheat-field wide">
         <label>Slots next reels</label>
         <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.4rem;">
-          <select class="cheat-slot"><option value="">random</option><option value="CH">🍒 CH</option><option value="BL">🔔 BL</option><option value="GM">💎 GM</option><option value="7">7 7</option><option value="LM">🍋 LM</option><option value="ST">⭐ ST</option></select>
-          <select class="cheat-slot"><option value="">random</option><option value="CH">🍒 CH</option><option value="BL">🔔 BL</option><option value="GM">💎 GM</option><option value="7">7 7</option><option value="LM">🍋 LM</option><option value="ST">⭐ ST</option></select>
-          <select class="cheat-slot"><option value="">random</option><option value="CH">🍒 CH</option><option value="BL">🔔 BL</option><option value="GM">💎 GM</option><option value="7">7 7</option><option value="LM">🍋 LM</option><option value="ST">⭐ ST</option></select>
+          <select class="cheat-slot"><option value="">random</option></select>
+          <select class="cheat-slot"><option value="">random</option></select>
+          <select class="cheat-slot"><option value="">random</option></select>
         </div>
       </div>
       <div class="cheat-field">
@@ -3911,11 +4311,11 @@
       <div class="cheat-section-title">Cards</div>
       <div class="cheat-field">
         <label for="cheat-player-card">Your high card</label>
-        <select id="cheat-player-card"><option value="">random</option><option value="0">2</option><option value="1">3</option><option value="2">4</option><option value="3">5</option><option value="4">6</option><option value="5">7</option><option value="6">8</option><option value="7">9</option><option value="8">10</option><option value="9">J</option><option value="10">Q</option><option value="11">K</option><option value="12">A</option></select>
+        <select id="cheat-player-card"></select>
       </div>
       <div class="cheat-field">
         <label for="cheat-house-card">House high card</label>
-        <select id="cheat-house-card"><option value="">random</option><option value="0">2</option><option value="1">3</option><option value="2">4</option><option value="3">5</option><option value="4">6</option><option value="5">7</option><option value="6">8</option><option value="7">9</option><option value="8">10</option><option value="9">J</option><option value="10">Q</option><option value="11">K</option><option value="12">A</option></select>
+        <select id="cheat-house-card"></select>
       </div>
       <div class="cheat-field wide">
         <label for="cheat-bj-outcome">Blackjack setup</label>
@@ -3968,7 +4368,7 @@
     </div>
   </div>  <div class="cheat-readout" id="cheat-readout">Enable cheats to peek and force the next outcomes.</div>
 </aside>
-<button class="cheat-peek-btn show" id="cheat-peek-btn">Show cheats</button>
+<button class="cheat-peek-btn" id="cheat-peek-btn">Show cheats</button>
 
 <div class="broke-banner" id="broke-banner">
   <div class="broke-inner">
@@ -3982,7 +4382,7 @@
   Refreshing the page also resets your balance to $10.
 </footer>
 
-<script src="./The Velvet Chip - play money only_files/three.min.js.download"></script>
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <script type="importmap">
 {
   "imports": {
@@ -3995,7 +4395,7 @@ import { FBXLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/
 window.CasinoFBXLoader = FBXLoader;
 window.dispatchEvent(new Event('casino-fbx-loader-ready'));
 </script>
-<script src="./The Velvet Chip - play money only_files/nathan-fbx-data.js.download"></script>
+<script src="./nathan-fbx-data.js"></script>
 <script>
 /* ---------- theme ---------- */
 const themeToggle = document.getElementById('theme-toggle');
@@ -4015,8 +4415,7 @@ themeToggle.addEventListener('click', () => {
 
 /* ---------- balance ---------- */
 const BALANCE_STORAGE_KEY = 'velvet-chip-balance';
-const JERRY_GLOBAL_TIP_STORAGE_KEY = 'velvet-chip-jerry-global-tips';
-const JERRY_GLOBAL_TIP_EVENT_KEY = 'velvet-chip-jerry-global-tip-event';
+const JERRY_GLOBAL_TIP_API_URL = 'https://api.zixy.lol/jerrys-global-tip-jar.json';
 const JERRY_GLOBAL_TIP_CHANNEL = 'velvet-chip-jerry-global-tip-jar';
 let jerryGlobalTipChannel = null;
 try{
@@ -4035,20 +4434,29 @@ const balanceEl = document.getElementById('balance');
 const brokeBanner = document.getElementById('broke-banner');
 
 function fmt(n){ return '$' + n.toFixed(2); }
-function recordGlobalJerryTip(amount){
+async function recordGlobalJerryTip(amount){
   const clean = Math.round(parseFloat(amount) * 100) / 100;
   if(!Number.isFinite(clean) || clean <= 0) return;
+  const event = {
+    amount:clean,
+    source:'The Velvet Chip',
+    at:Date.now()
+  };
   try{
-    const current = parseFloat(localStorage.getItem(JERRY_GLOBAL_TIP_STORAGE_KEY)) || 0;
-    const event = {
-      amount:clean,
-      source:'The Velvet Chip',
-      at:Date.now()
-    };
-    localStorage.setItem(JERRY_GLOBAL_TIP_STORAGE_KEY, (current + clean).toFixed(2));
-    localStorage.setItem(JERRY_GLOBAL_TIP_EVENT_KEY, JSON.stringify(event));
+    const res = await fetch(JERRY_GLOBAL_TIP_API_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body:JSON.stringify({ amount:clean })
+    });
+    const data = await res.json();
+    if(!res.ok || data.ok === false) throw new Error(data.error || 'tip API returned ' + res.status);
+    event.total = data.jerryGlobalTips;
+    event.updatedAt = data.updatedAt;
+  } catch(err){
+    event.error = err.message;
+  } finally {
     if(jerryGlobalTipChannel) jerryGlobalTipChannel.postMessage(event);
-  } catch(err){}
+  }
 }
 function comb(n, k){
   if(k < 0 || k > n) return 0;
@@ -4268,67 +4676,6 @@ document.querySelectorAll('.donation-copy').forEach(btn => {
 document.addEventListener('click', (event) => {
   if(!donationWidget.contains(event.target)) donationSetOpen(false);
 });
-
-/* ---------- home screen ---------- */
-const HOME_PLACEHOLDER_IMG = "data:image/jpeg;base64,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plg2woft/uYcWxr81P0jUxw4FJf0e9QiQADbr9EbTT0rdiYGo1SGmUTldsr8qw4mlznBGEZXoRtoHF1bG9QBc2izlOeYhoa6fYYGNs7ldTtbyuad4nHCnzYzTjMJuylWq9x0sbHSh49jX/sTfgBwOB0fBGMkWt8wdC8w20T8eY8eF61uSXKcASZjBd6veIGPmtZ8ty5W7RrdVyS4CA8WZRW4ZPIvaI6s0jv/AGo8U1jhejupVVoKtDHMwSIEB2Lus2eqleRGlUDgdeorpwW6fJfExABq0W1KXmYZXxzuVMAoZsUfyMx04mWHFFX7SFkOrRSCj4395m7xY3hOWXqT0NWyjjOZTFMbTZm/aH3F2j3fojZ1sLV7fhaErO5rzdAvUUZF8wgSA90Ddf3VxAxwsBbX41EtHlP2TcAArVxRnpidGpeT19IKavOYxqjO/vDs8PUth9W4i5J5G2OP7lrfHzbZ2/qAOI+2LBhUaAbY9dmP0j2zkQ5dd9psIxgOKnv+4RTQA25qvnNfKHIKyUNn6peucXQT7MMUFtWq6cv2zAMwqOze78y8ap1viyCNzf0hP338SARzm39EoEbv3MC/aFt80fWFC9F7DPv+5mtrSAb5QtE7Y6KSn7S80hfnOKcUxLc3yXc4Xuk+j4mRQWeCbme+Y4OrYdBLcyvvqoAqQUrJ/Exf0r4j94W0Fnjbr/O5eXwwN5xq6uodKQTKfeLjEDgMmz+EFX052K0S7fADgDgPjdOImI+ZB7d2zb+YzKOettLaXjy9yzD6keR18ptDik2cDdK1CzfjMZeYxANNADzxLzp2q0aX6StBcYbB+UdLVqti6V9xASqA6u6Zff1mEZbYHB2H3GtcAKvhohYgKd//AGbwgLa//EYtzw1DaK8pn/uQNQXzy5znb8L/AP/aAAwDAQACAAMAAAAQ888888842z+Y8+888888888888884/5V6XkMR2i888888888884Iq4yF1Q1CND4Q8888888888I3OHY71zMBBgsc88888888s08BjAtfL5jug88888888888U8khNwckRKC+08888888888o88Qp7vurRL7c8888888884k88UHmncbEvs888888888s8888sPOrl+D4kA00888888yDhp0cvRFvINQQ2bA888884sQq9e8YFoFqCOqAqC08888sCamCe8d+c3gifRaGs0U8888scOoU0AGRkZGsRmNoc8888o88m0p0WV+DuRvF798oc888o88qGY+ejmyG6UZV88k8888s888UHDYoWnM4C3idQ08888o888MYUWWSybQQIHyI88888o88888K62nuDElWZ24c88888cAIgh+8pD+c5EuG5E888888sW6qpmQz0/XQsn2E88888888sukVw6KkHqWvqu88888888888uvXZXbdBAf8888888888888888gAcg8888888888//EAB8RAAMAAQUBAQEAAAAAAAAAAAABERAgITAxQFFBYf/aAAgBAwEBPxDggTTHIv4IEj8DY2xoUDGpoJvng8LFBIaF4iFGLbK8DJhG5RMvgaJlCX6PHTwPCYpRsXXjhBieVjQuR4WtkEM/BP7x9cC8iS6JHlYnGtO/G3YeZii656Blsta8Fc8sy9DdELluKMjIJ5XPBISPcfzE55cOiHSE6MQj4CuHxqif0gibQSays7D40LZjYjvPWbzXfcTR+bEq2FRo2KX3/wD/xAAgEQEAAgICAwEBAQAAAAAAAAABABEQITAxIEBBUWFx/9oACAECAQE/EOCpUrJXomEhDwr0DJqLLgx9C4Y69UcX4V6pgj6N4uDgj6DO/Al+iw9Czqdo7J08BWR143XAn2WwgwbMNVAPsAyeBwJMEPwgVhgWQBPkIeHXDSVB3npBZIo7iQ8K4xgfClgT+wWXL5WfYRVjqF4CVk5BDF1h/kIORzO1xhlQZQhBAwtc6IibFk227lDBM1D+cVDUaym34RNqYU19g2yqIv2P5Fg1uUikFcK1K+ke37EqAsR1oh2RQv7ClhYjZqG5qoCalBxJrUWmxHsGF3F+wdwAJrsjvcLG4dwqwA65EHuOlEBuBHcA97inzuG+4JvUH9gXXp1yf//EACoQAQEAAgICAQIGAwEBAQAAAAERACExQVFhcYGRECAwQKGxwdHw4fFQ/9oACAEBAAE/EP2onCfgzRf5uIMUfJ/+MYC4NA/fJglZ2n1xQFweGSMmE4XYAU/9w1A54JLq48RIiJudn9+sAW7qPgfzipJYI++KDIohUL4xmMgFFlm+ccY76cEqpZf33OjMtSAvziUZTSs++NhSE2Inj1m4+hiRzfU2j5/64SEN7xgFXk9Gc2TgVE5PX+Mp0egd6gX6zO0BZFJ85y88C8KLrF0mx5Ft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";
-const HOME_GAMES = [
-  { id:'slots', label:'Slots' },
-  { id:'dice', label:'Dice' },
-  { id:'cards', label:'High card' },
-  { id:'blackjack', label:'Blackjack' },
-  { id:'crash', label:'Crash' },
-  { id:'moneywheel', label:'Money wheel' },
-  { id:'roulette', label:'Roulette' },
-  { id:'skypilot', label:'Sky pilot' },
-  { id:'mines', label:'Mines' },
-  { id:'beef', label:'Beef' },
-  { id:'keno', label:'Keno' },
-  { id:'plinko', label:'Plinko' },
-  { id:'poker', label:'Poker' },
-  { id:'poplock', label:'Pop lock' }
-];
-const homeScreenEl = document.getElementById('home-screen');
-const gameScreenEl = document.getElementById('game-screen');
-const homeGridEl = document.getElementById('home-grid');
-
-function buildHomeGrid(){
-  homeGridEl.innerHTML = '';
-  HOME_GAMES.forEach(game => {
-    const tile = document.createElement('button');
-    tile.type = 'button';
-    tile.className = 'game-tile';
-    tile.dataset.tab = game.id;
-    tile.innerHTML =
-      '<span class="game-tile-img"><img src="' + HOME_PLACEHOLDER_IMG + '" alt=""></span>' +
-      '<span class="game-tile-name"><span>' + game.label + '</span></span>';
-    tile.addEventListener('click', (event) => {
-      const p = centerOf(tile);
-      tapRing(p.x, p.y);
-      burstParticles(p.x, p.y, 'win', 8);
-      if(typeof playSound === 'function') playSound('click');
-      showGameScreen(game.id);
-    });
-    homeGridEl.appendChild(tile);
-  });
-}
-
-function showHome(){
-  homeScreenEl.classList.remove('hidden');
-  gameScreenEl.classList.add('hidden');
-}
-
-function showGameScreen(id){
-  homeScreenEl.classList.add('hidden');
-  gameScreenEl.classList.remove('hidden');
-  activateGameById(id);
-  if(id === 'beef' && typeof renderBeef === 'function') renderBeef();
-}
-
-buildHomeGrid();
-showHome();
-
-document.getElementById('lobby-btn').addEventListener('click', showHome);
-document.getElementById('home-logo').addEventListener('click', showHome);
 
 /* ---------- tabs ---------- */
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -4810,6 +5157,10 @@ const casino3dMachines = [
   { id:'crash', label:'Crash', color:0x7cdb86, pos:[5.8,0,-4.2], rot:-0.25 },
   { id:'moneywheel', label:'Money Wheel', color:0xd4aa24, pos:[7.0,0,-1.1], rot:-1.35 },
   { id:'roulette', label:'Roulette', color:0xe2887a, pos:[-7.0,0,-1.1], rot:1.35 },
+  { id:'pinball', label:'Pinball', color:0xffd166, pos:[-7.2,0,-3.2], rot:1.25 },
+  { id:'baccarat', label:'Baccarat', color:0x7cdb86, pos:[7.2,0,-3.2], rot:-1.25 },
+  { id:'craps', label:'Craps', color:0x63d7ff, pos:[7.2,0,2.2], rot:-1.45 },
+  { id:'dragontower', label:'Dragon Tower', color:0x9d7cff, pos:[-7.2,0,2.2], rot:1.45 },
   { id:'skypilot', label:'Sky Pilot', color:0x63d7ff, pos:[-6.7,0,0.9], rot:1.25 },
   { id:'mines', label:'Mines', color:0x63d7ff, pos:[6.6,0,0.7], rot:-1.25 },
   { id:'beef', label:'Beef', color:0xff8a4a, pos:[5.2,0,3.5], rot:-2.45 },
@@ -5784,6 +6135,102 @@ document.getElementById('deal-btn').addEventListener('click', function(){
   }, 500);
 });
 
+/* ---------- baccarat ---------- */
+let baccaratPick = 'player';
+document.querySelectorAll('.baccarat-pick').forEach(btn => {
+  btn.addEventListener('click', () => {
+    playSound('select');
+    baccaratPick = btn.dataset.baccaratBet;
+    document.querySelectorAll('.baccarat-pick').forEach(b => b.classList.toggle('active', b === btn));
+  });
+});
+function baccaratCard(){
+  return drawCard('');
+}
+function baccaratCardValue(card){
+  if(card.rank === 'A') return 1;
+  if(['10','J','Q','K'].includes(card.rank)) return 0;
+  return parseInt(card.rank, 10);
+}
+function baccaratTotal(hand){
+  return hand.reduce((sum, card) => sum + baccaratCardValue(card), 0) % 10;
+}
+function baccaratRenderHand(id, hand){
+  const el = document.getElementById(id + '-cards');
+  el.innerHTML = '';
+  hand.forEach(card => el.appendChild(makeCardEl(card, { small:true })));
+  document.getElementById(id + '-total').textContent = 'total: ' + baccaratTotal(hand);
+}
+function baccaratDrawsBanker(bankerTotal, playerThirdValue){
+  if(playerThirdValue === null) return bankerTotal <= 5;
+  if(bankerTotal <= 2) return true;
+  if(bankerTotal === 3) return playerThirdValue !== 8;
+  if(bankerTotal === 4) return playerThirdValue >= 2 && playerThirdValue <= 7;
+  if(bankerTotal === 5) return playerThirdValue >= 4 && playerThirdValue <= 7;
+  if(bankerTotal === 6) return playerThirdValue === 6 || playerThirdValue === 7;
+  return false;
+}
+function baccaratResetCards(){
+  ['baccarat-player', 'baccarat-banker'].forEach(id => {
+    const el = document.getElementById(id + '-cards');
+    el.innerHTML = '';
+    for(let i=0; i<2; i++) el.appendChild(makeCardEl(null, { small:true }));
+    document.getElementById(id + '-total').textContent = 'total: --';
+  });
+}
+baccaratResetCards();
+document.getElementById('baccarat-deal-btn').addEventListener('click', function(){
+  const bet = getBet('baccarat-bet', 'baccarat-msg');
+  if(bet === null) return;
+  const btn = this;
+  btn.disabled = true;
+  playSound('card');
+  setBalance(balance - bet);
+  baccaratResetCards();
+  const msg = document.getElementById('baccarat-msg');
+  msg.textContent = 'Dealing ' + baccaratPick + '...';
+  msg.className = 'result-msg';
+  setTimeout(() => {
+    const player = [baccaratCard(), baccaratCard()];
+    const banker = [baccaratCard(), baccaratCard()];
+    let playerTotal = baccaratTotal(player);
+    let bankerTotal = baccaratTotal(banker);
+    let playerThirdValue = null;
+    if(playerTotal < 8 && bankerTotal < 8){
+      if(playerTotal <= 5){
+        const third = baccaratCard();
+        player.push(third);
+        playerThirdValue = baccaratCardValue(third);
+        playerTotal = baccaratTotal(player);
+      }
+      if(baccaratDrawsBanker(bankerTotal, playerThirdValue)){
+        banker.push(baccaratCard());
+        bankerTotal = baccaratTotal(banker);
+      }
+    }
+    baccaratRenderHand('baccarat-player', player);
+    baccaratRenderHand('baccarat-banker', banker);
+    const winner = playerTotal === bankerTotal ? 'tie' : (playerTotal > bankerTotal ? 'player' : 'banker');
+    let payout = 0;
+    let win = false;
+    if(winner === baccaratPick){
+      payout = bet * (winner === 'tie' ? 9 : winner === 'banker' ? 1.95 : 2);
+      win = true;
+      msg.textContent = winner.toUpperCase() + ' wins ' + playerTotal + '-' + bankerTotal + '. Paid ' + fmt(payout) + '.';
+      msg.className = 'result-msg win';
+    } else if(winner === 'tie' && baccaratPick !== 'tie'){
+      payout = bet;
+      msg.textContent = 'Tie ' + playerTotal + '-' + bankerTotal + '. Player/Banker pushes; bet returned.';
+      msg.className = 'result-msg';
+    } else {
+      msg.textContent = winner.toUpperCase() + ' wins ' + playerTotal + '-' + bankerTotal + '. Paid 0x.';
+      msg.className = 'result-msg lose';
+    }
+    awardPayout(payout, 'baccarat', win);
+    btn.disabled = balance <= 0;
+  }, 520);
+});
+
 /* ---------- blackjack ---------- */
 const BJ_RANKS = [
   {label:'2',value:2},{label:'3',value:3},{label:'4',value:4},{label:'5',value:5},
@@ -6269,24 +6716,8 @@ function rouletteWins(bet, result){
   if(bet.type === 'parity') return bet.value === 'even' ? result % 2 === 0 : result % 2 === 1;
   return bet.value === 'low' ? result >= 1 && result <= 18 : result >= 19 && result <= 36;
 }
-function rouletteWedgeColor(num){
-  if(num === 0) return '#174f3c';
-  return rouletteColor(num) === 'red' ? '#6b1e2a' : '#241a10';
-}
-function buildRouletteWheelBackground(){
-  const n = ROULETTE_WHEEL_ORDER.length;
-  const slice = 360 / n;
-  const stops = ROULETTE_WHEEL_ORDER.map((num, i) => {
-    const start = (i * slice).toFixed(3);
-    const end = ((i + 1) * slice).toFixed(3);
-    return rouletteWedgeColor(num) + ' ' + start + 'deg ' + end + 'deg';
-  }).join(', ');
-  return 'radial-gradient(circle, transparent 0 34%, rgba(36,26,16,0.95) 34.5% 42%, transparent 42.5%), ' +
-    'conic-gradient(from -' + (slice / 2).toFixed(3) + 'deg, ' + stops + ')';
-}
 function renderRouletteWheel(){
   rouletteWheelEl.innerHTML = '';
-  rouletteWheelEl.style.background = buildRouletteWheelBackground();
   const slice = 360 / ROULETTE_WHEEL_ORDER.length;
   ROULETTE_WHEEL_ORDER.forEach((num, i) => {
     const pocket = document.createElement('span');
@@ -6412,6 +6843,351 @@ rouletteSpinBtn.addEventListener('click', function(){
 renderRouletteWheel();
 renderRouletteBoard();
 updateRouletteSelection();
+
+/* ---------- pinball ---------- */
+const pinballCabinet = document.getElementById('pinball-cabinet');
+const pinballBall = document.getElementById('pinball-ball');
+const pinballLaunchBtn = document.getElementById('pinball-launch-btn');
+const pinballScoreEl = document.getElementById('pinball-score');
+const pinballMultEl = document.getElementById('pinball-mult');
+const pinballBestEl = document.getElementById('pinball-best');
+const pinballMsg = document.getElementById('pinball-msg');
+const PINBALL_SPOTS = {
+  launch:[338,424],
+  A:[102,122],
+  B:[270,166],
+  C:[166,266],
+  left:[82,384],
+  right:[246,384],
+  jackpot:[196,72],
+  drain:[186,466]
+};
+function pinballMoveBall(name){
+  const spot = PINBALL_SPOTS[name] || PINBALL_SPOTS.launch;
+  pinballBall.style.left = spot[0] + 'px';
+  pinballBall.style.top = spot[1] + 'px';
+}
+function pinballSetScore(score, best){
+  pinballScoreEl.textContent = score;
+  pinballMultEl.textContent = (score / 760).toFixed(2) + 'x';
+  pinballBestEl.textContent = best || 'Ready';
+}
+pinballSetScore(0);
+pinballMoveBall('launch');
+pinballLaunchBtn.addEventListener('click', function(){
+  const bet = getBet('pinball-bet', 'pinball-msg');
+  if(bet === null) return;
+  this.disabled = true;
+  setBalance(balance - bet);
+  playSound('click');
+  pinballCabinet.classList.remove('launching');
+  void pinballCabinet.offsetWidth;
+  pinballCabinet.classList.add('launching');
+  pinballMsg.textContent = 'Ball launched...';
+  pinballMsg.className = 'result-msg';
+  pinballSetScore(0, 'Launching');
+  pinballMoveBall('launch');
+  const eventCount = 7 + Math.floor(Math.random() * 8);
+  const events = [];
+  for(let i=0; i<eventCount; i++){
+    const roll = Math.random();
+    if(roll < 0.16) events.push({ name:'jackpot', label:'Jackpot lane', score:520 });
+    else if(roll < 0.58) {
+      const bumper = ['A','B','C'][Math.floor(Math.random() * 3)];
+      events.push({ name:bumper, label:'Bumper ' + bumper, score:120 + Math.floor(Math.random() * 120) });
+    } else {
+      const lane = Math.random() < 0.5 ? 'left' : 'right';
+      events.push({ name:lane, label:lane === 'left' ? 'Left lane' : 'Right lane', score:80 + Math.floor(Math.random() * 90) });
+    }
+  }
+  if(Math.random() < 0.22) events.push({ name:'drain', label:'Fast drain', score:-120 });
+  let score = 0;
+  let best = 'None';
+  let step = 0;
+  const run = setInterval(() => {
+    const event = events[step];
+    pinballMoveBall(event.name);
+    document.querySelectorAll('.pinball-bumper').forEach(b => b.classList.remove('hit'));
+    if(['A','B','C'].includes(event.name)){
+      const bumper = document.querySelector('[data-pinball-bumper="' + event.name + '"]');
+      bumper.classList.add('hit');
+    }
+    playSound(event.name === 'drain' ? 'lose' : event.name === 'jackpot' ? 'gem' : 'tick');
+    score = Math.max(0, score + event.score);
+    if(event.score > 0 && (best === 'None' || event.score >= 220 || event.name === 'jackpot')) best = event.label;
+    pinballSetScore(score, event.label);
+    pinballMsg.textContent = event.label + ' for ' + (event.score > 0 ? '+' : '') + event.score + ' points.';
+    step++;
+    if(step >= events.length){
+      clearInterval(run);
+      setTimeout(() => {
+        pinballMoveBall('drain');
+        const mult = Math.round((score / 760) * 100) / 100;
+        const payout = Math.round(bet * mult * 100) / 100;
+        pinballSetScore(score, best);
+        if(payout > bet){
+          pinballMsg.textContent = 'Final score ' + score + '. Paid ' + fmt(payout) + ' (' + mult.toFixed(2) + 'x).';
+          pinballMsg.className = 'result-msg win';
+          awardPayout(payout, 'pinball', true);
+        } else if(payout > 0){
+          pinballMsg.textContent = 'Final score ' + score + '. Small save paid ' + fmt(payout) + ' (' + mult.toFixed(2) + 'x).';
+          pinballMsg.className = 'result-msg lose';
+          awardPayout(payout, 'pinball', false);
+        } else {
+          pinballMsg.textContent = 'Straight down the drain. Paid 0x.';
+          pinballMsg.className = 'result-msg lose';
+          awardPayout(0, 'pinball', false);
+        }
+        pinballLaunchBtn.disabled = balance <= 0;
+      }, 320);
+    }
+  }, 310);
+});
+
+/* ---------- craps ---------- */
+let crapsPick = 'pass';
+let crapsPoint = null;
+let crapsActiveBet = 0;
+let crapsActivePick = '';
+const crapsBetNames = {
+  pass:'Pass Line',
+  dont:"Don't Pass",
+  field:'Field',
+  any7:'Any 7',
+  hard4:'Hard 4',
+  hard10:'Hard 10'
+};
+function crapsUpdateUi(){
+  document.getElementById('craps-bet-label').textContent = crapsActivePick ? crapsBetNames[crapsActivePick] : crapsBetNames[crapsPick];
+  document.getElementById('craps-point-label').textContent = crapsPoint ? 'point: ' + crapsPoint : 'point: off';
+  document.querySelectorAll('.craps-bet').forEach(btn => btn.classList.toggle('active', btn.dataset.crapsBet === crapsPick));
+}
+document.querySelectorAll('.craps-bet').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if(crapsActiveBet > 0) return;
+    playSound('select');
+    crapsPick = btn.dataset.crapsBet;
+    crapsUpdateUi();
+  });
+});
+function crapsRollDie(){
+  return 1 + Math.floor(Math.random() * 6);
+}
+function crapsFinish(payout, text, win){
+  crapsPoint = null;
+  crapsActiveBet = 0;
+  crapsActivePick = '';
+  const msg = document.getElementById('craps-msg');
+  msg.textContent = text;
+  msg.className = 'result-msg ' + (win ? 'win' : payout > 0 ? '' : 'lose');
+  awardPayout(payout, 'craps', win);
+  crapsUpdateUi();
+}
+function crapsSetPoint(point, text){
+  crapsPoint = point;
+  const msg = document.getElementById('craps-msg');
+  msg.textContent = text;
+  msg.className = 'result-msg';
+  crapsUpdateUi();
+}
+document.getElementById('craps-roll-btn').addEventListener('click', function(){
+  const btn = this;
+  if(crapsActiveBet <= 0){
+    const bet = getBet('craps-bet', 'craps-msg');
+    if(bet === null) return;
+    crapsActiveBet = bet;
+    crapsActivePick = crapsPick;
+    setBalance(balance - bet);
+  }
+  btn.disabled = true;
+  playSound('click');
+  const dieA = document.getElementById('craps-die-a');
+  const dieB = document.getElementById('craps-die-b');
+  dieA.classList.add('rolling');
+  dieB.classList.add('rolling');
+  let ticks = 0;
+  const shaker = setInterval(() => {
+    dieA.textContent = crapsRollDie();
+    dieB.textContent = crapsRollDie();
+    ticks++;
+    if(ticks > 12){
+      clearInterval(shaker);
+      dieA.classList.remove('rolling');
+      dieB.classList.remove('rolling');
+      const a = crapsRollDie();
+      const b = crapsRollDie();
+      const sum = a + b;
+      dieA.textContent = a;
+      dieB.textContent = b;
+      const bet = crapsActiveBet;
+      const pick = crapsActivePick;
+      const prefix = 'Rolled ' + a + ' + ' + b + ' = ' + sum + '. ';
+      if(pick === 'field'){
+        if(sum === 2 || sum === 12) crapsFinish(bet * 3, prefix + 'Field hits big. Paid ' + fmt(bet * 3) + '.', true);
+        else if([3,4,9,10,11].includes(sum)) crapsFinish(bet * 2, prefix + 'Field hits. Paid ' + fmt(bet * 2) + '.', true);
+        else crapsFinish(0, prefix + 'Field loses.', false);
+      } else if(pick === 'any7'){
+        sum === 7 ? crapsFinish(bet * 5, prefix + 'Any 7 hits. Paid ' + fmt(bet * 5) + '.', true) : crapsFinish(0, prefix + 'Any 7 misses.', false);
+      } else if(pick === 'hard4'){
+        a === 2 && b === 2 ? crapsFinish(bet * 8, prefix + 'Hard 4. Paid ' + fmt(bet * 8) + '.', true) : crapsFinish(0, prefix + 'No hard 4.', false);
+      } else if(pick === 'hard10'){
+        a === 5 && b === 5 ? crapsFinish(bet * 8, prefix + 'Hard 10. Paid ' + fmt(bet * 8) + '.', true) : crapsFinish(0, prefix + 'No hard 10.', false);
+      } else if(!crapsPoint){
+        if(pick === 'pass'){
+          if(sum === 7 || sum === 11) crapsFinish(bet * 2, prefix + 'Pass Line wins. Paid ' + fmt(bet * 2) + '.', true);
+          else if([2,3,12].includes(sum)) crapsFinish(0, prefix + 'Pass Line craps out.', false);
+          else crapsSetPoint(sum, prefix + 'Point is ' + sum + '. Roll the point before 7.');
+        } else {
+          if(sum === 2 || sum === 3) crapsFinish(bet * 2, prefix + "Don't Pass wins. Paid " + fmt(bet * 2) + '.', true);
+          else if(sum === 12) crapsFinish(bet, prefix + "Don't Pass pushes on 12. Bet returned.", false);
+          else if(sum === 7 || sum === 11) crapsFinish(0, prefix + "Don't Pass loses.", false);
+          else crapsSetPoint(sum, prefix + 'Point is ' + sum + ". Don't Pass wants 7 first.");
+        }
+      } else if(pick === 'pass'){
+        if(sum === crapsPoint) crapsFinish(bet * 2, prefix + 'Point made. Paid ' + fmt(bet * 2) + '.', true);
+        else if(sum === 7) crapsFinish(0, prefix + 'Seven out. Pass Line loses.', false);
+        else {
+          const msg = document.getElementById('craps-msg');
+          msg.textContent = prefix + 'Point is still ' + crapsPoint + '. Roll again.';
+          msg.className = 'result-msg';
+        }
+      } else {
+        if(sum === 7) crapsFinish(bet * 2, prefix + "Seven out. Don't Pass paid " + fmt(bet * 2) + '.', true);
+        else if(sum === crapsPoint) crapsFinish(0, prefix + "Point made. Don't Pass loses.", false);
+        else {
+          const msg = document.getElementById('craps-msg');
+          msg.textContent = prefix + 'Point is still ' + crapsPoint + '. Roll again.';
+          msg.className = 'result-msg';
+        }
+      }
+      btn.disabled = balance <= 0 && crapsActiveBet <= 0;
+    }
+  }, 55);
+});
+crapsUpdateUi();
+
+/* ---------- dragon tower ---------- */
+const DRAGON_ROWS = 7;
+const DRAGON_COLS = 4;
+let dragonActive = false;
+let dragonBet = 0;
+let dragonRow = 0;
+let dragonTraps = [];
+let dragonSafePicks = [];
+const dragonTower = document.getElementById('dragon-tower');
+const dragonStartBtn = document.getElementById('dragon-start-btn');
+const dragonCashoutBtn = document.getElementById('dragon-cashout-btn');
+const dragonMsg = document.getElementById('dragon-msg');
+function dragonMultFor(steps){
+  return steps <= 0 ? 1 : Math.round(Math.pow(1.36, steps) * 100) / 100;
+}
+function dragonCurrentPayout(){
+  return Math.round(dragonBet * dragonMultFor(dragonRow) * 100) / 100;
+}
+function dragonBuild(){
+  dragonTower.innerHTML = '';
+  for(let row=DRAGON_ROWS - 1; row>=0; row--){
+    const rowEl = document.createElement('div');
+    rowEl.className = 'dragon-row';
+    rowEl.dataset.dragonRow = row;
+    for(let col=0; col<DRAGON_COLS; col++){
+      const tile = document.createElement('button');
+      tile.className = 'dragon-tile locked';
+      tile.type = 'button';
+      tile.textContent = '?';
+      tile.dataset.row = row;
+      tile.dataset.col = col;
+      tile.addEventListener('click', dragonPickTile);
+      rowEl.appendChild(tile);
+    }
+    dragonTower.appendChild(rowEl);
+  }
+}
+function dragonRender(revealAll){
+  document.querySelectorAll('.dragon-row').forEach(rowEl => {
+    const row = parseInt(rowEl.dataset.dragonRow, 10);
+    rowEl.classList.toggle('current', dragonActive && row === dragonRow);
+  });
+  document.querySelectorAll('.dragon-tile').forEach(tile => {
+    const row = parseInt(tile.dataset.row, 10);
+    const col = parseInt(tile.dataset.col, 10);
+    const pickedSafe = dragonSafePicks[row] === col;
+    const trap = dragonTraps[row] === col;
+    tile.disabled = !dragonActive || row !== dragonRow;
+    tile.className = 'dragon-tile';
+    if(!dragonActive || row !== dragonRow) tile.classList.add('locked');
+    if(pickedSafe){
+      tile.classList.add('safe');
+      tile.textContent = 'OK';
+    } else if(revealAll && trap){
+      tile.classList.add('trap');
+      tile.textContent = 'X';
+    } else {
+      tile.textContent = '?';
+    }
+  });
+  document.getElementById('dragon-row-stat').textContent = dragonRow + ' / ' + DRAGON_ROWS;
+  document.getElementById('dragon-mult-stat').textContent = dragonMultFor(dragonRow).toFixed(2) + 'x';
+  document.getElementById('dragon-cash-stat').textContent = dragonRow > 0 ? fmt(dragonCurrentPayout()) : '$0.00';
+  dragonCashoutBtn.disabled = !dragonActive || dragonRow <= 0;
+  dragonStartBtn.disabled = dragonActive || balance <= 0;
+}
+function dragonStart(){
+  const bet = getBet('dragon-bet', 'dragon-msg');
+  if(bet === null) return;
+  dragonActive = true;
+  dragonBet = bet;
+  dragonRow = 0;
+  dragonSafePicks = Array(DRAGON_ROWS).fill(null);
+  dragonTraps = Array.from({ length:DRAGON_ROWS }, () => Math.floor(Math.random() * DRAGON_COLS));
+  setBalance(balance - bet);
+  playSound('click');
+  dragonMsg.textContent = 'Climb started. Pick one button on the bottom row.';
+  dragonMsg.className = 'result-msg';
+  dragonRender(false);
+}
+function dragonEnd(payout, text, win){
+  dragonActive = false;
+  dragonMsg.textContent = text;
+  dragonMsg.className = 'result-msg ' + (win ? 'win' : 'lose');
+  awardPayout(payout, 'dragon tower', win);
+  dragonRender(true);
+}
+function dragonPickTile(event){
+  if(!dragonActive) return;
+  const tile = event.currentTarget;
+  const row = parseInt(tile.dataset.row, 10);
+  const col = parseInt(tile.dataset.col, 10);
+  if(row !== dragonRow) return;
+  if(col === dragonTraps[row]){
+    playSound('lose');
+    tile.classList.add('trap');
+    tile.textContent = 'X';
+    dragonEnd(0, 'Trap on row ' + (row + 1) + '. The tower keeps the bet.', false);
+    return;
+  }
+  playSound('gem');
+  dragonSafePicks[row] = col;
+  dragonRow++;
+  if(dragonRow >= DRAGON_ROWS){
+    const payout = dragonCurrentPayout();
+    dragonEnd(payout, 'Tower cleared. Paid ' + fmt(payout) + ' (' + dragonMultFor(DRAGON_ROWS).toFixed(2) + 'x).', true);
+    moneyRain(30);
+    return;
+  }
+  dragonMsg.textContent = 'Safe. Row ' + dragonRow + ' cleared; cash out for ' + fmt(dragonCurrentPayout()) + ' or climb again.';
+  dragonMsg.className = 'result-msg win';
+  dragonRender(false);
+}
+dragonStartBtn.addEventListener('click', dragonStart);
+dragonCashoutBtn.addEventListener('click', function(){
+  if(!dragonActive || dragonRow <= 0) return;
+  const payout = dragonCurrentPayout();
+  playSound('cash');
+  dragonEnd(payout, 'Cashed out on row ' + dragonRow + ' for ' + fmt(payout) + ' (' + dragonMultFor(dragonRow).toFixed(2) + 'x).', true);
+});
+dragonBuild();
+dragonRender(false);
 
 /* ---------- sky pilot ---------- */
 const skyStage = document.getElementById('sky-stage');
@@ -7766,7 +8542,5 @@ document.getElementById('poker-draw-btn').addEventListener('click', function(){
 });
 renderPoker();
 </script>
-<script defer="" src="./The Velvet Chip - play money only_files/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;a05c653e36fa47d0a7a312ee7aac99c9&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
-
-
-</body></html>
+</body>
+</html>
