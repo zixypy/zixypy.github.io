@@ -3711,7 +3711,7 @@
   .heartbeat-monitor::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg,transparent 0 28px,rgba(99,215,255,.08) 29px 30px),repeating-linear-gradient(90deg,transparent 0 38px,rgba(99,215,255,.06) 39px 40px); }
   .heartbeat-wave{ position:absolute; left:0; top:50%; width:200%; height:3px; background:#65e6cf; box-shadow:0 0 12px #65e6cf; transform:translateY(-50%); }
   .heartbeat-wave::before{ content:''; position:absolute; left:0; top:-47px; width:100%; height:94px; background:repeating-linear-gradient(90deg,transparent 0 58px,#65e6cf 59px 61px,transparent 62px 68px); clip-path:polygon(0 50%,4% 50%,5% 0,6% 100%,7% 32%,8% 50%,100% 50%); filter:drop-shadow(0 0 5px #65e6cf); }
-  .heartbeat-target{ position:absolute; left:50%; top:10px; bottom:10px; width:38px; transform:translateX(-50%); border-inline:1px dashed #ffd166; background:rgba(255,209,102,.08); }
+  .heartbeat-target{ position:absolute; left:50%; top:10px; bottom:10px; width:26%; min-width:70px; transform:translateX(-50%); border-inline:1px dashed #ffd166; background:rgba(255,209,102,.08); }
   .heartbeat-needle{ position:absolute; top:0; bottom:0; left:0; width:4px; background:#ff6f61; box-shadow:0 0 16px #ff6f61; }
   .heartbeat-pulse{ position:absolute; left:50%; top:50%; width:34px; height:34px; margin:-17px; border-radius:50%; border:2px solid rgba(255,209,102,.9); opacity:.22; }
   .heartbeat-monitor.beat .heartbeat-pulse{ animation:heart-pulse .34s ease; }
@@ -3727,15 +3727,51 @@
   .orbit-field{ height:310px; position:relative; overflow:hidden; border-radius:12px; border:1px solid rgba(157,124,255,.48); background:radial-gradient(circle at 20% 25%,#fff 0 1px,transparent 2px),radial-gradient(circle at 72% 72%,#fff 0 1px,transparent 2px),radial-gradient(circle at 46% 16%,#fff 0 1px,transparent 2px),radial-gradient(circle at center,#1b1230 0,#070913 73%); }
   .orbit-track{ position:absolute; inset:0; width:100%; height:100%; }.orbit-track polyline{ fill:none; stroke:rgba(157,124,255,.5); stroke-width:2; }
   .orbit-sun{ position:absolute; left:50%; top:50%; width:74px; height:74px; margin:-37px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#fff6ad,#ffbf4c 39%,#e45d24 72%); box-shadow:0 0 25px #ffb74d,0 0 70px rgba(241,108,46,.55); }
-  .orbit-satellite{ position:absolute; width:15px; height:15px; margin:-7px; border-radius:50%; background:#cdeeff; box-shadow:0 0 14px #63d7ff; z-index:2; }.orbit-satellite::after{ content:''; position:absolute; width:25px; height:5px; left:-5px; top:5px; border-inline:5px solid #9d7cff; }
+  .orbit-satellite{ position:absolute; left:50%; top:30.78%; width:15px; height:15px; margin:-7px; border-radius:50%; background:#cdeeff; box-shadow:0 0 14px #63d7ff; z-index:2; }.orbit-satellite::after{ content:''; position:absolute; width:25px; height:5px; left:-5px; top:5px; border-inline:5px solid #9d7cff; }
   .orbit-controls{ max-width:620px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:.7rem 1rem; }.orbit-controls label{ color:var(--text-muted); font-size:.78rem; }.orbit-controls b{ float:right; color:var(--brass-light); font-family:'JetBrains Mono',monospace; }
 
   .avalanche-board{ height:340px; position:relative; overflow:hidden; border-radius:12px; border:1px solid rgba(224,245,255,.7); background:linear-gradient(145deg,#e8f7ff 0%,#9ed0e6 52%,#568ba9 100%); }
-  .avalanche-board::before{ content:''; position:absolute; inset:-35% -10% 0; background:repeating-linear-gradient(135deg,transparent 0 42px,rgba(255,255,255,.26) 43px 46px,transparent 47px 88px); transform:skewY(-9deg); }.avalanche-obstacles{ position:absolute; inset:0; }.avalanche-obstacle{ position:absolute; z-index:1; font-size:1.55rem; filter:drop-shadow(0 4px 2px rgba(0,0,0,.26)); }.avalanche-snowball{ position:absolute; z-index:3; width:25px; height:25px; margin:-12px; border-radius:50%; background:radial-gradient(circle at 32% 28%,#fff,#dff5ff 52%,#94cee5); box-shadow:0 5px 9px rgba(0,0,0,.3); transition:left .42s ease,top .42s ease,transform .2s ease; }.avalanche-snowball.rolling{ animation:snow-roll .42s linear infinite; }@keyframes snow-roll{ to{ transform:rotate(360deg); } }
+  .avalanche-board::before{ content:''; position:absolute; inset:-35% -10% 0; background:repeating-linear-gradient(135deg,transparent 0 42px,rgba(255,255,255,.26) 43px 46px,transparent 47px 88px); transform:skewY(-9deg); }.avalanche-obstacles{ position:absolute; inset:0; }.avalanche-obstacle{ position:absolute; z-index:1; font-size:1.55rem; filter:drop-shadow(0 4px 2px rgba(0,0,0,.26)); }.avalanche-snowball{ position:absolute; z-index:3; width:25px; height:25px; margin:-12px; border-radius:50%; background:radial-gradient(circle at 32% 28%,#fff,#dff5ff 52%,#94cee5); box-shadow:0 5px 9px rgba(0,0,0,.3); transition:left .42s ease,top .42s ease,transform .2s ease; }.avalanche-snowball::after{ content:''; position:absolute; inset:3px; border-radius:50%; border-top:2px solid rgba(67,118,145,.75); opacity:0; }.avalanche-snowball.rolling::after{ opacity:1; animation:snow-roll .42s linear infinite; }@keyframes snow-roll{ to{ transform:rotate(360deg); } }
 
   .market-terminal{ border:1px solid rgba(103,230,138,.46); border-radius:12px; overflow:hidden; background:#071612; }.market-head{ display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:.6rem .8rem; background:rgba(103,230,138,.09); color:#9cefb1; font:.75rem 'JetBrains Mono',monospace; letter-spacing:.6px; }.market-price{ font-size:1.35rem; font-weight:800; }.market-price.down{ color:#ef8b84; }.market-chart{ display:block; width:100%; height:230px; background:repeating-linear-gradient(0deg,transparent 0 36px,rgba(103,230,138,.08) 37px 38px),repeating-linear-gradient(90deg,transparent 0 60px,rgba(103,230,138,.06) 61px 62px); }.market-chart polyline{ fill:none; stroke:#67e68a; stroke-width:3; filter:drop-shadow(0 0 5px rgba(103,230,138,.6)); }.market-chart polyline.crash{ stroke:#ef6a62; }.market-tape{ padding:.55rem .75rem; min-height:1.35rem; color:var(--text-muted); font:.72rem 'JetBrains Mono',monospace; border-top:1px solid rgba(103,230,138,.18); }
 
-  .siphon-tanks{ display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:end; max-width:600px; margin:0 auto; }.tank-label{ text-align:center; color:var(--text-muted); font-size:.74rem; text-transform:uppercase; letter-spacing:.8px; }.tank{ height:195px; margin-top:.45rem; position:relative; overflow:hidden; border:3px solid rgba(240,230,210,.45); border-radius:12px 12px 20px 20px; background:linear-gradient(90deg,rgba(255,255,255,.12),transparent 15% 85%,rgba(0,0,0,.22)); }.tank-fill{ position:absolute; left:0; right:0; bottom:0; height:100%; background:linear-gradient(180deg,#9cecff,#217eb6); transition:height .45s ease; box-shadow:inset 0 8px 16px rgba(255,255,255,.22); }.house-tank .tank-fill{ background:linear-gradient(180deg,#f4b64b,#bb4d30); }.tank b{ position:absolute; z-index:1; left:0; right:0; top:50%; transform:translateY(-50%); text-align:center; color:#fff; font:800 1.15rem 'JetBrains Mono',monospace; text-shadow:0 2px 3px #000; }.siphon-valve{ width:54px; height:54px; margin-bottom:65px; border-radius:50%; border:6px solid var(--brass); position:relative; }.siphon-valve::before,.siphon-valve::after{ content:''; position:absolute; left:50%; top:50%; background:var(--brass-light); transform:translate(-50%,-50%); }.siphon-valve::before{ width:42px; height:5px; }.siphon-valve::after{ width:5px; height:42px; }.siphon-valve.sucking{ animation:siphon-turn .55s ease; }@keyframes siphon-turn{ to{ transform:rotate(360deg) scale(1.12); } }
+  .siphon-tanks{ display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:end; max-width:600px; margin:0 auto; }.tank-label{ text-align:center; color:var(--text-muted); font-size:.74rem; text-transform:uppercase; letter-spacing:.8px; }.tank{ height:195px; margin-top:.45rem; position:relative; overflow:hidden; border:3px solid rgba(240,230,210,.45); border-radius:12px 12px 20px 20px; background:linear-gradient(90deg,rgba(255,255,255,.12),transparent 15% 85%,rgba(0,0,0,.22)); }.tank-fill{ position:absolute; left:0; right:0; bottom:0; height:100%; background:linear-gradient(180deg,#9cecff,#217eb6); transition:height .45s ease; box-shadow:inset 0 8px 16px rgba(255,255,255,.22); }.your-tank::after{ content:'STAKE'; position:absolute; z-index:2; left:0; right:0; bottom:50%; border-top:1px dashed rgba(255,255,255,.54); color:rgba(255,255,255,.72); font:700 .52rem 'JetBrains Mono',monospace; letter-spacing:.8px; text-align:right; padding-right:.25rem; }.house-tank .tank-fill{ background:linear-gradient(180deg,#f4b64b,#bb4d30); }.tank b{ position:absolute; z-index:3; left:0; right:0; top:50%; transform:translateY(-50%); text-align:center; color:#fff; font:800 1.15rem 'JetBrains Mono',monospace; text-shadow:0 2px 3px #000; }.tank.seized{ animation:tank-seized .42s ease 2; }@keyframes tank-seized{ 50%{ transform:translateX(7px); border-color:#ef6a62; } }.siphon-valve{ width:54px; height:54px; margin-bottom:65px; border-radius:50%; border:6px solid var(--brass); position:relative; }.siphon-valve::before,.siphon-valve::after{ content:''; position:absolute; left:50%; top:50%; background:var(--brass-light); transform:translate(-50%,-50%); }.siphon-valve::before{ width:42px; height:5px; }.siphon-valve::after{ width:5px; height:42px; }.siphon-valve.sucking{ animation:siphon-turn .55s ease; }@keyframes siphon-turn{ to{ transform:rotate(360deg) scale(1.12); } }
+
+  .risk-rail{ height:8px; width:min(430px, 100%); margin:.85rem auto 0; overflow:hidden; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.34); box-shadow:inset 0 1px 4px rgba(0,0,0,.35); }
+  .risk-rail > span{ display:block; height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg,#67e68a,#ffd166 55%,#ef6a62); transition:width .28s ease, filter .28s ease; box-shadow:0 0 14px rgba(255,209,102,.38); }
+  .risk-caption{ display:flex; justify-content:space-between; width:min(430px,100%); margin:.36rem auto 0; color:var(--text-faint); font:0.67rem 'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.75px; }
+
+  .deadhand-table{ position:relative; overflow:hidden; border-radius:10px; padding:.8rem .65rem; background:radial-gradient(ellipse at 50% 120%,rgba(107,30,42,.55),transparent 70%),linear-gradient(135deg,#142a20,#07150f); border:1px solid rgba(232,200,90,.22); }
+  .deadhand-table::before{ content:'LAST CHANCE'; position:absolute; top:.5rem; right:.65rem; color:rgba(255,209,102,.42); font:700 .6rem 'JetBrains Mono',monospace; letter-spacing:1.4px; }
+  .dead-hand-cards .playing-card{ animation:card-deal .28s ease both, deadhand-card-glow 2.4s ease-in-out infinite; }
+  .dead-hand-cards .playing-card:nth-child(2n){ animation-delay:.04s; }.dead-hand-cards .playing-card:nth-child(3n){ animation-delay:.08s; }
+  @keyframes deadhand-card-glow{ 50%{ box-shadow:0 6px 20px rgba(255,209,102,.35); } }
+
+  .gridlock-board::after{ content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(90deg,transparent 0 42%,rgba(99,215,255,.12) 48%,transparent 54%); transform:translateX(-120%); animation:gridlock-sweep 3.2s linear infinite; }
+  .grid-cell{ isolation:isolate; }.grid-cell .traffic-light,.grid-cell .grid-car,.grid-finish{ z-index:1; }.grid-cell.green{ background:linear-gradient(135deg,rgba(30,106,72,.72),rgba(36,26,16,.8)); }.grid-cell.yellow{ background:linear-gradient(135deg,rgba(122,84,20,.6),rgba(36,26,16,.8)); }.grid-cell.red{ background:linear-gradient(135deg,rgba(107,30,42,.68),rgba(36,26,16,.8)); }
+  .grid-cell.reachable::after{ content:'GO'; position:absolute; right:.35rem; top:.26rem; color:var(--brass-light); font:700 .55rem 'JetBrains Mono',monospace; letter-spacing:.5px; }
+  .gridlock-clock{ color:#9cecff; font:700 .75rem 'JetBrains Mono',monospace; }.gridlock-clock.warning{ color:#ffd166; }.gridlock-clock.danger{ color:#ef8b84; }
+  @keyframes gridlock-sweep{ to{ transform:translateX(120%); } }
+
+  .chop-gauge{ isolation:isolate; }.chop-gauge::after{ content:'PERFECT CUT'; position:absolute; left:50%; top:50%; z-index:1; transform:translate(-50%,-50%); color:rgba(255,255,230,.82); font:700 .64rem 'JetBrains Mono',monospace; letter-spacing:.9px; pointer-events:none; }.chop-needle{ z-index:2; }.chop-log::before{ content:'GRAIN'; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-15deg); color:rgba(255,238,185,.42); font:700 .62rem 'JetBrains Mono',monospace; letter-spacing:1px; }.chop-log.critical{ box-shadow:0 0 0 4px rgba(255,209,102,.35),0 0 34px rgba(255,209,102,.5); }
+
+  .cook-meter{ position:relative; height:14px; margin:.95rem auto 0; max-width:560px; overflow:hidden; border-radius:999px; background:linear-gradient(90deg,#922a24 0 17%,#ce6b2d 17% 34%,#5ca35e 34% 61%,#d89b31 61% 79%,#562017 79%); border:1px solid rgba(255,255,255,.17); }.cook-meter::before{ content:'FLIP'; position:absolute; left:23%; top:50%; transform:translate(-50%,-50%); color:rgba(255,255,255,.7); font:700 .56rem 'JetBrains Mono',monospace; letter-spacing:.7px; }.cook-meter::after{ content:'JUICY'; position:absolute; left:51%; top:50%; transform:translate(-50%,-50%); color:rgba(255,255,255,.82); font:700 .56rem 'JetBrains Mono',monospace; letter-spacing:.7px; }.cook-meter-needle{ position:absolute; z-index:1; top:-5px; width:4px; height:24px; border-radius:8px; background:#fff5c4; box-shadow:0 0 11px #fff,0 0 18px #ffd166; transform:translateX(-50%); }
+  .grill-stage.ready{ box-shadow:0 0 0 2px rgba(103,230,138,.7),0 0 30px rgba(103,230,138,.22); }.grill-stage.burning{ animation:grill-danger .36s linear infinite alternate; } @keyframes grill-danger{ to{ filter:saturate(1.55) brightness(1.14); } }
+
+  .heartbeat-status{ display:flex; justify-content:center; gap:.6rem; align-items:center; margin:.8rem auto 0; color:#9cecff; font:.74rem 'JetBrains Mono',monospace; }.heartbeat-status b{ color:var(--brass-light); }.heartbeat-status .heartbeat-led{ width:8px; height:8px; border-radius:50%; background:#455; box-shadow:none; transition:background .16s ease, box-shadow .16s ease; }.heartbeat-status .heartbeat-led.live{ background:#67e68a; box-shadow:0 0 12px #67e68a; }.heartbeat-status .heartbeat-led.hot{ background:#ffd166; box-shadow:0 0 14px #ffd166; }
+  .heartbeat-monitor.live{ box-shadow:inset 0 0 28px rgba(99,215,255,.12),0 0 24px rgba(99,215,255,.12); }.heartbeat-monitor.flatline .heartbeat-wave{ background:#ef6a62; }.heartbeat-monitor.flatline .heartbeat-wave::before{ filter:drop-shadow(0 0 5px #ef6a62); }
+
+  .leak-joint.preview{ color:#dffbff; background:#163847; box-shadow:inset 0 0 0 1px rgba(99,215,255,.58),0 0 13px rgba(99,215,255,.24); }.leak-joint.preview::after{ content:'•'; position:absolute; color:#9cecff; font-size:1.3rem; filter:drop-shadow(0 0 5px #9cecff); }.leak-joint{ position:relative; }
+  .leakage-board.flowing .leakage-source{ animation:leak-source-pulse .45s ease-in-out infinite alternate; }.leakage-board.flowing::after{ content:'WATER RELEASED'; position:absolute; left:50%; top:.3rem; transform:translateX(-50%); color:#e5fbff; font:700 .56rem 'JetBrains Mono',monospace; letter-spacing:1.2px; text-shadow:0 0 10px #63d7ff; } @keyframes leak-source-pulse{ to{ transform:scale(1.14); box-shadow:0 0 28px rgba(99,215,255,.95); } }
+
+  .orbit-guide{ position:absolute; inset:50% auto auto 50%; width:39%; aspect-ratio:1; transform:translate(-50%,-50%); border:1px dashed rgba(157,124,255,.58); border-radius:50%; box-shadow:0 0 26px rgba(157,124,255,.12),inset 0 0 28px rgba(157,124,255,.05); }.orbit-guide::after{ content:'STABLE BAND'; position:absolute; left:50%; bottom:-1.3rem; transform:translateX(-50%); white-space:nowrap; color:rgba(211,197,255,.7); font:700 .54rem 'JetBrains Mono',monospace; letter-spacing:1px; }.orbit-field.launching .orbit-guide{ animation:orbit-guide-pulse 1.2s ease-in-out infinite; } @keyframes orbit-guide-pulse{ 50%{ box-shadow:0 0 36px rgba(157,124,255,.44),inset 0 0 28px rgba(157,124,255,.15); } }
+  .orbit-track polyline{ stroke-linecap:round; stroke-linejoin:round; }
+
+  .avalanche-board::after{ content:'STEER AT EACH RIDGE'; position:absolute; left:50%; top:.45rem; transform:translateX(-50%); z-index:4; color:rgba(22,71,96,.72); font:700 .58rem 'JetBrains Mono',monospace; letter-spacing:1px; white-space:nowrap; }.avalanche-obstacle.tree-hit{ animation:avalanche-hit .42s ease; }.avalanche-obstacle.boulder-hit{ animation:avalanche-boulder .48s ease both; }@keyframes avalanche-hit{ 45%{ transform:scale(1.28) rotate(-15deg); } }@keyframes avalanche-boulder{ to{ transform:scale(1.5) rotate(25deg); opacity:.25; } }.avalanche-steer{ min-width:124px; }.avalanche-steer.armed{ border-color:#63d7ff; box-shadow:0 0 16px rgba(99,215,255,.3); color:#e5fbff; }
+
+  .market-terminal{ position:relative; }.market-terminal.live::after{ content:'LIVE'; position:absolute; right:.75rem; top:.7rem; color:#67e68a; font:700 .58rem 'JetBrains Mono',monospace; letter-spacing:1px; animation:market-live .8s ease-in-out infinite alternate; }@keyframes market-live{ to{ opacity:.35; } }.market-chart{ transition:filter .18s ease; }.market-chart.surge{ filter:brightness(1.35); }.market-orderbook{ display:grid; grid-template-columns:repeat(3,1fr); gap:.35rem; padding:.5rem .65rem; border-top:1px solid rgba(103,230,138,.13); }.market-orderbook span{ border:1px solid rgba(103,230,138,.17); border-radius:5px; padding:.3rem; color:var(--text-muted); font:.62rem 'JetBrains Mono',monospace; text-align:center; }.market-orderbook b{ display:block; margin-top:.14rem; color:#d9f9e2; font-size:.76rem; }.market-orderbook .market-book-risk b{ color:#ffd166; }.market-orderbook .market-book-risk.hot b{ color:#ef8b84; }
+
+  .siphon-link{ width:84px; height:6px; margin:-34px auto 0; border-radius:999px; background:linear-gradient(90deg,#217eb6,#9cecff 48%,#bb4d30); opacity:.52; position:relative; }.siphon-link::after{ content:''; position:absolute; top:50%; left:0; width:13px; height:13px; margin-top:-6px; border-radius:50%; background:#dffbff; box-shadow:0 0 12px #63d7ff; transform:translateX(var(--siphon-flow,-20px)); opacity:0; }.siphon-link.flowing::after{ opacity:1; animation:siphon-flow .62s ease; }@keyframes siphon-flow{ to{ transform:translateX(90px); opacity:.25; } }.siphon-catch{ max-width:430px; margin:.9rem auto 0; }.siphon-catch .risk-rail{ margin:0; }.siphon-catch-label{ display:flex; justify-content:space-between; margin-bottom:.35rem; color:var(--text-faint); font:.67rem 'JetBrains Mono',monospace; text-transform:uppercase; letter-spacing:.7px; }.siphon-catch-label b{ color:#ffd166; }
 
   @media (max-width:620px){ .chop-yard{ grid-template-columns:1fr; }.chop-log{ width:110px; justify-self:center; }.orbit-controls{ grid-template-columns:1fr; }.grid-cell{ min-height:58px; }.leak-joint{ min-height:40px; font-size:1.12rem; }.siphon-tanks{ gap:.55rem; }.tank{ height:150px; }.siphon-valve{ transform:scale(.75); }.avalanche-board{ height:280px; } }
 </style>
@@ -4358,8 +4394,9 @@
       <button class="chip-btn" data-target="deadhand-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="deadhand-bet" data-max="1">Max</button>
     </div>
     <div class="challenge-panel">
-      <div class="dead-hand-cards" id="deadhand-cards"></div>
-      <div class="metric-strip"><span>Pot multiplier<b id="deadhand-mult">1.00x</b></span><span>Safe draws<b id="deadhand-safe">0</b></span><span>Danger cards<b> A · J · ☠</b></span></div>
+      <div class="deadhand-table"><div class="dead-hand-cards" id="deadhand-cards"></div></div>
+      <div class="risk-rail"><span id="deadhand-risk-fill"></span></div><div class="risk-caption"><span>Fresh deck</span><span id="deadhand-risk">21% danger</span><span>Dead man's hand</span></div>
+      <div class="metric-strip"><span>Pot multiplier<b id="deadhand-mult">1.00x</b></span><span>Safe draws<b id="deadhand-safe">0</b></span><span>Cards left<b id="deadhand-left">13</b></span></div>
     </div>
     <div class="challenge-actions"><button class="action-btn" id="deadhand-draw" data-autolock>Deal first card</button><button class="action-btn cashout" id="deadhand-bank" disabled>Bank pot</button></div>
     <div class="result-msg" id="deadhand-msg"></div>
@@ -4373,7 +4410,7 @@
       <label for="gridlock-bet">Bet</label><input type="number" id="gridlock-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="gridlock-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="gridlock-bet" data-max="1">Max</button>
     </div>
-    <div class="challenge-panel"><div class="gridlock-board" id="gridlock-board" aria-label="Gridlock city grid"></div><div class="metric-strip"><span>Route<b id="gridlock-route">Parked</b></span><span>Current payout<b id="gridlock-mult">1.00x</b></span><span>Lights refresh<b>0.7 sec</b></span></div></div>
+    <div class="challenge-panel"><div class="gridlock-board" id="gridlock-board" aria-label="Gridlock city grid"></div><div class="metric-strip"><span>Route<b id="gridlock-route">Parked</b></span><span>Current payout<b id="gridlock-mult">1.00x</b></span><span>Lights refresh<b class="gridlock-clock" id="gridlock-clock">Ready</b></span></div></div>
     <div class="challenge-actions"><button class="action-btn" id="gridlock-start" data-autolock>Start engine</button><button class="action-btn cashout" id="gridlock-bank" disabled>Cash out</button></div>
     <div class="result-msg" id="gridlock-msg"></div>
   </div>
@@ -4385,7 +4422,7 @@
       <label for="chop-bet">Bet</label><input type="number" id="chop-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="chop-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="chop-bet" data-max="1">Max</button>
     </div>
-    <div class="challenge-panel"><div class="chop-yard"><div class="chop-gauge"><span class="chop-sweet"></span><span class="chop-needle" id="chop-needle"></span></div><div class="chop-log" id="chop-log"></div></div><div class="metric-strip"><span>Sweet spot<b>43%–57%</b></span><span>Accuracy<b id="chop-accuracy">—</b></span><span>Clean-cut range<b>3.5x–10x</b></span></div></div>
+    <div class="challenge-panel"><div class="chop-yard"><div class="chop-gauge"><span class="chop-sweet"></span><span class="chop-needle" id="chop-needle"></span></div><div class="chop-log" id="chop-log"></div></div><div class="metric-strip"><span>Sweet spot<b>43%–57%</b></span><span>Accuracy<b id="chop-accuracy">—</b></span><span>Cut quality<b id="chop-tier">Waiting</b></span></div></div>
     <div class="challenge-actions"><button class="action-btn" id="chop-btn" data-autolock>Raise axe</button></div><div class="result-msg" id="chop-msg"></div>
   </div>
 
@@ -4396,7 +4433,7 @@
       <label for="overcook-bet">Bet</label><input type="number" id="overcook-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="overcook-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="overcook-bet" data-max="1">Max</button>
     </div>
-    <div class="challenge-panel"><div class="grill-stage"><span class="grill-bars"></span><span class="grill-flames"></span><div class="grill-meat" id="overcook-meat"></div></div><div class="metric-strip"><span>Cook time<b id="overcook-time">0.0s</b></span><span>Flip<b id="overcook-flip">Not yet</b></span><span>Projected<b id="overcook-mult">—</b></span></div></div>
+    <div class="challenge-panel"><div class="grill-stage" id="overcook-stage"><span class="grill-bars"></span><span class="grill-flames"></span><div class="grill-meat" id="overcook-meat"></div></div><div class="cook-meter"><span class="cook-meter-needle" id="overcook-needle"></span></div><div class="metric-strip"><span>Cook time<b id="overcook-time">0.0s</b></span><span>Flip<b id="overcook-flip">Not yet</b></span><span>Projected<b id="overcook-mult">—</b></span></div></div>
     <div class="challenge-actions"><button class="action-btn" id="overcook-place" data-autolock>Place steak</button><button class="action-btn secondary" id="overcook-flip-btn" disabled>Flip</button><button class="action-btn cashout" id="overcook-plate" disabled>Plate it</button></div><div class="result-msg" id="overcook-msg"></div>
   </div>
 
@@ -4407,7 +4444,7 @@
       <label for="heartbeat-bet">Bet</label><input type="number" id="heartbeat-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="heartbeat-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="heartbeat-bet" data-max="1">Max</button>
     </div>
-    <div class="challenge-panel"><div class="heartbeat-monitor" id="heartbeat-monitor"><span class="heartbeat-wave"></span><span class="heartbeat-target"></span><span class="heartbeat-pulse"></span><span class="heartbeat-needle" id="heartbeat-needle"></span></div><div class="metric-strip"><span>Combo<b id="heartbeat-combo">0</b></span><span>Multiplier<b id="heartbeat-mult">1.00x</b></span><span>Beat window<b>±120ms</b></span></div></div>
+    <div class="challenge-panel"><div class="heartbeat-monitor" id="heartbeat-monitor"><span class="heartbeat-wave"></span><span class="heartbeat-target"></span><span class="heartbeat-pulse"></span><span class="heartbeat-needle" id="heartbeat-needle"></span></div><div class="heartbeat-status"><i class="heartbeat-led" id="heartbeat-led"></i><span id="heartbeat-cue">Start the monitor, then follow the gold lane.</span><b id="heartbeat-next">—</b></div><div class="metric-strip"><span>Combo<b id="heartbeat-combo">0</b></span><span>Multiplier<b id="heartbeat-mult">1.00x</b></span><span>Beat window<b>±120ms</b></span></div></div>
     <div class="challenge-actions"><button class="action-btn" id="heartbeat-btn" data-autolock>Start rhythm</button><button class="action-btn cashout" id="heartbeat-bank" disabled>Bank combo</button></div><div class="result-msg" id="heartbeat-msg"></div>
   </div>
 
@@ -4418,7 +4455,7 @@
       <label for="leakage-bet">Bet</label><input type="number" id="leakage-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="leakage-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="leakage-bet" data-max="1">Max</button>
     </div>
-    <div class="challenge-panel"><div class="leakage-board"><div class="leakage-source"></div><div class="leakage-pipes" id="leakage-pipes"></div><div class="leak-buckets" id="leakage-buckets"></div></div><div class="metric-strip"><span>Valve turns<b id="leakage-turns">—</b></span><span>Target bucket<b id="leakage-target">—</b></span><span>Best bucket<b>4.00x</b></span></div></div>
+    <div class="challenge-panel"><div class="leakage-board" id="leakage-board"><div class="leakage-source"></div><div class="leakage-pipes" id="leakage-pipes"></div><div class="leak-buckets" id="leakage-buckets"></div></div><div class="metric-strip"><span>Valve turns<b id="leakage-turns">—</b></span><span>Preview<b id="leakage-target">—</b></span><span>Highest bucket<b id="leakage-best">3.00x</b></span></div></div>
     <div class="challenge-actions"><button class="action-btn" id="leakage-prepare" data-autolock>Prepare valves</button><button class="action-btn cashout" id="leakage-release" disabled>Release water</button></div><div class="result-msg" id="leakage-msg"></div>
   </div>
 
@@ -4429,7 +4466,7 @@
       <label for="orbit-bet">Bet</label><input type="number" id="orbit-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="orbit-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="orbit-bet" data-max="1">Max</button>
     </div>
-    <div class="challenge-panel"><div class="orbit-field" id="orbit-field"><svg class="orbit-track" id="orbit-track" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline id="orbit-line"></polyline></svg><span class="orbit-sun"></span><span class="orbit-satellite" id="orbit-satellite"></span></div><div class="orbit-controls"><label>Velocity angle <b id="orbit-angle-value">0°</b><input type="range" id="orbit-angle" min="0" max="359" value="0"></label><label>Launch speed <b id="orbit-speed-value">1.55</b><input type="range" id="orbit-speed" min="1.05" max="3.10" value="1.55" step="0.01"></label></div><div class="metric-strip"><span>Orbit time<b id="orbit-time">0.0s</b></span><span>Multiplier<b id="orbit-mult">1.00x</b></span><span>Status<b id="orbit-status">Ready</b></span></div></div>
+    <div class="challenge-panel"><div class="orbit-field" id="orbit-field"><svg class="orbit-track" id="orbit-track" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline id="orbit-line"></polyline></svg><span class="orbit-guide"></span><span class="orbit-sun"></span><span class="orbit-satellite" id="orbit-satellite"></span></div><div class="orbit-controls"><label>Velocity angle <b id="orbit-angle-value">0°</b><input type="range" id="orbit-angle" min="0" max="359" value="0"></label><label>Launch speed <b id="orbit-speed-value">1.55</b><input type="range" id="orbit-speed" min="1.05" max="3.10" value="1.55" step="0.01"></label></div><div class="metric-strip"><span>Orbit time<b id="orbit-time">0.0s</b></span><span>Multiplier<b id="orbit-mult">1.00x</b></span><span>Status<b id="orbit-status">Ready</b></span></div></div>
     <div class="challenge-actions"><button class="action-btn" id="orbit-launch" data-autolock>Launch satellite</button><button class="action-btn cashout" id="orbit-bank" disabled>Cash out</button></div><div class="result-msg" id="orbit-msg"></div>
   </div>
 
@@ -4441,8 +4478,8 @@
       <button class="chip-btn" data-target="avalanche-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="avalanche-bet" data-max="1">Max</button>
       <label for="avalanche-lane">Drop lane</label><select id="avalanche-lane"><option value="1">Left ridge</option><option value="2" selected>Center peak</option><option value="3">Right ridge</option></select>
     </div>
-    <div class="challenge-panel"><div class="avalanche-board" id="avalanche-board"><div class="avalanche-obstacles" id="avalanche-obstacles"></div><span class="avalanche-snowball" id="avalanche-snowball"></span></div><div class="metric-strip"><span>Snowball size<b id="avalanche-size">1.00x</b></span><span>Distance<b id="avalanche-distance">0 / 8</b></span><span>Terrain<b id="avalanche-terrain">Fresh powder</b></span></div></div>
-    <div class="challenge-actions"><button class="action-btn" id="avalanche-drop" data-autolock>Drop snowball</button></div><div class="result-msg" id="avalanche-msg"></div>
+    <div class="challenge-panel"><div class="avalanche-board" id="avalanche-board"><div class="avalanche-obstacles" id="avalanche-obstacles"></div><span class="avalanche-snowball" id="avalanche-snowball"></span></div><div class="metric-strip"><span>Snowball size<b id="avalanche-size">1.00x</b></span><span>Distance<b id="avalanche-distance">0 / 8</b></span><span>Next ridge<b id="avalanche-terrain">Fresh powder</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="avalanche-drop" data-autolock>Drop snowball</button><button class="action-btn secondary avalanche-steer" id="avalanche-left" disabled>← Steer left</button><button class="action-btn secondary avalanche-steer" id="avalanche-right" disabled>Steer right →</button></div><div class="result-msg" id="avalanche-msg"></div>
   </div>
 
   <div class="game-card" id="blackmarket">
@@ -4452,7 +4489,7 @@
       <label for="blackmarket-bet">Crate cost</label><input type="number" id="blackmarket-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="blackmarket-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="blackmarket-bet" data-max="1">Max</button>
     </div>
-    <div class="challenge-panel"><div class="market-terminal"><div class="market-head"><span>VX-9 CONTRABAND INDEX</span><span class="market-price" id="market-price">$100.00</span></div><svg class="market-chart" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline id="market-line" points="0,56 100,56"></polyline></svg><div class="market-tape" id="market-tape">Market idle. Price updates every 2 seconds.</div></div><div class="metric-strip"><span>Crate value<b id="market-value">—</b></span><span>Up ticks<b id="market-streak">0</b></span><span>Crash risk<b id="market-risk">Base</b></span></div></div>
+    <div class="challenge-panel"><div class="market-terminal" id="market-terminal"><div class="market-head"><span>VX-9 CONTRABAND INDEX</span><span class="market-price" id="market-price">$100.00</span></div><svg class="market-chart" id="market-chart" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline id="market-line" points="0,56 100,56"></polyline></svg><div class="market-tape" id="market-tape">Market idle. Price updates every 2 seconds.</div><div class="market-orderbook"><span>Session high<b id="market-high">$100.00</b></span><span>Session low<b id="market-low">$100.00</b></span><span class="market-book-risk" id="market-book-risk">Correction<b id="market-book-risk-value">Base</b></span></div></div><div class="metric-strip"><span>Crate value<b id="market-value">—</b></span><span>Up ticks<b id="market-streak">0</b></span><span>Tick<b id="market-tick">0</b></span></div></div>
     <div class="challenge-actions"><button class="action-btn" id="market-buy" data-autolock>Buy crate</button><button class="action-btn cashout" id="market-sell" disabled>Sell crate</button></div><div class="result-msg" id="market-msg"></div>
   </div>
 
@@ -4462,8 +4499,9 @@
     <div class="bet-row" style="justify-content:center;">
       <label for="siphon-bet">Bet</label><input type="number" id="siphon-bet" value="1" min="0.25" step="0.25">
       <button class="chip-btn" data-target="siphon-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="siphon-bet" data-max="1">Max</button>
+      <label for="siphon-mode">Draw</label><select id="siphon-mode"><option value="cautious">Cautious</option><option value="standard" selected>Standard</option><option value="aggressive">Aggressive</option></select>
     </div>
-    <div class="challenge-panel"><div class="siphon-tanks"><div><div class="tank-label">Your tank</div><div class="tank"><span class="tank-fill" id="siphon-your-fill"></span><b id="siphon-your">100%</b></div></div><div class="siphon-valve" id="siphon-valve"></div><div><div class="tank-label">House tank</div><div class="tank house-tank"><span class="tank-fill" id="siphon-house-fill"></span><b id="siphon-house">100%</b></div></div></div><div class="metric-strip"><span>Multiplier<b id="siphon-mult">1.00x</b></span><span>Streak<b id="siphon-streak">0</b></span><span>Catch chance<b id="siphon-risk">—</b></span></div></div>
+    <div class="challenge-panel"><div class="siphon-tanks"><div><div class="tank-label">Your tank</div><div class="tank your-tank"><span class="tank-fill" id="siphon-your-fill"></span><b id="siphon-your">100%</b></div></div><div class="siphon-valve" id="siphon-valve"></div><div><div class="tank-label">House tank</div><div class="tank house-tank"><span class="tank-fill" id="siphon-house-fill"></span><b id="siphon-house">100%</b></div></div></div><div class="siphon-link" id="siphon-link"></div><div class="siphon-catch"><div class="siphon-catch-label"><span>Catch probability</span><b id="siphon-risk">—</b></div><div class="risk-rail"><span id="siphon-risk-fill"></span></div></div><div class="metric-strip"><span>Multiplier<b id="siphon-mult">1.00x</b></span><span>Streak<b id="siphon-streak">0</b></span><span>Draw mode<b id="siphon-mode-readout">Standard</b></span></div></div>
     <div class="challenge-actions"><button class="action-btn" id="siphon-start" data-autolock>Prime valve</button><button class="action-btn" id="siphon-btn" disabled>Siphon</button><button class="action-btn cashout" id="siphon-bank" disabled>Lock valves</button></div><div class="result-msg" id="siphon-msg"></div>
   </div>
 
@@ -5024,6 +5062,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.getElementById(btn.dataset.tab).classList.add('active');
       if(btn.dataset.tab === 'beef' && typeof renderBeef === 'function') renderBeef();
       if(btn.dataset.tab === 'craps' && typeof crapsCenterDice === 'function') requestAnimationFrame(crapsCenterDice);
+      if(btn.dataset.tab === 'orbit' && typeof renderOrbit === 'function') requestAnimationFrame(renderOrbit);
     });
   });
 
@@ -8996,14 +9035,28 @@ renderPoker();
 
 /* ---------- back-room games ---------- */
 /* Dead Man's Hand */
-const deadhand = { active:false, bet:0, mult:1, safe:0 };
+const deadhand = { active:false, bet:0, mult:1, safe:0, deck:[], dealing:false };
 const deadhandCards = document.getElementById('deadhand-cards');
+function deadhandControls(locked){
+  document.getElementById('deadhand-bet').disabled = locked;
+  document.querySelectorAll('[data-target="deadhand-bet"]').forEach(btn => btn.disabled = locked);
+}
+function deadhandDanger(){
+  if(!deadhand.deck.length) return 0;
+  const hazards = deadhand.deck.filter(card => card.cursed || card.rank === 'A' || card.rank === 'J').length;
+  return hazards / deadhand.deck.length;
+}
 function renderDeadhand(){
   document.getElementById('deadhand-mult').textContent = deadhand.mult.toFixed(2) + 'x';
   document.getElementById('deadhand-safe').textContent = deadhand.safe;
+  document.getElementById('deadhand-left').textContent = deadhand.active ? deadhand.deck.length : 13;
+  const danger = deadhand.active ? deadhandDanger() : 9 / 53;
+  document.getElementById('deadhand-risk').textContent = Math.round(danger * 100) + '% danger';
+  document.getElementById('deadhand-risk-fill').style.width = (danger * 100).toFixed(1) + '%';
 }
 function deadhandEnd(payout, message, win){
-  deadhand.active = false;
+  deadhand.active = false; deadhand.dealing = false;
+  deadhandControls(false);
   document.getElementById('deadhand-draw').textContent = 'Deal first card';
   document.getElementById('deadhand-bank').disabled = true;
   const msg = document.getElementById('deadhand-msg');
@@ -9013,34 +9066,50 @@ function deadhandEnd(payout, message, win){
   document.getElementById('deadhand-draw').disabled = balance <= 0;
 }
 function deadhandDraw(){
-  const cursed = Math.random() < 0.055;
-  const card = cursed ? null : drawCard('');
-  if(cursed || card.rank === 'A' || card.rank === 'J'){
-    const doom = document.createElement('div');
-    doom.className = 'playing-card cursed-card';
-    doom.textContent = cursed ? 'CURSED' : card.rank + ' OF DOOM';
-    deadhandCards.appendChild(doom);
-    playSound('mine');
-    deadhandEnd(0, cursed ? 'The cursed card took the whole pot.' : card.rank + ' is cursed here. The felt goes cold.', false);
-    return;
-  }
-  deadhandCards.appendChild(makeCardEl(card, { small:true }));
-  deadhand.safe++;
-  const gain = 0.13 + Math.min(11, card.value + 1) * 0.042;
-  deadhand.mult = Math.round((deadhand.mult + gain) * 100) / 100;
-  renderDeadhand();
-  document.getElementById('deadhand-msg').textContent = card.rank + ' is safe. Draw again or bank ' + fmt(deadhand.bet * deadhand.mult) + '.';
+  if(deadhand.dealing || !deadhand.active) return;
+  deadhand.dealing = true;
+  document.getElementById('deadhand-draw').disabled = true;
+  document.getElementById('deadhand-bank').disabled = true;
+  document.getElementById('deadhand-msg').textContent = 'Dealing the next card…';
   document.getElementById('deadhand-msg').className = 'result-msg';
-  playSound('card');
+  setTimeout(() => {
+    if(!deadhand.active) return;
+    const card = deadhand.deck.pop();
+    const cursed = card && card.cursed;
+    if(cursed || card.rank === 'A' || card.rank === 'J'){
+      const doom = document.createElement('div');
+      doom.className = 'playing-card cursed-card';
+      doom.textContent = cursed ? 'CURSED' : card.rank + ' OF DOOM';
+      deadhandCards.appendChild(doom);
+      playSound('mine');
+      deadhandEnd(0, cursed ? 'The cursed card took the whole pot.' : card.rank + ' is cursed here. The felt goes cold.', false);
+      return;
+    }
+    deadhandCards.appendChild(makeCardEl(card, { small:true }));
+    while(deadhandCards.children.length > 6) deadhandCards.removeChild(deadhandCards.firstChild);
+    deadhand.safe++;
+    const gain = 0.14 + Math.min(10, card.value) * 0.04;
+    deadhand.mult = Math.round((deadhand.mult + gain) * 100) / 100;
+    deadhand.dealing = false;
+    renderDeadhand();
+    document.getElementById('deadhand-msg').textContent = card.rank + ' is safe. The deck is getting hotter—bank ' + fmt(deadhand.bet * deadhand.mult) + ' or draw again.';
+    document.getElementById('deadhand-msg').className = 'result-msg';
+    document.getElementById('deadhand-draw').disabled = false;
+    document.getElementById('deadhand-bank').disabled = false;
+    playSound('card');
+  }, 220);
 }
 document.getElementById('deadhand-draw').addEventListener('click', function(){
   if(!deadhand.active){
     const bet = getBet('deadhand-bet', 'deadhand-msg');
     if(bet === null) return;
-    deadhand.active = true; deadhand.bet = bet; deadhand.mult = 1; deadhand.safe = 0;
+    deadhand.active = true; deadhand.bet = bet; deadhand.mult = 1; deadhand.safe = 0; deadhand.dealing = false;
+    deadhand.deck = buildDeck(); deadhand.deck.push({ cursed:true });
+    for(let i=deadhand.deck.length - 1; i>0; i--){ const j = Math.floor(Math.random() * (i + 1)); [deadhand.deck[i], deadhand.deck[j]] = [deadhand.deck[j], deadhand.deck[i]]; }
     deadhandCards.innerHTML = '';
     setBalance(balance - bet);
     this.disabled = false;
+    deadhandControls(true);
     this.textContent = 'Draw another';
     document.getElementById('deadhand-bank').disabled = false;
     renderDeadhand();
@@ -9055,7 +9124,7 @@ document.getElementById('deadhand-bank').addEventListener('click', () => {
 renderDeadhand();
 
 /* Gridlock */
-const gridlock = { active:false, bet:0, mult:1, current:[3,0], lights:[], route:0, timer:null };
+const gridlock = { active:false, bet:0, mult:1, current:[3,0], lights:[], route:0, timer:null, deadline:0 };
 function gridlockLight(){
   const roll = Math.random();
   return roll < 0.56 ? 'green' : roll < 0.79 ? 'yellow' : 'red';
@@ -9063,6 +9132,26 @@ function gridlockLight(){
 function gridlockReachable(r, c){
   const here = gridlock.current;
   return (r === here[0] - 1 && c === here[1]) || (r === here[0] && c === here[1] + 1);
+}
+function gridlockSetTurn(){
+  cancelAnimationFrame(gridlock.timer);
+  gridlock.lights = Array.from({length:16}, gridlockLight);
+  const choices = [];
+  for(let r=0; r<4; r++) for(let c=0; c<4; c++) if(gridlockReachable(r,c)) choices.push(r * 4 + c);
+  if(choices.length && choices.every(i => gridlock.lights[i] === 'red')) gridlock.lights[choices[Math.floor(Math.random() * choices.length)]] = 'yellow';
+  gridlock.lights[3] = 'green';
+  gridlock.deadline = performance.now() + 1050;
+  const clock = document.getElementById('gridlock-clock');
+  function count(now){
+    if(!gridlock.active) return;
+    const left = Math.max(0, gridlock.deadline - now);
+    clock.textContent = (left / 1000).toFixed(1) + 's';
+    clock.className = 'gridlock-clock' + (left < 250 ? ' danger' : left < 560 ? ' warning' : '');
+    if(left <= 0){ gridlockStop(0, 'You stalled at the light. Traffic does not wait.', false); return; }
+    gridlock.timer = requestAnimationFrame(count);
+  }
+  renderGridlock();
+  gridlock.timer = requestAnimationFrame(count);
 }
 function renderGridlock(){
   const board = document.getElementById('gridlock-board');
@@ -9075,6 +9164,7 @@ function renderGridlock(){
     cell.className = 'grid-cell ' + light + (current ? ' current' : '') + (reachable ? ' reachable' : '');
     cell.disabled = !reachable;
     cell.innerHTML = current ? '<span class="grid-car">🚗</span>' : '<span class="traffic-light"><i></i><i></i><i></i></span>' + (r === 0 && c === 3 ? '<span class="grid-finish">EXIT</span>' : '');
+    cell.setAttribute('aria-label', current ? 'Your car' : reachable ? 'Drive here: ' + light + ' light' : 'Intersection: ' + light + ' light');
     if(reachable) cell.addEventListener('click', () => gridlockDrive(r,c));
     board.appendChild(cell);
   }
@@ -9082,10 +9172,11 @@ function renderGridlock(){
   document.getElementById('gridlock-mult').textContent = gridlock.mult.toFixed(2) + 'x';
 }
 function gridlockStop(payout, text, win){
-  clearInterval(gridlock.timer); gridlock.timer = null; gridlock.active = false;
+  cancelAnimationFrame(gridlock.timer); gridlock.timer = null; gridlock.active = false;
   document.getElementById('gridlock-bank').disabled = true;
   document.getElementById('gridlock-start').disabled = balance <= 0;
   const msg = document.getElementById('gridlock-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose');
+  const clock = document.getElementById('gridlock-clock'); clock.textContent = 'Parked'; clock.className = 'gridlock-clock';
   renderGridlock(); awardPayout(payout, 'gridlock', win);
 }
 function gridlockDrive(r,c){
@@ -9102,63 +9193,87 @@ function gridlockDrive(r,c){
   if(r === 0 && c === 3){
     gridlock.mult = Math.round((gridlock.mult + 0.8) * 100) / 100;
     gridlockStop(gridlock.bet * gridlock.mult, 'You cleared the city grid. Paid ' + fmt(gridlock.bet * gridlock.mult) + '.', true);
-  } else renderGridlock();
+  } else gridlockSetTurn();
 }
 document.getElementById('gridlock-start').addEventListener('click', function(){
   if(gridlock.active) return;
   const bet = getBet('gridlock-bet', 'gridlock-msg'); if(bet === null) return;
   gridlock.active = true; gridlock.bet = bet; gridlock.mult = 1; gridlock.current = [3,0]; gridlock.route = 0;
-  gridlock.lights = Array.from({length:16}, gridlockLight); gridlock.lights[15] = 'green';
   setBalance(balance - bet); this.disabled = true; document.getElementById('gridlock-bank').disabled = false;
-  document.getElementById('gridlock-msg').textContent = 'Pick an adjacent intersection before the lights change.';
+  document.getElementById('gridlock-msg').textContent = 'A route is open. Pick an adjacent intersection before the light changes.';
   document.getElementById('gridlock-msg').className = 'result-msg';
-  renderGridlock();
-  gridlock.timer = setInterval(() => { if(!gridlock.active) return; gridlock.lights = Array.from({length:16}, gridlockLight); gridlock.lights[3] = 'green'; renderGridlock(); }, 700);
+  gridlockSetTurn();
 });
 document.getElementById('gridlock-bank').addEventListener('click', () => { if(gridlock.active) gridlockStop(gridlock.bet * gridlock.mult, 'You pulled over safely. Paid ' + fmt(gridlock.bet * gridlock.mult) + '.', true); });
 gridlock.lights = Array.from({length:16}, gridlockLight); gridlock.lights[3] = 'green'; renderGridlock();
 
 /* Chop */
-let chopActive = false, chopBet = 0, chopPosition = 0.5;
+let chopActive = false, chopBet = 0, chopPosition = 0.5, chopRaf = null, chopStarted = 0;
 function chopAnimate(ts){
-  chopPosition = (Math.sin(ts / 355) + 1) / 2;
+  if(!chopActive) return;
+  chopPosition = (Math.sin((ts - chopStarted) / 265) + 1) / 2;
   document.getElementById('chop-needle').style.left = (chopPosition * 100).toFixed(2) + '%';
-  requestAnimationFrame(chopAnimate);
+  chopRaf = requestAnimationFrame(chopAnimate);
 }
-requestAnimationFrame(chopAnimate);
+function chopPayout(error){
+  if(error <= 0.07) return 4 + (1 - error / 0.07) * 6;
+  if(error <= 0.18) return 1.8 + (0.18 - error) / 0.11 * 2.2;
+  if(error <= 0.35) return 1.05 + (0.35 - error) / 0.17 * 0.75;
+  return 0;
+}
+function chopControls(locked){
+  document.getElementById('chop-bet').disabled = locked;
+  document.querySelectorAll('[data-target="chop-bet"]').forEach(btn => btn.disabled = locked);
+}
 document.getElementById('chop-btn').addEventListener('click', function(){
   const msg = document.getElementById('chop-msg');
   if(!chopActive){
     const bet = getBet('chop-bet', 'chop-msg'); if(bet === null) return;
-    chopActive = true; chopBet = bet; setBalance(balance - bet);
+    chopActive = true; chopBet = bet; chopStarted = performance.now(); setBalance(balance - bet);
     this.disabled = false;
-    this.textContent = 'CHOP!'; msg.textContent = 'Axe is up. Hit the bright center.'; msg.className = 'result-msg';
+    chopControls(true); this.textContent = 'CHOP!'; msg.textContent = 'Axe is up. Aim for the bright center.'; msg.className = 'result-msg';
+    chopRaf = requestAnimationFrame(chopAnimate);
     return;
   }
-  chopActive = false; this.textContent = 'Raise axe';
+  chopActive = false; cancelAnimationFrame(chopRaf); this.textContent = 'Raise axe';
   const error = Math.abs(chopPosition - 0.5);
-  const log = document.getElementById('chop-log'); log.classList.remove('chopped'); void log.offsetWidth; log.classList.add('chopped');
-  if(chopPosition < 0.15 || chopPosition > 0.85){
-    document.getElementById('chop-accuracy').textContent = Math.round((1-error) * 100) + '%';
+  const accuracy = Math.round(Math.max(0, 1 - error * 2) * 100);
+  const mult = chopPayout(error);
+  const log = document.getElementById('chop-log'); log.classList.remove('chopped','critical'); void log.offsetWidth; log.classList.add('chopped');
+  document.getElementById('chop-accuracy').textContent = accuracy + '%';
+  if(mult <= 0){
+    document.getElementById('chop-tier').textContent = 'Knot';
     msg.textContent = 'Knot hit. The axe head flies into the woods.'; msg.className = 'result-msg lose'; awardPayout(0, 'chop', false);
   } else {
-    const mult = error <= 0.07 ? 4 + (1 - error / 0.07) * 6 : 1.15;
     const payout = chopBet * mult;
-    document.getElementById('chop-accuracy').textContent = Math.round((1-error) * 100) + '%';
-    msg.textContent = error <= 0.07 ? 'Clean split! Paid ' + fmt(payout) + '.' : 'Glancing cut. Paid ' + fmt(payout) + '.';
+    const tier = error <= .025 ? 'Perfect' : error <= .07 ? 'Clean' : error <= .18 ? 'Solid' : 'Rough';
+    document.getElementById('chop-tier').textContent = tier;
+    if(tier === 'Perfect') log.classList.add('critical');
+    msg.textContent = tier + ' cut at ' + accuracy + '%. Paid ' + fmt(payout) + '.';
     msg.className = 'result-msg win'; awardPayout(payout, 'chop', true);
   }
-  this.disabled = balance <= 0;
+  setTimeout(() => { chopControls(false); this.disabled = balance <= 0; }, 420);
 });
+document.getElementById('chop-needle').style.left = '50%';
 
 /* Overcooked */
-const overcook = { active:false, bet:0, started:0, flipped:false, raf:null };
-function overcookMultiplier(seconds){
-  if(!overcook.flipped) return 0;
-  if(seconds < 3) return 0.6;
-  if(seconds <= 7.4) return 1 + (seconds - 3) * 0.56;
-  if(seconds < 10.8) return Math.max(0.2, 3.46 - (seconds - 7.4) * 0.9);
+const overcook = { active:false, bet:0, started:0, flipped:false, flippedAt:0, raf:null };
+function overcookSideValue(age){
+  if(age < 1.25) return 0.2 + age * 0.42;
+  if(age <= 3.35) return 0.73 + (age - 1.25) * 0.82;
+  if(age < 5.9) return Math.max(0.28, 2.45 - (age - 3.35) * 0.68);
   return 0;
+}
+function overcookState(seconds){
+  const topAge = overcook.flipped ? overcook.flippedAt : seconds;
+  const bottomAge = overcook.flipped ? Math.max(0, seconds - overcook.flippedAt) : 0;
+  const burned = topAge >= 5.9 || (overcook.flipped && bottomAge >= 5.9);
+  const mult = overcook.flipped && !burned ? Math.round(Math.min(overcookSideValue(topAge), overcookSideValue(bottomAge)) * 1.45 * 100) / 100 : 0;
+  return { topAge, bottomAge, burned, mult };
+}
+function overcookControls(locked){
+  document.getElementById('overcook-bet').disabled = locked;
+  document.querySelectorAll('[data-target="overcook-bet"]').forEach(btn => btn.disabled = locked);
 }
 function overcookEnd(payout, text, win){
   cancelAnimationFrame(overcook.raf); overcook.active = false;
@@ -9166,39 +9281,47 @@ function overcookEnd(payout, text, win){
   document.getElementById('overcook-place').textContent = 'Place steak';
   document.getElementById('overcook-flip-btn').disabled = true;
   document.getElementById('overcook-plate').disabled = true;
-  const msg = document.getElementById('overcook-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose');
+  overcookControls(false);
+  const msg = document.getElementById('overcook-msg'); msg.textContent = text; msg.className = 'result-msg' + (win ? ' win' : payout <= 0 ? ' lose' : '');
   awardPayout(payout, 'overcooked', win);
 }
 function overcookLoop(now){
   if(!overcook.active) return;
   const seconds = (now - overcook.started) / 1000;
   const meat = document.getElementById('overcook-meat');
+  const stage = document.getElementById('overcook-stage');
   document.getElementById('overcook-time').textContent = seconds.toFixed(1) + 's';
-  const mult = overcookMultiplier(seconds);
-  document.getElementById('overcook-mult').textContent = overcook.flipped ? mult.toFixed(2) + 'x' : 'Flip first';
-  meat.style.background = seconds < 2.5 ? '#b54130' : seconds < 5.2 ? '#ae592a' : seconds < 7.5 ? '#8e5729' : '#55301d';
-  if(seconds >= 10.8){ meat.classList.add('burnt'); overcookEnd(0, 'Burnt to a crisp. The grill keeps the steak.', false); return; }
+  const state = overcookState(seconds);
+  const exposedAge = overcook.flipped ? state.bottomAge : state.topAge;
+  document.getElementById('overcook-needle').style.left = Math.min(100, exposedAge / 5.9 * 100).toFixed(1) + '%';
+  document.getElementById('overcook-mult').textContent = overcook.flipped ? state.mult.toFixed(2) + 'x' : 'Flip the top at 2–3s';
+  document.getElementById('overcook-flip').textContent = overcook.flipped ? 'Top ' + state.topAge.toFixed(1) + 's' : 'Top ' + state.topAge.toFixed(1) + 's';
+  meat.style.background = exposedAge < 1.5 ? '#b54130' : exposedAge < 3.4 ? '#ae592a' : exposedAge < 5.1 ? '#8e5729' : '#55301d';
+  stage.classList.toggle('ready', overcook.flipped && state.topAge >= 2.4 && state.topAge <= 4.2 && state.bottomAge >= 2.4 && state.bottomAge <= 4.2);
+  stage.classList.toggle('burning', state.topAge >= 5.2 || state.bottomAge >= 5.2);
+  if(state.burned){ meat.classList.add('burnt'); overcookEnd(0, 'One side blackened. The grill keeps the steak.', false); return; }
   overcook.raf = requestAnimationFrame(overcookLoop);
 }
 document.getElementById('overcook-place').addEventListener('click', function(){
   if(overcook.active) return;
   const bet = getBet('overcook-bet', 'overcook-msg'); if(bet === null) return;
-  overcook.active = true; overcook.bet = bet; overcook.started = performance.now(); overcook.flipped = false;
+  overcook.active = true; overcook.bet = bet; overcook.started = performance.now(); overcook.flipped = false; overcook.flippedAt = 0;
   setBalance(balance - bet); this.disabled = true; this.textContent = 'Cooking…';
-  const meat = document.getElementById('overcook-meat'); meat.className = 'grill-meat';
-  document.getElementById('overcook-flip').textContent = 'Waiting'; document.getElementById('overcook-flip-btn').disabled = false; document.getElementById('overcook-plate').disabled = false;
-  document.getElementById('overcook-msg').textContent = 'Flip once, then pull it before it burns.'; document.getElementById('overcook-msg').className = 'result-msg';
+  overcookControls(true); const meat = document.getElementById('overcook-meat'); meat.className = 'grill-meat';
+  document.getElementById('overcook-stage').classList.remove('ready','burning'); document.getElementById('overcook-needle').style.left = '0%';
+  document.getElementById('overcook-flip').textContent = 'Top 0.0s'; document.getElementById('overcook-flip-btn').disabled = false; document.getElementById('overcook-plate').disabled = false;
+  document.getElementById('overcook-msg').textContent = 'Sear the first side for 2–3 seconds, flip, then match the second side.'; document.getElementById('overcook-msg').className = 'result-msg';
   overcook.raf = requestAnimationFrame(overcookLoop);
 });
 document.getElementById('overcook-flip-btn').addEventListener('click', function(){
   if(!overcook.active || overcook.flipped) return;
-  overcook.flipped = true; this.disabled = true; document.getElementById('overcook-flip').textContent = 'Done'; document.getElementById('overcook-meat').classList.add('flipped'); playSound('tick');
+  overcook.flipped = true; overcook.flippedAt = (performance.now() - overcook.started) / 1000; this.disabled = true; document.getElementById('overcook-meat').classList.add('flipped'); playSound('tick');
 });
 document.getElementById('overcook-plate').addEventListener('click', () => {
   if(!overcook.active) return;
-  if(!overcook.flipped){ document.getElementById('overcook-msg').textContent = 'It needs one flip before it can be plated.'; document.getElementById('overcook-msg').className = 'result-msg lose'; return; }
-  const seconds = (performance.now() - overcook.started) / 1000, mult = overcookMultiplier(seconds), payout = overcook.bet * mult;
-  overcookEnd(payout, 'Plated at ' + seconds.toFixed(1) + 's. Paid ' + fmt(payout) + '.', payout > overcook.bet);
+  if(!overcook.flipped){ document.getElementById('overcook-msg').textContent = 'Flip once before plating—the bottom is still raw.'; document.getElementById('overcook-msg').className = 'result-msg'; return; }
+  const seconds = (performance.now() - overcook.started) / 1000, state = overcookState(seconds), payout = overcook.bet * state.mult;
+  overcookEnd(payout, (state.mult >= 1 ? 'Plated' : 'Undercooked, but plated') + ' at ' + seconds.toFixed(1) + 's. Paid ' + fmt(payout) + '.', payout >= overcook.bet);
 });
 
 /* Heartbeat */
@@ -9208,27 +9331,44 @@ function heartbeatEnd(payout, text, win){
   cancelAnimationFrame(heartbeat.raf); heartbeat.active = false;
   document.getElementById('heartbeat-btn').textContent = 'Start rhythm'; document.getElementById('heartbeat-btn').disabled = balance <= 0;
   document.getElementById('heartbeat-bank').disabled = true;
+  const monitor = document.getElementById('heartbeat-monitor'); monitor.classList.remove('live'); monitor.classList.toggle('flatline', !win);
+  const led = document.getElementById('heartbeat-led'); led.classList.remove('live','hot');
+  document.getElementById('heartbeat-cue').textContent = win ? 'Combo secured.' : 'Flatline. Start a new rhythm.';
+  document.getElementById('heartbeat-next').textContent = win ? heartbeat.mult.toFixed(2) + 'x' : '—';
   const msg = document.getElementById('heartbeat-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose');
   awardPayout(payout, 'heartbeat', win);
 }
 function heartbeatLoop(now){
   if(!heartbeat.active) return;
   const elapsed = now - heartbeat.start;
-  if(elapsed < 0){ heartbeat.raf = requestAnimationFrame(heartbeatLoop); return; }
+  if(elapsed < 0){
+    const count = Math.max(0, Math.ceil(-elapsed / 400));
+    document.getElementById('heartbeat-cue').textContent = 'Count in… ' + count;
+    document.getElementById('heartbeat-next').textContent = 'Ready';
+    document.getElementById('heartbeat-led').className = 'heartbeat-led hot';
+    heartbeat.raf = requestAnimationFrame(heartbeatLoop); return;
+  }
   const beat = Math.floor(elapsed / HEARTBEAT_MS), phase = (elapsed % HEARTBEAT_MS) / HEARTBEAT_MS;
   document.getElementById('heartbeat-needle').style.left = (phase * 100).toFixed(2) + '%';
+  document.getElementById('heartbeat-next').textContent = Math.max(0, Math.abs(.5 - phase) * HEARTBEAT_MS).toFixed(0) + 'ms';
+  document.getElementById('heartbeat-led').className = 'heartbeat-led' + (Math.abs(phase - .5) <= .13 ? ' hot' : ' live');
   if(beat !== heartbeat.lastBeat){
     if(heartbeat.lastBeat >= 0 && heartbeat.hitBeat !== heartbeat.lastBeat){ heartbeatEnd(0, 'Missed beat. The monitor flatlines.', false); return; }
     heartbeat.lastBeat = beat;
+    const monitor = document.getElementById('heartbeat-monitor'); monitor.classList.remove('beat'); void monitor.offsetWidth; monitor.classList.add('beat');
+    document.getElementById('heartbeat-cue').textContent = 'Beat ' + (beat + 1) + ' — hit the gold lane';
+    playSound('tick');
   }
   heartbeat.raf = requestAnimationFrame(heartbeatLoop);
 }
 document.getElementById('heartbeat-btn').addEventListener('click', function(){
   if(!heartbeat.active){
     const bet = getBet('heartbeat-bet', 'heartbeat-msg'); if(bet === null) return;
-    heartbeat.active = true; heartbeat.bet = bet; heartbeat.combo = 0; heartbeat.mult = 1; heartbeat.start = performance.now() + 350; heartbeat.lastBeat = -1; heartbeat.hitBeat = -1;
-    setBalance(balance - bet); this.disabled = false; this.textContent = 'Hit beat'; document.getElementById('heartbeat-bank').disabled = false;
-    document.getElementById('heartbeat-msg').textContent = 'Wait for the needle to cross the gold lane.'; document.getElementById('heartbeat-msg').className = 'result-msg'; heartbeat.raf = requestAnimationFrame(heartbeatLoop); return;
+    heartbeat.active = true; heartbeat.bet = bet; heartbeat.combo = 0; heartbeat.mult = 1; heartbeat.start = performance.now() + 1200; heartbeat.lastBeat = -1; heartbeat.hitBeat = -1;
+    setBalance(balance - bet); this.disabled = false; this.textContent = 'Hit beat'; document.getElementById('heartbeat-bank').disabled = true;
+    document.getElementById('heartbeat-combo').textContent = '0'; document.getElementById('heartbeat-mult').textContent = '1.00x';
+    const monitor = document.getElementById('heartbeat-monitor'); monitor.classList.remove('flatline'); monitor.classList.add('live');
+    document.getElementById('heartbeat-msg').textContent = 'Count in, then click or press Space on every beat.'; document.getElementById('heartbeat-msg').className = 'result-msg'; heartbeat.raf = requestAnimationFrame(heartbeatLoop); return;
   }
   const elapsed = performance.now() - heartbeat.start;
   if(elapsed < 0) return;
@@ -9236,6 +9376,7 @@ document.getElementById('heartbeat-btn').addEventListener('click', function(){
   if(beat !== heartbeat.hitBeat && Math.abs(phase - 0.5) <= 0.13){
     heartbeat.hitBeat = beat; heartbeat.combo++; heartbeat.mult = Math.round((1 + heartbeat.combo * 0.31) * 100) / 100;
     document.getElementById('heartbeat-combo').textContent = heartbeat.combo; document.getElementById('heartbeat-mult').textContent = heartbeat.mult.toFixed(2) + 'x';
+    document.getElementById('heartbeat-bank').disabled = false;
     const monitor = document.getElementById('heartbeat-monitor'); monitor.classList.remove('beat'); void monitor.offsetWidth; monitor.classList.add('beat');
     document.getElementById('heartbeat-msg').textContent = heartbeat.combo > 1 ? 'Perfect. Keep the rhythm or bank it.' : 'Beat locked. Build the combo.'; document.getElementById('heartbeat-msg').className = 'result-msg win'; playSound('gem');
   } else heartbeatEnd(0, 'Mistimed click. The monitor flatlines.', false);
@@ -9245,10 +9386,24 @@ document.getElementById('heartbeat-bank').addEventListener('click', () => {
   if(heartbeat.combo < 1){ document.getElementById('heartbeat-msg').textContent = 'Bank after at least one clean beat.'; return; }
   const payout = heartbeat.bet * heartbeat.mult; heartbeatEnd(payout, 'Combo banked. Paid ' + fmt(payout) + '.', true);
 });
+document.addEventListener('keydown', event => {
+  if(event.code !== 'Space' || !heartbeat.active || /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement && document.activeElement.tagName)) return;
+  event.preventDefault();
+  document.getElementById('heartbeat-btn').click();
+});
 
 /* Leakage */
-const leakage = { active:false, releasing:false, bet:0, turns:0, joints:[] };
-const LEAK_PAYOUTS = [0.5,0.8,1.25,4,1.6,0.85], LEAK_ARROW = ['↙','↓','↘'];
+const leakage = { active:false, releasing:false, bet:0, turns:0, joints:[], payouts:[0.02,0.12,0.32,0.58,1,3] };
+const LEAK_BASE_PAYOUTS = [0.02,0.12,0.32,0.58,1,3], LEAK_ARROW = ['↙','↓','↘'];
+function leakagePayouts(){
+  const values = LEAK_BASE_PAYOUTS.slice();
+  for(let i=values.length - 1; i>0; i--){ const j = Math.floor(Math.random() * (i + 1)); [values[i],values[j]] = [values[j],values[i]]; }
+  return values;
+}
+function leakageControls(locked){
+  document.getElementById('leakage-bet').disabled = locked;
+  document.querySelectorAll('[data-target="leakage-bet"]').forEach(btn => btn.disabled = locked);
+}
 function leakageRoute(){
   let col = 2, path = [];
   for(let row=0; row<5; row++){
@@ -9256,45 +9411,57 @@ function leakageRoute(){
   }
   return { path, bucket:col };
 }
-function renderLeakage(flow){
+function renderLeakage(mode){
   const pipes = document.getElementById('leakage-pipes'), buckets = document.getElementById('leakage-buckets'); pipes.innerHTML = ''; buckets.innerHTML = '';
   const route = leakage.joints.length ? leakageRoute() : {path:[],bucket:2};
+  const preview = mode === 'preview', flow = mode === 'flow';
   leakage.joints.forEach((row, r) => row.forEach((joint, c) => {
-    const btn = document.createElement('button'); const lit = flow && route.path.some(point => point[0] === r && point[1] === c);
-    btn.className = 'leak-joint' + (lit ? ' flow' : ''); btn.textContent = LEAK_ARROW[joint]; btn.disabled = !leakage.active || leakage.releasing || leakage.turns <= 0;
-    btn.addEventListener('click', () => { if(!leakage.active || leakage.turns <= 0) return; leakage.joints[r][c] = (leakage.joints[r][c] + 1) % 3; leakage.turns--; renderLeakage(false); }); pipes.appendChild(btn);
+    const btn = document.createElement('button'); const lit = (preview || flow) && route.path.some(point => point[0] === r && point[1] === c);
+    btn.className = 'leak-joint' + (lit ? (flow ? ' flow' : ' preview') : ''); btn.textContent = LEAK_ARROW[joint]; btn.disabled = !leakage.active || leakage.releasing || leakage.turns <= 0;
+    btn.setAttribute('aria-label', 'Pipe joint row ' + (r + 1) + ', column ' + (c + 1) + ', outlet ' + LEAK_ARROW[joint]);
+    btn.addEventListener('click', () => { if(!leakage.active || leakage.turns <= 0) return; leakage.joints[r][c] = (leakage.joints[r][c] + 1) % 3; leakage.turns--; renderLeakage('preview'); }); pipes.appendChild(btn);
   }));
-  LEAK_PAYOUTS.forEach((mult, i) => { const bucket = document.createElement('div'); bucket.className = 'leak-bucket' + (flow && i === route.bucket ? ' filled' : ''); bucket.textContent = mult.toFixed(2) + 'x'; buckets.appendChild(bucket); });
-  document.getElementById('leakage-turns').textContent = leakage.active ? leakage.turns : '—'; document.getElementById('leakage-target').textContent = leakage.active ? 'Bucket ' + (route.bucket + 1) : '—';
+  leakage.payouts.forEach((mult, i) => { const bucket = document.createElement('div'); bucket.className = 'leak-bucket' + (flow && i === route.bucket ? ' filled' : ''); bucket.textContent = mult.toFixed(2) + 'x'; buckets.appendChild(bucket); });
+  const board = document.getElementById('leakage-board'); board.classList.toggle('flowing', flow);
+  document.getElementById('leakage-turns').textContent = leakage.active ? leakage.turns : '—'; document.getElementById('leakage-target').textContent = leakage.active ? 'B' + (route.bucket + 1) + ' · ' + leakage.payouts[route.bucket].toFixed(2) + 'x' : '—';
+  document.getElementById('leakage-best').textContent = Math.max(...leakage.payouts).toFixed(2) + 'x';
 }
-function leakageEnd(payout, text, win){
+function leakageEnd(payout, text, win, keepBoard){
   leakage.active = false; leakage.releasing = false; document.getElementById('leakage-prepare').disabled = balance <= 0; document.getElementById('leakage-release').disabled = true;
-  const msg = document.getElementById('leakage-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'leakage', win); renderLeakage(false);
+  leakageControls(false);
+  const msg = document.getElementById('leakage-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'leakage', win); if(!keepBoard) renderLeakage();
 }
 document.getElementById('leakage-prepare').addEventListener('click', function(){
   if(leakage.active) return;
   const bet = getBet('leakage-bet', 'leakage-msg'); if(bet === null) return;
-  leakage.active = true; leakage.releasing = false; leakage.bet = bet; leakage.turns = 5; leakage.joints = Array.from({length:5}, () => Array.from({length:6}, () => Math.floor(Math.random()*3)));
-  setBalance(balance - bet); this.disabled = true; document.getElementById('leakage-release').disabled = false; document.getElementById('leakage-msg').textContent = 'You have five valve turns. Rotate the joints, then release.'; document.getElementById('leakage-msg').className = 'result-msg'; renderLeakage(false);
+  leakage.active = true; leakage.releasing = false; leakage.bet = bet; leakage.turns = 2; leakage.payouts = leakagePayouts(); leakage.joints = Array.from({length:5}, () => Array.from({length:6}, () => Math.floor(Math.random()*3)));
+  setBalance(balance - bet); this.disabled = true; leakageControls(true); document.getElementById('leakage-release').disabled = false; document.getElementById('leakage-msg').textContent = 'You have two valve turns. The bright path previews where the water will land.'; document.getElementById('leakage-msg').className = 'result-msg'; renderLeakage('preview');
 });
 document.getElementById('leakage-release').addEventListener('click', function(){
   if(!leakage.active || leakage.releasing) return; leakage.releasing = true; this.disabled = true;
-  const route = leakageRoute(); let step = 0; renderLeakage(false);
+  const route = leakageRoute(); let step = 0; renderLeakage('preview');
   const timer = setInterval(() => {
     const tile = document.getElementById('leakage-pipes').children[route.path[step][0] * 6 + route.path[step][1]]; if(tile) tile.classList.add('flow'); playSound('peg'); step++;
-    if(step >= route.path.length){ clearInterval(timer); setTimeout(() => { const mult = LEAK_PAYOUTS[route.bucket], payout = leakage.bet * mult; renderLeakage(true); leakageEnd(payout, 'Water reached bucket ' + (route.bucket + 1) + ' at ' + mult.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', payout > leakage.bet); }, 300); }
+    if(step >= route.path.length){ clearInterval(timer); setTimeout(() => { const mult = leakage.payouts[route.bucket], payout = leakage.bet * mult; renderLeakage('flow'); leakageEnd(payout, 'Water reached bucket ' + (route.bucket + 1) + ' at ' + mult.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', payout > leakage.bet, true); }, 480); }
   }, 420);
 });
-leakage.joints = Array.from({length:5}, () => Array.from({length:6}, () => Math.floor(Math.random()*3))); renderLeakage(false);
+leakage.joints = Array.from({length:5}, () => Array.from({length:6}, () => Math.floor(Math.random()*3))); renderLeakage();
 
 /* Orbit */
-const orbit = { active:false, bet:0, pos:{x:0,y:-0.62}, vel:{x:1.55,y:0}, last:0, started:0, points:[], raf:null };
+const orbit = { active:false, bet:0, pos:{x:0,y:-0.62}, vel:{x:1.55,y:0}, last:0, simTime:0, sampledAt:0, points:[], raf:null };
+function orbitMultiplier(){ return Math.min(12, 1 + orbit.simTime * 0.16); }
+function orbitControls(locked){
+  document.getElementById('orbit-bet').disabled = locked;
+  document.querySelectorAll('[data-target="orbit-bet"]').forEach(btn => btn.disabled = locked);
+}
 function renderOrbit(){
-  const sat = document.getElementById('orbit-satellite'); sat.style.left = (50 + orbit.pos.x * 31).toFixed(2) + '%'; sat.style.top = (50 + orbit.pos.y * 31).toFixed(2) + '%';
+  const field = document.getElementById('orbit-field'), rect = field.getBoundingClientRect(), scale = Math.min(rect.width, rect.height) * .31;
+  const sat = document.getElementById('orbit-satellite');
+  if(rect.width && rect.height){ sat.style.left = (rect.width / 2 + orbit.pos.x * scale).toFixed(1) + 'px'; sat.style.top = (rect.height / 2 + orbit.pos.y * scale).toFixed(1) + 'px'; }
   document.getElementById('orbit-line').setAttribute('points', orbit.points.map(p => p.x.toFixed(2) + ',' + p.y.toFixed(2)).join(' '));
 }
 function orbitFinish(payout, text, win){
-  cancelAnimationFrame(orbit.raf); orbit.active = false; document.getElementById('orbit-launch').disabled = balance <= 0; document.getElementById('orbit-bank').disabled = true; document.getElementById('orbit-angle').disabled = false; document.getElementById('orbit-speed').disabled = false;
+  cancelAnimationFrame(orbit.raf); orbit.active = false; document.getElementById('orbit-launch').disabled = balance <= 0; document.getElementById('orbit-bank').disabled = true; document.getElementById('orbit-angle').disabled = false; document.getElementById('orbit-speed').disabled = false; document.getElementById('orbit-field').classList.remove('launching'); orbitControls(false);
   const msg = document.getElementById('orbit-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'orbit', win);
 }
 function orbitLoop(now){
@@ -9302,11 +9469,17 @@ function orbitLoop(now){
   const dt = Math.min(0.035, (now - orbit.last) / 1000 || 0.016); orbit.last = now;
   const r = Math.hypot(orbit.pos.x, orbit.pos.y), gravity = 1.5 / Math.max(0.02, r * r * r);
   orbit.vel.x += -orbit.pos.x * gravity * dt; orbit.vel.y += -orbit.pos.y * gravity * dt; orbit.pos.x += orbit.vel.x * dt; orbit.pos.y += orbit.vel.y * dt;
-  const nextR = Math.hypot(orbit.pos.x, orbit.pos.y), elapsed = (now - orbit.started) / 1000, mult = 1 + elapsed * 0.16;
+  orbit.simTime += dt;
+  const nextR = Math.hypot(orbit.pos.x, orbit.pos.y), elapsed = orbit.simTime, mult = orbitMultiplier();
   if(nextR < 0.18){ document.getElementById('orbit-status').textContent = 'Burned'; orbitFinish(0, 'The satellite fell into the gravity well.', false); return; }
   if(nextR > 1.48){ document.getElementById('orbit-status').textContent = 'Escaped'; orbitFinish(0, 'The satellite escaped the map boundary.', false); return; }
-  if(orbit.points.length === 0 || elapsed * 60 % 3 < 1){ orbit.points.push({x:50 + orbit.pos.x * 31,y:50 + orbit.pos.y * 31}); if(orbit.points.length > 110) orbit.points.shift(); }
-  document.getElementById('orbit-time').textContent = elapsed.toFixed(1) + 's'; document.getElementById('orbit-mult').textContent = mult.toFixed(2) + 'x'; document.getElementById('orbit-status').textContent = nextR < 0.38 ? 'Close' : nextR > 1.18 ? 'Wide' : 'Stable'; renderOrbit(); orbit.raf = requestAnimationFrame(orbitLoop);
+  if(elapsed - orbit.sampledAt >= .045 || orbit.points.length === 0){
+    orbit.sampledAt = elapsed;
+    const field = document.getElementById('orbit-field'), rect = field.getBoundingClientRect(), scale = Math.min(rect.width, rect.height) * .31;
+    orbit.points.push({ x:(rect.width / 2 + orbit.pos.x * scale) / rect.width * 100, y:(rect.height / 2 + orbit.pos.y * scale) / rect.height * 100 });
+    if(orbit.points.length > 120) orbit.points.shift();
+  }
+  document.getElementById('orbit-time').textContent = elapsed.toFixed(1) + 's'; document.getElementById('orbit-mult').textContent = mult.toFixed(2) + 'x'; document.getElementById('orbit-status').textContent = mult >= 12 ? 'Capped' : nextR < 0.38 ? 'Close' : nextR > 1.18 ? 'Wide' : 'Stable'; renderOrbit(); orbit.raf = requestAnimationFrame(orbitLoop);
 }
 function updateOrbitInputs(){ document.getElementById('orbit-angle-value').textContent = document.getElementById('orbit-angle').value + '°'; document.getElementById('orbit-speed-value').textContent = Number(document.getElementById('orbit-speed').value).toFixed(2); }
 document.getElementById('orbit-angle').addEventListener('input', updateOrbitInputs); document.getElementById('orbit-speed').addEventListener('input', updateOrbitInputs);
@@ -9314,76 +9487,137 @@ document.getElementById('orbit-launch').addEventListener('click', function(){
   if(orbit.active) return;
   const bet = getBet('orbit-bet', 'orbit-msg'); if(bet === null) return;
   const rad = Number(document.getElementById('orbit-angle').value) * Math.PI / 180, speed = Number(document.getElementById('orbit-speed').value);
-  orbit.active = true; orbit.bet = bet; orbit.pos = {x:0,y:-0.62}; orbit.vel = {x:Math.cos(rad)*speed,y:Math.sin(rad)*speed}; orbit.points = []; orbit.last = performance.now(); orbit.started = orbit.last;
-  setBalance(balance - bet); this.disabled = true; document.getElementById('orbit-bank').disabled = false; document.getElementById('orbit-angle').disabled = true; document.getElementById('orbit-speed').disabled = true; document.getElementById('orbit-msg').textContent = 'Satellite launched. A clean orbit builds every second.'; document.getElementById('orbit-msg').className = 'result-msg'; orbit.raf = requestAnimationFrame(orbitLoop);
+  orbit.active = true; orbit.bet = bet; orbit.pos = {x:0,y:-0.62}; orbit.vel = {x:Math.cos(rad)*speed,y:Math.sin(rad)*speed}; orbit.points = []; orbit.last = performance.now(); orbit.simTime = 0; orbit.sampledAt = 0;
+  setBalance(balance - bet); orbitControls(true); this.disabled = true; document.getElementById('orbit-bank').disabled = false; document.getElementById('orbit-angle').disabled = true; document.getElementById('orbit-speed').disabled = true; document.getElementById('orbit-field').classList.add('launching'); document.getElementById('orbit-msg').textContent = 'Satellite launched. Simulation time, not tab time, builds the multiplier.'; document.getElementById('orbit-msg').className = 'result-msg'; orbit.raf = requestAnimationFrame(orbitLoop);
 });
-document.getElementById('orbit-bank').addEventListener('click', () => { if(!orbit.active) return; const mult = 1 + ((performance.now() - orbit.started) / 1000) * 0.16, payout = orbit.bet * mult; orbitFinish(payout, 'Orbit banked at ' + mult.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', true); });
+document.getElementById('orbit-bank').addEventListener('click', () => { if(!orbit.active) return; const mult = orbitMultiplier(), payout = orbit.bet * mult; orbitFinish(payout, 'Orbit banked at ' + mult.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', true); });
 updateOrbitInputs(); renderOrbit();
 
 /* Avalanche */
-const avalanche = { active:false, bet:0, mass:1, lane:2, step:0, terrain:[], timer:null };
+const avalanche = { active:false, bet:0, mass:1, lane:2, step:0, terrain:[], timer:null, steer:0 };
 function avalancheBuild(){
   avalanche.terrain = Array.from({length:8}, () => Array.from({length:5}, () => { const roll = Math.random(); return roll < .075 ? 'boulder' : roll < .29 ? 'tree' : 'powder'; }));
   const field = document.getElementById('avalanche-obstacles'); field.innerHTML = '';
-  avalanche.terrain.forEach((row,r) => row.forEach((kind,c) => { if(kind === 'powder') return; const el = document.createElement('span'); el.className = 'avalanche-obstacle'; el.textContent = kind === 'tree' ? '🌲' : '🪨'; el.style.left = (10 + c * 20) + '%'; el.style.top = (8 + r * 11.2) + '%'; field.appendChild(el); }));
+  avalanche.terrain.forEach((row,r) => row.forEach((kind,c) => { if(kind === 'powder') return; const el = document.createElement('span'); el.className = 'avalanche-obstacle'; el.dataset.row = r; el.dataset.col = c; el.textContent = kind === 'tree' ? '🌲' : '🪨'; el.style.left = (10 + c * 20) + '%'; el.style.top = (8 + r * 11.2) + '%'; field.appendChild(el); }));
+}
+function avalancheForecast(){
+  if(!avalanche.active || avalanche.step >= 8){ document.getElementById('avalanche-terrain').textContent = 'Fresh powder'; return; }
+  const row = avalanche.terrain[avalanche.step], labels = [[-1,'L'],[0,'C'],[1,'R']].map(([offset,label]) => {
+    const lane = avalanche.lane + offset; if(lane < 0 || lane > 4) return label + ' —';
+    return label + ' ' + (row[lane] === 'powder' ? '❄' : row[lane] === 'tree' ? '🌲' : '🪨');
+  });
+  document.getElementById('avalanche-terrain').textContent = labels.join(' ');
 }
 function renderAvalanche(){
   const ball = document.getElementById('avalanche-snowball'); ball.style.left = (10 + avalanche.lane * 20) + '%'; ball.style.top = (5 + avalanche.step * 11.3) + '%'; ball.style.transform = 'scale(' + Math.max(.42, avalanche.mass) + ')';
-  document.getElementById('avalanche-size').textContent = avalanche.mass.toFixed(2) + 'x'; document.getElementById('avalanche-distance').textContent = avalanche.step + ' / 8';
+  document.getElementById('avalanche-size').textContent = avalanche.mass.toFixed(2) + 'x'; document.getElementById('avalanche-distance').textContent = avalanche.step + ' / 8'; avalancheForecast();
 }
-function avalancheEnd(payout, text, win){ clearInterval(avalanche.timer); avalanche.active = false; const ball = document.getElementById('avalanche-snowball'); ball.classList.remove('rolling'); document.getElementById('avalanche-drop').disabled = balance <= 0; const msg = document.getElementById('avalanche-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'avalanche', win); }
+function avalancheEnd(payout, text, win){ clearTimeout(avalanche.timer); avalanche.active = false; const ball = document.getElementById('avalanche-snowball'); ball.classList.remove('rolling'); document.getElementById('avalanche-drop').disabled = balance <= 0; document.getElementById('avalanche-lane').disabled = false; document.getElementById('avalanche-left').disabled = true; document.getElementById('avalanche-right').disabled = true; document.querySelectorAll('.avalanche-steer').forEach(btn => btn.classList.remove('armed')); const msg = document.getElementById('avalanche-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'avalanche', win); }
+function avalancheQueueSteer(direction){
+  if(!avalanche.active) return;
+  avalanche.steer = direction;
+  document.getElementById('avalanche-left').classList.toggle('armed', direction < 0);
+  document.getElementById('avalanche-right').classList.toggle('armed', direction > 0);
+  document.getElementById('avalanche-msg').textContent = 'Steer queued for the next ridge.';
+  document.getElementById('avalanche-msg').className = 'result-msg';
+}
+function avalancheRollStep(){
+  if(!avalanche.active) return;
+  avalanche.step++;
+  const natural = Math.random() < .14 ? (Math.random() < .5 ? -1 : 1) : 0;
+  const move = avalanche.steer || natural;
+  avalanche.lane = Math.max(0, Math.min(4, avalanche.lane + move));
+  avalanche.steer = 0; document.querySelectorAll('.avalanche-steer').forEach(btn => btn.classList.remove('armed'));
+  const kind = avalanche.terrain[avalanche.step - 1][avalanche.lane];
+  const obstacle = document.querySelector('.avalanche-obstacle[data-row="' + (avalanche.step - 1) + '"][data-col="' + avalanche.lane + '"]');
+  if(kind === 'boulder'){
+    if(obstacle) obstacle.classList.add('boulder-hit');
+    renderAvalanche(); avalancheEnd(0, 'Boulder strike. The snowball shattered.', false); return;
+  }
+  if(kind === 'tree'){
+    avalanche.mass = Math.max(.15, avalanche.mass * .62); if(obstacle) obstacle.classList.add('tree-hit'); playSound('lose');
+  } else { avalanche.mass += .29; playSound('peg'); }
+  renderAvalanche();
+  if(avalanche.step >= 8){ const payout = avalanche.bet * avalanche.mass; avalancheEnd(payout, 'Snowball reached the base at ' + avalanche.mass.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', payout > avalanche.bet); return; }
+  avalanche.timer = setTimeout(avalancheRollStep, Math.max(280, 610 - avalanche.step * 38));
+}
 document.getElementById('avalanche-drop').addEventListener('click', function(){
   if(avalanche.active) return; const bet = getBet('avalanche-bet', 'avalanche-msg'); if(bet === null) return;
-  avalanche.active = true; avalanche.bet = bet; avalanche.mass = 1; avalanche.step = 0; avalanche.lane = (Number(document.getElementById('avalanche-lane').value) - 1) * 2; avalancheBuild(); renderAvalanche(); setBalance(balance - bet); this.disabled = true; const ball = document.getElementById('avalanche-snowball'); ball.classList.add('rolling'); document.getElementById('avalanche-msg').textContent = 'Rolling…'; document.getElementById('avalanche-msg').className = 'result-msg';
-  avalanche.timer = setInterval(() => {
-    avalanche.step++; avalanche.lane = Math.max(0, Math.min(4, avalanche.lane + (Math.random() < .34 ? -1 : Math.random() > .66 ? 1 : 0))); const kind = avalanche.terrain[avalanche.step - 1][avalanche.lane];
-    if(kind === 'boulder'){ renderAvalanche(); avalancheEnd(0, 'Boulder strike. The snowball shattered.', false); return; }
-    if(kind === 'tree'){ avalanche.mass = Math.max(.15, avalanche.mass * .62); document.getElementById('avalanche-terrain').textContent = 'Tree impact'; playSound('lose'); }
-    else { avalanche.mass += .24; document.getElementById('avalanche-terrain').textContent = 'Fresh powder'; playSound('peg'); }
-    renderAvalanche();
-    if(avalanche.step >= 8){ const payout = avalanche.bet * avalanche.mass; avalancheEnd(payout, 'Snowball reached the base at ' + avalanche.mass.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', payout > avalanche.bet); }
-  }, 510);
+  avalanche.active = true; avalanche.bet = bet; avalanche.mass = 1; avalanche.step = 0; avalanche.steer = 0; avalanche.lane = (Number(document.getElementById('avalanche-lane').value) - 1) * 2; avalancheBuild(); renderAvalanche(); setBalance(balance - bet); this.disabled = true; document.getElementById('avalanche-lane').disabled = true; document.getElementById('avalanche-left').disabled = false; document.getElementById('avalanche-right').disabled = false; const ball = document.getElementById('avalanche-snowball'); ball.classList.add('rolling'); document.getElementById('avalanche-msg').textContent = 'Rolling… steer for the next ridge.'; document.getElementById('avalanche-msg').className = 'result-msg';
+  avalanche.timer = setTimeout(avalancheRollStep, 650);
 });
+document.getElementById('avalanche-left').addEventListener('click', () => avalancheQueueSteer(-1));
+document.getElementById('avalanche-right').addEventListener('click', () => avalancheQueueSteer(1));
 avalancheBuild(); renderAvalanche();
 
 /* Black Market */
-const market = { active:false, bet:0, price:1, history:[1], up:0, timer:null };
+const market = { active:false, bet:0, price:1, history:[1], up:0, timer:null, clock:null, nextAt:0, ticks:0, high:1, low:1, chartHigh:1.55, chartLow:.45 };
+const MARKET_SELL_FEE = .02;
+function marketControls(locked){
+  document.getElementById('blackmarket-bet').disabled = locked;
+  document.querySelectorAll('[data-target="blackmarket-bet"]').forEach(btn => btn.disabled = locked);
+}
 function renderMarket(){
-  const values = market.history, min = Math.min(0.45, ...values), max = Math.max(1.55, ...values), spread = max - min || 1;
+  const values = market.history, min = market.chartLow, max = market.chartHigh, spread = max - min || 1;
   const points = values.map((value,i) => (i / Math.max(1,values.length-1) * 100).toFixed(1) + ',' + (90 - (value-min)/spread*80).toFixed(1)).join(' ');
   const line = document.getElementById('market-line'); line.setAttribute('points', points); line.classList.toggle('crash', market.price === 0);
   const price = document.getElementById('market-price'); price.textContent = '$' + (market.price * 100).toFixed(2); price.classList.toggle('down', values.length > 1 && values[values.length-1] < values[values.length-2]);
-  document.getElementById('market-value').textContent = market.active ? fmt(market.bet * market.price) : '—'; document.getElementById('market-streak').textContent = market.up; document.getElementById('market-risk').textContent = market.up >= 3 ? '25% crash' : 'Base';
+  const risk = market.up >= 3 ? '25% crash' : 'Base';
+  document.getElementById('market-value').textContent = market.active ? fmt(market.bet * market.price * (1 - MARKET_SELL_FEE)) : '—'; document.getElementById('market-streak').textContent = market.up; document.getElementById('market-tick').textContent = market.ticks; document.getElementById('market-high').textContent = '$' + (market.high * 100).toFixed(2); document.getElementById('market-low').textContent = '$' + (market.low * 100).toFixed(2); document.getElementById('market-book-risk-value').textContent = risk; document.getElementById('market-book-risk').classList.toggle('hot', market.up >= 3);
 }
-function marketEnd(payout, text, win){ clearInterval(market.timer); market.timer = null; market.active = false; document.getElementById('market-buy').disabled = balance <= 0; document.getElementById('market-sell').disabled = true; const msg = document.getElementById('market-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'black market', win); renderMarket(); }
+function marketEnd(payout, text, win){ clearInterval(market.timer); clearInterval(market.clock); market.timer = null; market.clock = null; market.active = false; document.getElementById('market-buy').disabled = balance <= 0; document.getElementById('market-sell').disabled = true; document.getElementById('market-terminal').classList.remove('live'); marketControls(false); const msg = document.getElementById('market-msg'); msg.textContent = text; msg.className = 'result-msg' + (win ? ' win' : payout <= 0 ? ' lose' : ''); awardPayout(payout, 'black market', win); renderMarket(); }
+function marketCountdown(){
+  if(!market.active) return;
+  const remaining = Math.max(0, market.nextAt - performance.now());
+  document.getElementById('market-tape').textContent = 'Quote ' + (market.ticks + 1) + ' settles in ' + (remaining / 1000).toFixed(1) + 's · 2% exit fee applies.';
+}
 function marketTick(){
   if(!market.active) return;
-  if(market.up >= 3 && Math.random() < .25){ market.price = 0; market.history.push(0); document.getElementById('market-tape').textContent = 'HOUSE CORRECTION: market cratered to zero.'; renderMarket(); marketEnd(0, 'The house correction erased the crate.', false); return; }
-  const before = market.price, drift = (1 - market.price) * .09, change = (Math.random() * .34 - .16) + drift; market.price = Math.max(.07, Math.round((market.price * (1 + change)) * 10000) / 10000); market.up = market.price > before ? market.up + 1 : 0; market.history.push(market.price); if(market.history.length > 25) market.history.shift();
-  document.getElementById('market-tape').textContent = market.price > before ? 'Green tick. House model is stretching.' : 'Red tick. The crate is getting cheaper.'; renderMarket(); playSound(market.price > before ? 'tick' : 'lose');
+  if(market.up >= 3 && Math.random() < .25){ market.price = 0; market.history.push(0); market.low = 0; market.chartLow = 0; document.getElementById('market-tape').textContent = 'HOUSE CORRECTION: market cratered to zero.'; renderMarket(); marketEnd(0, 'The house correction erased the crate.', false); return; }
+  const before = market.price, drift = (1 - market.price) * .085, change = (Math.random() * .34 - .182) + drift;
+  market.price = Math.max(.07, Math.round((market.price * (1 + change)) * 10000) / 10000); market.up = market.price > before ? market.up + 1 : 0; market.ticks++; market.high = Math.max(market.high, market.price); market.low = Math.min(market.low, market.price); market.chartHigh = Math.max(market.chartHigh, market.price * 1.08); market.chartLow = Math.min(market.chartLow, market.price * .92); market.history.push(market.price); if(market.history.length > 25) market.history.shift(); market.nextAt = performance.now() + 2000;
+  document.getElementById('market-sell').disabled = false; document.getElementById('market-chart').classList.toggle('surge', Math.abs(change) > .12); renderMarket(); playSound(market.price > before ? 'tick' : 'lose');
 }
 document.getElementById('market-buy').addEventListener('click', function(){
   if(market.active) return; const bet = getBet('blackmarket-bet', 'market-msg'); if(bet === null) return;
-  market.active = true; market.bet = bet; market.price = 1; market.history = [1]; market.up = 0; setBalance(balance - bet); this.disabled = true; document.getElementById('market-sell').disabled = false; document.getElementById('market-msg').textContent = 'Crate acquired. Sell before the next correction.'; document.getElementById('market-msg').className = 'result-msg'; renderMarket(); market.timer = setInterval(marketTick, 2000);
+  market.active = true; market.bet = bet; market.price = 1; market.history = [1]; market.up = 0; market.ticks = 0; market.high = 1; market.low = 1; market.chartHigh = 1.55; market.chartLow = .45; market.nextAt = performance.now() + 2000;
+  setBalance(balance - bet); marketControls(true); this.disabled = true; document.getElementById('market-sell').disabled = true; document.getElementById('market-terminal').classList.add('live'); document.getElementById('market-msg').textContent = 'Crate acquired. The first quote must settle before you can sell.'; document.getElementById('market-msg').className = 'result-msg'; renderMarket(); market.timer = setInterval(marketTick, 2000); market.clock = setInterval(marketCountdown, 100); marketCountdown();
 });
-document.getElementById('market-sell').addEventListener('click', () => { if(!market.active) return; const payout = market.bet * market.price; marketEnd(payout, 'Sold at ' + market.price.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', payout > market.bet); });
+document.getElementById('market-sell').addEventListener('click', () => { if(!market.active || market.ticks < 1) return; const payout = market.bet * market.price * (1 - MARKET_SELL_FEE); marketEnd(payout, 'Sold at ' + market.price.toFixed(2) + 'x after the 2% exit fee. Paid ' + fmt(payout) + '.', payout > market.bet); });
 renderMarket();
 
 /* Siphon */
-const siphon = { active:false, bet:0, yours:100, house:100, streak:0 };
-function renderSiphon(){
-  document.getElementById('siphon-your-fill').style.height = siphon.yours + '%'; document.getElementById('siphon-house-fill').style.height = siphon.house + '%'; document.getElementById('siphon-your').textContent = siphon.yours.toFixed(0) + '%'; document.getElementById('siphon-house').textContent = siphon.house.toFixed(0) + '%'; document.getElementById('siphon-mult').textContent = (siphon.yours / 100).toFixed(2) + 'x'; document.getElementById('siphon-streak').textContent = siphon.streak; document.getElementById('siphon-risk').textContent = siphon.active ? Math.min(82, 8 + siphon.streak * 12).toFixed(0) + '%' : '—';
+const SIPHON_MODES = {
+  cautious:{ label:'Cautious', base:.09, step:.10, min:4, max:8 },
+  standard:{ label:'Standard', base:.15, step:.13, min:8, max:18 },
+  aggressive:{ label:'Aggressive', base:.25, step:.17, min:18, max:38 }
+};
+const siphon = { active:false, bet:0, yours:100, house:100, streak:0, mode:'standard', busy:false };
+function siphonChance(){ const mode = SIPHON_MODES[siphon.mode]; return Math.min(.88, mode.base + siphon.streak * mode.step); }
+function siphonControls(locked){
+  document.getElementById('siphon-bet').disabled = locked; document.getElementById('siphon-mode').disabled = locked;
+  document.querySelectorAll('[data-target="siphon-bet"]').forEach(btn => btn.disabled = locked);
 }
-function siphonEnd(payout, text, win){ siphon.active = false; document.getElementById('siphon-start').disabled = balance <= 0; document.getElementById('siphon-btn').disabled = true; document.getElementById('siphon-bank').disabled = true; const msg = document.getElementById('siphon-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'siphon', win); renderSiphon(); }
+function renderSiphon(){
+  const chance = siphonChance();
+  document.getElementById('siphon-your-fill').style.height = Math.min(100, siphon.yours / 2) + '%'; document.getElementById('siphon-house-fill').style.height = Math.max(0, siphon.house) + '%'; document.getElementById('siphon-your').textContent = siphon.yours.toFixed(0) + '%'; document.getElementById('siphon-house').textContent = siphon.house.toFixed(0) + '%'; document.getElementById('siphon-mult').textContent = (siphon.yours / 100).toFixed(2) + 'x'; document.getElementById('siphon-streak').textContent = siphon.streak; document.getElementById('siphon-risk').textContent = siphon.active ? Math.round(chance * 100) + '%' : '—'; document.getElementById('siphon-risk-fill').style.width = siphon.active ? (chance * 100).toFixed(1) + '%' : '0%'; document.getElementById('siphon-mode-readout').textContent = SIPHON_MODES[siphon.mode].label;
+}
+function siphonEnd(payout, text, win){ siphon.active = false; siphon.busy = false; document.getElementById('siphon-start').disabled = balance <= 0; document.getElementById('siphon-btn').disabled = true; document.getElementById('siphon-bank').disabled = true; document.getElementById('siphon-link').classList.remove('flowing'); siphonControls(false); const msg = document.getElementById('siphon-msg'); msg.textContent = text; msg.className = 'result-msg' + (win ? ' win' : payout <= 0 ? ' lose' : ''); awardPayout(payout, 'siphon', win); renderSiphon(); }
 document.getElementById('siphon-start').addEventListener('click', function(){
   if(siphon.active) return; const bet = getBet('siphon-bet', 'siphon-msg'); if(bet === null) return;
-  siphon.active = true; siphon.bet = bet; siphon.yours = 100; siphon.house = 100; siphon.streak = 0; setBalance(balance - bet); this.disabled = true; document.getElementById('siphon-btn').disabled = false; document.getElementById('siphon-bank').disabled = false; document.getElementById('siphon-msg').textContent = 'Valve primed. First siphon has an 8% catch chance.'; document.getElementById('siphon-msg').className = 'result-msg'; renderSiphon();
+  siphon.active = true; siphon.bet = bet; siphon.yours = 100; siphon.house = 100; siphon.streak = 0; siphon.busy = false; siphon.mode = document.getElementById('siphon-mode').value; setBalance(balance - bet); siphonControls(true); this.disabled = true; document.getElementById('siphon-btn').disabled = false; document.getElementById('siphon-bank').disabled = false; document.getElementById('siphon-msg').textContent = 'Valve primed. First siphon has a ' + Math.round(siphonChance() * 100) + '% catch chance.'; document.getElementById('siphon-msg').className = 'result-msg'; renderSiphon();
 });
 document.getElementById('siphon-btn').addEventListener('click', function(){
-  if(!siphon.active) return; const chance = Math.min(.82, .08 + siphon.streak * .12); const valve = document.getElementById('siphon-valve'); valve.classList.remove('sucking'); void valve.offsetWidth; valve.classList.add('sucking');
-  if(Math.random() < chance){ siphonEnd(0, 'Caught at the valve. The house seizes your whole tank.', false); return; }
-  const transfer = Math.min(siphon.house, 8 + Math.random() * 14); siphon.house -= transfer; siphon.yours += transfer; siphon.streak++; document.getElementById('siphon-msg').textContent = 'Stole ' + transfer.toFixed(0) + '% fuel. Bank it or press your luck.'; document.getElementById('siphon-msg').className = 'result-msg win'; playSound('gem'); renderSiphon();
-  if(siphon.house <= .01){ const payout = siphon.bet * (siphon.yours / 100); siphonEnd(payout, 'House tank drained. Paid ' + fmt(payout) + '.', true); }
+  if(!siphon.active || siphon.busy) return; siphon.busy = true; this.disabled = true;
+  const chance = siphonChance(), valve = document.getElementById('siphon-valve'), link = document.getElementById('siphon-link'); valve.classList.remove('sucking'); void valve.offsetWidth; valve.classList.add('sucking'); link.classList.remove('flowing'); void link.offsetWidth; link.classList.add('flowing');
+  setTimeout(() => {
+    if(!siphon.active) return;
+    siphon.busy = false;
+    if(Math.random() < chance){ document.querySelector('.your-tank').classList.add('seized'); siphonEnd(0, 'Caught at the valve. The house seizes your whole tank.', false); return; }
+    const mode = SIPHON_MODES[siphon.mode], transfer = Math.min(siphon.house, mode.min + Math.random() * (mode.max - mode.min)); siphon.house -= transfer; siphon.yours += transfer; siphon.streak++; document.getElementById('siphon-msg').textContent = 'Stole ' + transfer.toFixed(0) + '% fuel on a ' + mode.label.toLowerCase() + ' draw. Bank it or press your luck.'; document.getElementById('siphon-msg').className = 'result-msg win'; playSound('gem'); renderSiphon();
+    if(siphon.house <= .01){ const payout = siphon.bet * (siphon.yours / 100); siphonEnd(payout, 'House tank drained. Paid ' + fmt(payout) + '.', true); }
+    else document.getElementById('siphon-btn').disabled = false;
+  }, 330);
 });
 document.getElementById('siphon-bank').addEventListener('click', () => { if(!siphon.active) return; const payout = siphon.bet * (siphon.yours / 100); siphonEnd(payout, 'Valves locked. Paid ' + fmt(payout) + '.', payout > siphon.bet); });
 renderSiphon();
