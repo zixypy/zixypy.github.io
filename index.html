@@ -5012,15 +5012,15 @@ function jerryBuildPrompt(message){
 
 function npcFallbackReply(message){
   const replies = [
-    'Wow. "' + message + '"? Stunning fucking contribution, champ. I am logging that with the pit desk under "customer said dumb shit."',
-    'I heard you, unfortunately. House policy says I have to respond, which is bullshit and frankly hostile to staff morale.',
-    'Ask better questions, genius. I am the official tip jar attendant, not your personal dumbass oracle with a badge.',
-    'Sure, sure. Anyway, tip me. The Velvet Chip does not run on vibes and your weird little bullshit hopes, dumbass.',
-    'That was a hell of a sentence, asshole. Surveillance heard it too, and the cameras are embarrassed for you.',
-    'Incredible. You typed that shit, looked at it, and still hit send. I am calling the floor manager in spirit.',
-    'Come closer to the glass, you unlucky little freak. Casino policy requires me to whisper terrible financial advice at doomed patrons.',
-    'Mmm. I can smell the desperation from the comp desk, and buddy, it smells like burnt chips and bad fucking decisions.',
-    'Say that again, slower, so I can hate it properly and staple it to your player file.'
+    'Jerry was too drunk to respond to "' + message + '".',
+    'Jerry is currently convulsing on the floor. (you havent given a tip yet)',
+    '*He would say something, but he forgot to clock into work today*',
+    'He was too stunned to speak.',
+    'Jerry doesnt want to talk with you.',
+    "Try again later, when Jerry isn't overdosing on meth",
+    'Jerry is trying to win a tip from the roulette table. At least, he thinks its the roulette table',
+    '$' + ((Math.random() * 5.36) + 0.81) + 'to continue talking',
+    'Jerry is tripping balls right now. *He just tried to get a tip from the cardboard cutout of John Cena*'
   ];
   return replies[Math.floor(Math.random() * replies.length)];
 }
