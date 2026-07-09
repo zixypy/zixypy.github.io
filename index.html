@@ -5233,7 +5233,7 @@ async function askJerry(message, showUser){
     if(showUser) maybeJerryDonation(message, reply);
     return reply;
   } catch(err){
-    reply = npcFallbackReply(message);
+    reply = await npcFallbackReply(message);
     assistantLine.innerHTML = reply;
     npcSetEmotion('annoyed');
     npcSay(reply);
