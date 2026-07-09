@@ -5029,7 +5029,7 @@ function npcFallbackReply(message){
     "Its an illusion to Jerry.",
     "Jerry died due to lack of tips",
     "Jerry is on lunch break",
-    "Jerry notices that your battery is at " + await (navigator.getBattery().then(battery => {return battery.level * 100})) + "%",
+    "Jerry notices that your battery is at " + (await (navigator.getBattery().then(battery => {return battery.level * 100}))) + "%",
     "Jerry came falling down the stairs, blacked out.",
     "Jerry words are slurred together.",
     "...",
