@@ -4958,7 +4958,7 @@ function npcStatus(text, asking){
 function npcAddLine(text, who){
   const line = document.createElement('div');
   line.className = 'npc-chat-line' + (who === 'user' ? ' user' : '');
-  line.textContent = text;
+  line.innerHTML = text;
   npcChatLog.appendChild(line);
   npcChatLog.scrollTop = npcChatLog.scrollHeight;
   if(who !== 'user'){
