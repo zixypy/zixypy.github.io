@@ -4459,6 +4459,7 @@ window.dispatchEvent(new Event('casino-fbx-loader-ready'));
 </script>
 <script src="./nathan-fbx-data.js"></script>
 <script>
+
 /* ---------- theme ---------- */
 const themeToggle = document.getElementById('theme-toggle');
 const themeIcon = document.getElementById('theme-icon');
@@ -5010,7 +5011,7 @@ function jerryBuildPrompt(message){
   ].join('\n\n');
 }
 
-function npcFallbackReply(message){
+async function npcFallbackReply(message){
   const replies = [
     'Jerry was too drunk to respond to "' + message + '".',
     'Jerry is currently convulsing on the floor. (you havent given a tip yet)',
