@@ -5016,11 +5016,17 @@ function npcFallbackReply(message){
     'Jerry is currently convulsing on the floor. (you havent given a tip yet)',
     '*He would say something, but he forgot to clock into work today*',
     'He was too stunned to speak.',
-    'Jerry doesnt want to talk with you.',
+    "Jerry doesn't want to talk with you.",
     "Try again later, when Jerry isn't overdosing on meth",
     'Jerry is trying to win a tip from the roulette table. At least, he thinks its the roulette table',
-    '$' + ((Math.random() * 5.36) + 0.81) + 'to continue talking',
-    'Jerry is tripping balls right now. *He just tried to get a tip from the cardboard cutout of John Cena*'
+    'Please pay $' + (Math.round(((Math.random() * 5.36) + 0.81)*100)) + ' to continue talking',
+    'Jerry is tripping balls right now. (He just tried to get a tip from the cardboard cutout of John Cena)',
+    'You couldnt understand Jerry.',
+    "Jerry tells you to look at the meme he sent you. It's a picture of a tip jar.",
+    "Jerry noclipped into the backrooms and can't talk right now.",
+    "Jerry showed you a video he thought was funny. <video controls src='assets/TIPJARVIDEO.mp4'>your browser does not support the video element</video>",
+    "Jerry had to go to the hospital. He broke his arm holding a tip jar for 96 hours straight.",
+    "Its an illusion to Jerry."
   ];
   return replies[Math.floor(Math.random() * replies.length)];
 }
