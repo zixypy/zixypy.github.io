@@ -3650,6 +3650,94 @@
     }
     .cheat-grid{ grid-template-columns:1fr; }
   }
+
+  /* ---------- the back-room games ---------- */
+  .challenge-panel{
+    max-width:860px;
+    margin:1rem auto 1.2rem;
+    padding:1rem;
+    border:1px solid var(--brass);
+    border-radius:13px;
+    background:radial-gradient(circle at 50% 0, rgba(255,209,102,0.10), transparent 48%), var(--ink);
+    box-shadow:inset 0 0 36px rgba(0,0,0,0.24);
+  }
+  .challenge-actions{ display:flex; gap:0.7rem; justify-content:center; flex-wrap:wrap; margin-top:1rem; }
+  .metric-strip{ display:flex; gap:0.55rem; justify-content:center; flex-wrap:wrap; margin:0.85rem auto 0; }
+  .metric-strip span{ min-width:112px; padding:0.45rem 0.65rem; border:1px solid var(--tile-border); border-radius:7px; background:rgba(255,255,255,0.035); color:var(--text-muted); text-align:center; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.7px; }
+  .metric-strip b{ display:block; margin-top:0.18rem; color:var(--brass-light); font-family:'JetBrains Mono', monospace; font-size:0.92rem; letter-spacing:0; }
+
+  .dead-hand-cards{ min-height:126px; display:flex; justify-content:center; align-items:center; gap:0.5rem; flex-wrap:wrap; }
+  .dead-hand-cards .playing-card{ width:68px; height:96px; font-size:0.78rem; }
+  .dead-hand-cards .card-center{ font-size:1.85rem; }
+  .dead-hand-cards .cursed-card{ background:linear-gradient(135deg,#241a10,#6b1e2a 45%,#241a10); color:#ffe68b; border-color:#e2887a; display:grid; place-items:center; font-family:'DM Serif Display',serif; font-size:0.92rem; text-align:center; line-height:1; text-shadow:0 0 12px rgba(255,209,102,0.5); }
+  .dead-hand-cards .cursed-card::after{ content:'☠'; display:block; font-size:1.7rem; }
+
+  .gridlock-board{ position:relative; display:grid; grid-template-columns:repeat(4, minmax(54px, 1fr)); gap:0.55rem; padding:1rem; border-radius:12px; background:repeating-linear-gradient(90deg,rgba(255,255,255,0.025) 0 18px,transparent 18px 36px), #111a1a; overflow:hidden; }
+  .gridlock-board::before{ content:''; position:absolute; inset:50% 0 auto; border-top:1px dashed rgba(255,255,255,0.14); pointer-events:none; }
+  .grid-cell{ min-height:72px; border:1px solid rgba(240,230,210,0.16); border-radius:9px; background:rgba(36,26,16,0.75); color:var(--text-muted); cursor:pointer; position:relative; display:grid; place-items:center; transition:transform .16s ease, border-color .16s ease, box-shadow .16s ease; }
+  .grid-cell:disabled{ cursor:default; opacity:0.55; }
+  .grid-cell.reachable:not(:disabled){ border-color:var(--brass); box-shadow:0 0 16px rgba(255,209,102,0.2); animation:gridlock-reachable 1.1s ease-in-out infinite; }
+  .grid-cell.reachable:not(:disabled):hover{ transform:translateY(-3px); }
+  .grid-cell.current{ outline:2px solid #63d7ff; outline-offset:2px; }
+  .grid-car{ font-size:1.5rem; filter:drop-shadow(0 0 7px rgba(99,215,255,0.8)); transform:rotate(-90deg); }
+  .traffic-light{ width:27px; height:44px; padding:4px; display:flex; flex-direction:column; justify-content:space-between; border-radius:8px; background:#080b0b; border:1px solid rgba(255,255,255,0.13); }
+  .traffic-light i{ width:15px; height:9px; border-radius:999px; background:#313438; display:block; }
+  .grid-cell.green .traffic-light i:nth-child(3){ background:#67e68a; box-shadow:0 0 12px #67e68a; }
+  .grid-cell.yellow .traffic-light i:nth-child(2){ background:#ffd166; box-shadow:0 0 12px #ffd166; }
+  .grid-cell.red .traffic-light i:nth-child(1){ background:#ef6a62; box-shadow:0 0 12px #ef6a62; }
+  .grid-finish{ position:absolute; right:0.28rem; bottom:0.2rem; font-size:0.62rem; color:#67e68a; letter-spacing:0.7px; }
+  @keyframes gridlock-reachable{ 50%{ box-shadow:0 0 25px rgba(255,209,102,0.42); } }
+
+  .chop-yard{ display:grid; grid-template-columns:1fr minmax(150px, 0.42fr); gap:1rem; align-items:center; }
+  .chop-gauge{ height:50px; position:relative; border:1px solid var(--card-border); border-radius:999px; overflow:hidden; background:linear-gradient(90deg,#74232d 0 15%,#5d3518 15% 32%,#1d6b4e 32% 68%,#5d3518 68% 85%,#74232d 85%); box-shadow:inset 0 0 16px rgba(0,0,0,.42); }
+  .chop-gauge::before,.chop-gauge::after{ content:'KNOT'; position:absolute; top:50%; transform:translateY(-50%); color:rgba(255,236,202,.7); font:700 .6rem 'JetBrains Mono',monospace; }
+  .chop-gauge::before{ left:4%; }.chop-gauge::after{ right:4%; }
+  .chop-sweet{ position:absolute; left:43%; width:14%; inset-block:0; background:rgba(255,240,160,.35); border-inline:1px solid #fff1a7; }
+  .chop-needle{ position:absolute; top:-8px; bottom:-8px; width:7px; margin-left:-3px; border-radius:5px; background:#f7f0d1; box-shadow:0 0 10px #fff,0 0 20px var(--brass); }
+  .chop-log{ height:110px; border-radius:50%; background:repeating-radial-gradient(circle at 50% 50%,#d99a50 0 8px,#9a5a28 9px 12px,#542b15 13px 15px); border:8px solid #4a2614; box-shadow:inset 0 0 0 3px rgba(255,238,185,.3),0 12px 20px rgba(0,0,0,.35); position:relative; }
+  .chop-log::after{ content:'✦'; position:absolute; inset:0; display:grid; place-items:center; color:#3a1b0c; font-size:2.4rem; opacity:.58; }
+  .chop-log.chopped{ animation:chop-split .55s ease both; }
+  @keyframes chop-split{ 45%{ transform:rotate(10deg) scale(1.12); filter:brightness(1.45); } 100%{ transform:rotate(-3deg); } }
+
+  .grill-stage{ min-height:200px; overflow:hidden; position:relative; display:grid; place-items:center; border:1px solid rgba(255,209,102,.35); border-radius:12px; background:linear-gradient(#1b1712 0 18%,#4e1715 18% 100%); }
+  .grill-bars{ position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0 36px,rgba(0,0,0,.58) 38px 43px,transparent 45px 71px); opacity:.8; }
+  .grill-flames{ position:absolute; left:0; right:0; bottom:-2px; height:65%; opacity:.56; background:radial-gradient(ellipse at 15% 100%,#ff9b3f 0 18%,transparent 19%),radial-gradient(ellipse at 38% 100%,#e94c31 0 22%,transparent 23%),radial-gradient(ellipse at 64% 100%,#ffb54a 0 19%,transparent 20%),radial-gradient(ellipse at 88% 100%,#e94c31 0 22%,transparent 23%); animation:grill-flicker .55s ease-in-out infinite alternate; }
+  .grill-meat{ width:130px; height:82px; z-index:1; border-radius:48% 52% 42% 58%; border:5px solid rgba(255,221,165,.22); background:#8d251f; box-shadow:0 10px 20px rgba(0,0,0,.45),inset 0 0 24px rgba(0,0,0,.28); transition:filter .2s ease, transform .35s ease, background .2s linear; }
+  .grill-meat.flipped{ transform:rotateY(180deg) rotate(6deg); }
+  .grill-meat.burnt{ filter:grayscale(1) brightness(.35); box-shadow:0 0 23px rgba(255,80,40,.5); }
+  @keyframes grill-flicker{ to{ transform:scaleY(1.08) translateY(-4px); filter:brightness(1.25); } }
+
+  .heartbeat-monitor{ height:175px; position:relative; overflow:hidden; border:1px solid rgba(99,215,255,.5); border-radius:12px; background:linear-gradient(180deg,rgba(11,39,39,.86),#061414); }
+  .heartbeat-monitor::before{ content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg,transparent 0 28px,rgba(99,215,255,.08) 29px 30px),repeating-linear-gradient(90deg,transparent 0 38px,rgba(99,215,255,.06) 39px 40px); }
+  .heartbeat-wave{ position:absolute; left:0; top:50%; width:200%; height:3px; background:#65e6cf; box-shadow:0 0 12px #65e6cf; transform:translateY(-50%); }
+  .heartbeat-wave::before{ content:''; position:absolute; left:0; top:-47px; width:100%; height:94px; background:repeating-linear-gradient(90deg,transparent 0 58px,#65e6cf 59px 61px,transparent 62px 68px); clip-path:polygon(0 50%,4% 50%,5% 0,6% 100%,7% 32%,8% 50%,100% 50%); filter:drop-shadow(0 0 5px #65e6cf); }
+  .heartbeat-target{ position:absolute; left:50%; top:10px; bottom:10px; width:38px; transform:translateX(-50%); border-inline:1px dashed #ffd166; background:rgba(255,209,102,.08); }
+  .heartbeat-needle{ position:absolute; top:0; bottom:0; left:0; width:4px; background:#ff6f61; box-shadow:0 0 16px #ff6f61; }
+  .heartbeat-pulse{ position:absolute; left:50%; top:50%; width:34px; height:34px; margin:-17px; border-radius:50%; border:2px solid rgba(255,209,102,.9); opacity:.22; }
+  .heartbeat-monitor.beat .heartbeat-pulse{ animation:heart-pulse .34s ease; }
+  @keyframes heart-pulse{ 50%{ transform:scale(2.3); opacity:1; } }
+
+  .leakage-board{ position:relative; overflow:hidden; border-radius:12px; padding:0.75rem; background:linear-gradient(#14212a,#0a1015); border:1px solid rgba(99,215,255,.42); }
+  .leakage-source{ margin:0 auto .5rem; width:42px; height:24px; border-radius:8px 8px 4px 4px; background:#63d7ff; box-shadow:0 0 18px rgba(99,215,255,.55); }
+  .leakage-pipes{ display:grid; grid-template-columns:repeat(6,1fr); gap:.35rem; }
+  .leak-joint{ min-height:48px; border:1px solid rgba(125,180,205,.32); border-radius:7px; background:rgba(5,15,21,.7); color:#9ceaff; cursor:pointer; font:1.5rem 'JetBrains Mono',monospace; transition:transform .18s ease, box-shadow .18s ease; }
+  .leak-joint:hover:not(:disabled){ transform:rotate(10deg); border-color:#63d7ff; }.leak-joint.flow{ color:#e5fbff; background:#15495e; box-shadow:0 0 16px rgba(99,215,255,.65); }.leak-joint:disabled{ cursor:default; }
+  .leak-buckets{ display:grid; grid-template-columns:repeat(6,1fr); gap:.35rem; margin-top:.65rem; }.leak-bucket{ min-height:55px; border:1px solid rgba(99,215,255,.32); border-radius:0 0 10px 10px; background:linear-gradient(transparent 55%,rgba(99,215,255,.12)); color:var(--text-muted); display:grid; place-items:end center; padding:.28rem; font:.68rem 'JetBrains Mono',monospace; }.leak-bucket.filled{ color:#dffbff; background:linear-gradient(transparent 20%,rgba(99,215,255,.72)); box-shadow:0 0 18px rgba(99,215,255,.45); }
+
+  .orbit-field{ height:310px; position:relative; overflow:hidden; border-radius:12px; border:1px solid rgba(157,124,255,.48); background:radial-gradient(circle at 20% 25%,#fff 0 1px,transparent 2px),radial-gradient(circle at 72% 72%,#fff 0 1px,transparent 2px),radial-gradient(circle at 46% 16%,#fff 0 1px,transparent 2px),radial-gradient(circle at center,#1b1230 0,#070913 73%); }
+  .orbit-track{ position:absolute; inset:0; width:100%; height:100%; }.orbit-track polyline{ fill:none; stroke:rgba(157,124,255,.5); stroke-width:2; }
+  .orbit-sun{ position:absolute; left:50%; top:50%; width:74px; height:74px; margin:-37px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#fff6ad,#ffbf4c 39%,#e45d24 72%); box-shadow:0 0 25px #ffb74d,0 0 70px rgba(241,108,46,.55); }
+  .orbit-satellite{ position:absolute; width:15px; height:15px; margin:-7px; border-radius:50%; background:#cdeeff; box-shadow:0 0 14px #63d7ff; z-index:2; }.orbit-satellite::after{ content:''; position:absolute; width:25px; height:5px; left:-5px; top:5px; border-inline:5px solid #9d7cff; }
+  .orbit-controls{ max-width:620px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:.7rem 1rem; }.orbit-controls label{ color:var(--text-muted); font-size:.78rem; }.orbit-controls b{ float:right; color:var(--brass-light); font-family:'JetBrains Mono',monospace; }
+
+  .avalanche-board{ height:340px; position:relative; overflow:hidden; border-radius:12px; border:1px solid rgba(224,245,255,.7); background:linear-gradient(145deg,#e8f7ff 0%,#9ed0e6 52%,#568ba9 100%); }
+  .avalanche-board::before{ content:''; position:absolute; inset:-35% -10% 0; background:repeating-linear-gradient(135deg,transparent 0 42px,rgba(255,255,255,.26) 43px 46px,transparent 47px 88px); transform:skewY(-9deg); }.avalanche-obstacles{ position:absolute; inset:0; }.avalanche-obstacle{ position:absolute; z-index:1; font-size:1.55rem; filter:drop-shadow(0 4px 2px rgba(0,0,0,.26)); }.avalanche-snowball{ position:absolute; z-index:3; width:25px; height:25px; margin:-12px; border-radius:50%; background:radial-gradient(circle at 32% 28%,#fff,#dff5ff 52%,#94cee5); box-shadow:0 5px 9px rgba(0,0,0,.3); transition:left .42s ease,top .42s ease,transform .2s ease; }.avalanche-snowball.rolling{ animation:snow-roll .42s linear infinite; }@keyframes snow-roll{ to{ transform:rotate(360deg); } }
+
+  .market-terminal{ border:1px solid rgba(103,230,138,.46); border-radius:12px; overflow:hidden; background:#071612; }.market-head{ display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:.6rem .8rem; background:rgba(103,230,138,.09); color:#9cefb1; font:.75rem 'JetBrains Mono',monospace; letter-spacing:.6px; }.market-price{ font-size:1.35rem; font-weight:800; }.market-price.down{ color:#ef8b84; }.market-chart{ display:block; width:100%; height:230px; background:repeating-linear-gradient(0deg,transparent 0 36px,rgba(103,230,138,.08) 37px 38px),repeating-linear-gradient(90deg,transparent 0 60px,rgba(103,230,138,.06) 61px 62px); }.market-chart polyline{ fill:none; stroke:#67e68a; stroke-width:3; filter:drop-shadow(0 0 5px rgba(103,230,138,.6)); }.market-chart polyline.crash{ stroke:#ef6a62; }.market-tape{ padding:.55rem .75rem; min-height:1.35rem; color:var(--text-muted); font:.72rem 'JetBrains Mono',monospace; border-top:1px solid rgba(103,230,138,.18); }
+
+  .siphon-tanks{ display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:end; max-width:600px; margin:0 auto; }.tank-label{ text-align:center; color:var(--text-muted); font-size:.74rem; text-transform:uppercase; letter-spacing:.8px; }.tank{ height:195px; margin-top:.45rem; position:relative; overflow:hidden; border:3px solid rgba(240,230,210,.45); border-radius:12px 12px 20px 20px; background:linear-gradient(90deg,rgba(255,255,255,.12),transparent 15% 85%,rgba(0,0,0,.22)); }.tank-fill{ position:absolute; left:0; right:0; bottom:0; height:100%; background:linear-gradient(180deg,#9cecff,#217eb6); transition:height .45s ease; box-shadow:inset 0 8px 16px rgba(255,255,255,.22); }.house-tank .tank-fill{ background:linear-gradient(180deg,#f4b64b,#bb4d30); }.tank b{ position:absolute; z-index:1; left:0; right:0; top:50%; transform:translateY(-50%); text-align:center; color:#fff; font:800 1.15rem 'JetBrains Mono',monospace; text-shadow:0 2px 3px #000; }.siphon-valve{ width:54px; height:54px; margin-bottom:65px; border-radius:50%; border:6px solid var(--brass); position:relative; }.siphon-valve::before,.siphon-valve::after{ content:''; position:absolute; left:50%; top:50%; background:var(--brass-light); transform:translate(-50%,-50%); }.siphon-valve::before{ width:42px; height:5px; }.siphon-valve::after{ width:5px; height:42px; }.siphon-valve.sucking{ animation:siphon-turn .55s ease; }@keyframes siphon-turn{ to{ transform:rotate(360deg) scale(1.12); } }
+
+  @media (max-width:620px){ .chop-yard{ grid-template-columns:1fr; }.chop-log{ width:110px; justify-self:center; }.orbit-controls{ grid-template-columns:1fr; }.grid-cell{ min-height:58px; }.leak-joint{ min-height:40px; font-size:1.12rem; }.siphon-tanks{ gap:.55rem; }.tank{ height:150px; }.siphon-valve{ transform:scale(.75); }.avalanche-board{ height:280px; } }
 </style>
 </head>
 <body>
@@ -3705,6 +3793,16 @@
   <button class="tab-btn" data-tab="plinko">Plinko</button>
   <button class="tab-btn" data-tab="poker">Poker</button>
   <button class="tab-btn" data-tab="poplock">Pop lock</button>
+  <button class="tab-btn" data-tab="deadhand">Dead man's hand</button>
+  <button class="tab-btn" data-tab="gridlock">Gridlock</button>
+  <button class="tab-btn" data-tab="chop">Chop</button>
+  <button class="tab-btn" data-tab="overcooked">Overcooked</button>
+  <button class="tab-btn" data-tab="heartbeat">Heartbeat</button>
+  <button class="tab-btn" data-tab="leakage">Leakage</button>
+  <button class="tab-btn" data-tab="orbit">Orbit</button>
+  <button class="tab-btn" data-tab="avalanche">Avalanche</button>
+  <button class="tab-btn" data-tab="blackmarket">Black market</button>
+  <button class="tab-btn" data-tab="siphon">Siphon</button>
 </div>
 <button class="casino3d-launch" id="casino3d-launch">Enter 3D Casino</button>
 
@@ -4250,6 +4348,123 @@
     </div>
     <div class="result-msg" id="poplock-msg"></div>
     <div class="game-readout" id="poplock-level-readout">Low: 0.5x speed/payout - Medium: 1x speed/payout - High: 2x speed/payout</div>
+  </div>
+
+  <div class="game-card" id="deadhand">
+    <h2>Dead Man's Hand</h2>
+    <p class="game-sub">Draw one card at a time. Number cards build the pot; Aces, Jacks, and the cursed card erase it. Leave while you still can.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="deadhand-bet">Bet</label><input type="number" id="deadhand-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="deadhand-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="deadhand-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel">
+      <div class="dead-hand-cards" id="deadhand-cards"></div>
+      <div class="metric-strip"><span>Pot multiplier<b id="deadhand-mult">1.00x</b></span><span>Safe draws<b id="deadhand-safe">0</b></span><span>Danger cards<b> A · J · ☠</b></span></div>
+    </div>
+    <div class="challenge-actions"><button class="action-btn" id="deadhand-draw" data-autolock>Deal first card</button><button class="action-btn cashout" id="deadhand-bank" disabled>Bank pot</button></div>
+    <div class="result-msg" id="deadhand-msg"></div>
+    <div class="game-readout">Every normal card adds 0.14x–0.55x. The house gets more dangerous with every card left on the felt.</div>
+  </div>
+
+  <div class="game-card" id="gridlock">
+    <h2>Gridlock</h2>
+    <p class="game-sub">Drive from the southwest to the northeast corner. The lights mutate constantly—green pays, yellow limps, red totals the car.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="gridlock-bet">Bet</label><input type="number" id="gridlock-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="gridlock-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="gridlock-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel"><div class="gridlock-board" id="gridlock-board" aria-label="Gridlock city grid"></div><div class="metric-strip"><span>Route<b id="gridlock-route">Parked</b></span><span>Current payout<b id="gridlock-mult">1.00x</b></span><span>Lights refresh<b>0.7 sec</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="gridlock-start" data-autolock>Start engine</button><button class="action-btn cashout" id="gridlock-bank" disabled>Cash out</button></div>
+    <div class="result-msg" id="gridlock-msg"></div>
+  </div>
+
+  <div class="game-card" id="chop">
+    <h2>Chop</h2>
+    <p class="game-sub">The axe never stops swinging. Strike the bright center for a clean cut; catch a knot and your axe snaps.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="chop-bet">Bet</label><input type="number" id="chop-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="chop-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="chop-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel"><div class="chop-yard"><div class="chop-gauge"><span class="chop-sweet"></span><span class="chop-needle" id="chop-needle"></span></div><div class="chop-log" id="chop-log"></div></div><div class="metric-strip"><span>Sweet spot<b>43%–57%</b></span><span>Accuracy<b id="chop-accuracy">—</b></span><span>Clean-cut range<b>3.5x–10x</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="chop-btn" data-autolock>Raise axe</button></div><div class="result-msg" id="chop-msg"></div>
+  </div>
+
+  <div class="game-card" id="overcooked">
+    <h2>Overcooked</h2>
+    <p class="game-sub">Place the steak, flip it once, then pull it at the right second. More sear means more money—until the grill turns it to coal.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="overcook-bet">Bet</label><input type="number" id="overcook-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="overcook-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="overcook-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel"><div class="grill-stage"><span class="grill-bars"></span><span class="grill-flames"></span><div class="grill-meat" id="overcook-meat"></div></div><div class="metric-strip"><span>Cook time<b id="overcook-time">0.0s</b></span><span>Flip<b id="overcook-flip">Not yet</b></span><span>Projected<b id="overcook-mult">—</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="overcook-place" data-autolock>Place steak</button><button class="action-btn secondary" id="overcook-flip-btn" disabled>Flip</button><button class="action-btn cashout" id="overcook-plate" disabled>Plate it</button></div><div class="result-msg" id="overcook-msg"></div>
+  </div>
+
+  <div class="game-card" id="heartbeat">
+    <h2>Heartbeat</h2>
+    <p class="game-sub">Tap on the beat to keep the line alive. Every perfect beat builds your combo; one missed beat flatlines the whole run.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="heartbeat-bet">Bet</label><input type="number" id="heartbeat-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="heartbeat-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="heartbeat-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel"><div class="heartbeat-monitor" id="heartbeat-monitor"><span class="heartbeat-wave"></span><span class="heartbeat-target"></span><span class="heartbeat-pulse"></span><span class="heartbeat-needle" id="heartbeat-needle"></span></div><div class="metric-strip"><span>Combo<b id="heartbeat-combo">0</b></span><span>Multiplier<b id="heartbeat-mult">1.00x</b></span><span>Beat window<b>±120ms</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="heartbeat-btn" data-autolock>Start rhythm</button><button class="action-btn cashout" id="heartbeat-bank" disabled>Bank combo</button></div><div class="result-msg" id="heartbeat-msg"></div>
+  </div>
+
+  <div class="game-card" id="leakage">
+    <h2>Leakage</h2>
+    <p class="game-sub">Spend your valve turns before release, then guide the water to the valuable buckets. The flow only gets one chance.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="leakage-bet">Bet</label><input type="number" id="leakage-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="leakage-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="leakage-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel"><div class="leakage-board"><div class="leakage-source"></div><div class="leakage-pipes" id="leakage-pipes"></div><div class="leak-buckets" id="leakage-buckets"></div></div><div class="metric-strip"><span>Valve turns<b id="leakage-turns">—</b></span><span>Target bucket<b id="leakage-target">—</b></span><span>Best bucket<b>4.00x</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="leakage-prepare" data-autolock>Prepare valves</button><button class="action-btn cashout" id="leakage-release" disabled>Release water</button></div><div class="result-msg" id="leakage-msg"></div>
+  </div>
+
+  <div class="game-card" id="orbit">
+    <h2>Orbit</h2>
+    <p class="game-sub">Set a launch angle and speed, then hold a stable orbit. Drift too close and you burn; drift too far and the satellite is gone.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="orbit-bet">Bet</label><input type="number" id="orbit-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="orbit-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="orbit-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel"><div class="orbit-field" id="orbit-field"><svg class="orbit-track" id="orbit-track" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline id="orbit-line"></polyline></svg><span class="orbit-sun"></span><span class="orbit-satellite" id="orbit-satellite"></span></div><div class="orbit-controls"><label>Velocity angle <b id="orbit-angle-value">0°</b><input type="range" id="orbit-angle" min="0" max="359" value="0"></label><label>Launch speed <b id="orbit-speed-value">1.55</b><input type="range" id="orbit-speed" min="1.05" max="3.10" value="1.55" step="0.01"></label></div><div class="metric-strip"><span>Orbit time<b id="orbit-time">0.0s</b></span><span>Multiplier<b id="orbit-mult">1.00x</b></span><span>Status<b id="orbit-status">Ready</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="orbit-launch" data-autolock>Launch satellite</button><button class="action-btn cashout" id="orbit-bank" disabled>Cash out</button></div><div class="result-msg" id="orbit-msg"></div>
+  </div>
+
+  <div class="game-card" id="avalanche">
+    <h2>Avalanche</h2>
+    <p class="game-sub">Drop a snowball from the peak. Fresh powder makes it bigger, trees shave it down, and boulders shatter it outright.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="avalanche-bet">Bet</label><input type="number" id="avalanche-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="avalanche-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="avalanche-bet" data-max="1">Max</button>
+      <label for="avalanche-lane">Drop lane</label><select id="avalanche-lane"><option value="1">Left ridge</option><option value="2" selected>Center peak</option><option value="3">Right ridge</option></select>
+    </div>
+    <div class="challenge-panel"><div class="avalanche-board" id="avalanche-board"><div class="avalanche-obstacles" id="avalanche-obstacles"></div><span class="avalanche-snowball" id="avalanche-snowball"></span></div><div class="metric-strip"><span>Snowball size<b id="avalanche-size">1.00x</b></span><span>Distance<b id="avalanche-distance">0 / 8</b></span><span>Terrain<b id="avalanche-terrain">Fresh powder</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="avalanche-drop" data-autolock>Drop snowball</button></div><div class="result-msg" id="avalanche-msg"></div>
+  </div>
+
+  <div class="game-card" id="blackmarket">
+    <h2>Black Market</h2>
+    <p class="game-sub">Buy a crate and trade directly against a volatile house algorithm. Three green ticks in a row make the next correction much nastier.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="blackmarket-bet">Crate cost</label><input type="number" id="blackmarket-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="blackmarket-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="blackmarket-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel"><div class="market-terminal"><div class="market-head"><span>VX-9 CONTRABAND INDEX</span><span class="market-price" id="market-price">$100.00</span></div><svg class="market-chart" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline id="market-line" points="0,56 100,56"></polyline></svg><div class="market-tape" id="market-tape">Market idle. Price updates every 2 seconds.</div></div><div class="metric-strip"><span>Crate value<b id="market-value">—</b></span><span>Up ticks<b id="market-streak">0</b></span><span>Crash risk<b id="market-risk">Base</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="market-buy" data-autolock>Buy crate</button><button class="action-btn cashout" id="market-sell" disabled>Sell crate</button></div><div class="result-msg" id="market-msg"></div>
+  </div>
+
+  <div class="game-card" id="siphon">
+    <h2>Siphon</h2>
+    <p class="game-sub">Steal fuel from the house tank to swell your payout. The house learns your rhythm, so every consecutive siphon raises the catch chance.</p>
+    <div class="bet-row" style="justify-content:center;">
+      <label for="siphon-bet">Bet</label><input type="number" id="siphon-bet" value="1" min="0.25" step="0.25">
+      <button class="chip-btn" data-target="siphon-bet" data-amt="1">+$1</button><button class="chip-btn" data-target="siphon-bet" data-max="1">Max</button>
+    </div>
+    <div class="challenge-panel"><div class="siphon-tanks"><div><div class="tank-label">Your tank</div><div class="tank"><span class="tank-fill" id="siphon-your-fill"></span><b id="siphon-your">100%</b></div></div><div class="siphon-valve" id="siphon-valve"></div><div><div class="tank-label">House tank</div><div class="tank house-tank"><span class="tank-fill" id="siphon-house-fill"></span><b id="siphon-house">100%</b></div></div></div><div class="metric-strip"><span>Multiplier<b id="siphon-mult">1.00x</b></span><span>Streak<b id="siphon-streak">0</b></span><span>Catch chance<b id="siphon-risk">—</b></span></div></div>
+    <div class="challenge-actions"><button class="action-btn" id="siphon-start" data-autolock>Prime valve</button><button class="action-btn" id="siphon-btn" disabled>Siphon</button><button class="action-btn cashout" id="siphon-bank" disabled>Lock valves</button></div><div class="result-msg" id="siphon-msg"></div>
   </div>
 
 </div>
@@ -8195,21 +8410,24 @@ renderKeno();
 /* ---------- plinko ---------- */
 const plinkoBoard = document.getElementById('plinko-board');
 const plinkoOdds = document.getElementById('plinko-odds');
-const PLINKO_TABLES = {
-  low:[1.6,1.3,1.1,0.8,0.5,0.8,1.1,1.3,1.6],
-  medium:[5,2,1.3,0.7,0.3,0.7,1.3,2,5],
-  high:[18,5,1.5,0.4,0.1,0.4,1.5,5,18]
-};
 function plinkoBuckets(rows, risk){
-  const base = PLINKO_TABLES[risk];
-  const out = [];
+  /* Build every table from the actual binomial landing odds.  The old
+     interpolated nine-slot table changed its return wildly when rows changed. */
+  const profile = {
+    low:{ floor:0.68, power:2.15, peak:2.2 },
+    medium:{ floor:0.15, power:3.15, peak:10.5 },
+    high:{ floor:0.03, power:5.25, peak:130 }
+  }[risk] || { floor:0.15, power:3.15, peak:10.5 };
+  const raw = [];
+  let expected = 0;
   for(let i=0; i<=rows; i++){
-    const pos = i / rows * (base.length - 1);
-    const lo = Math.floor(pos), hi = Math.ceil(pos);
-    const v = lo === hi ? base[lo] : base[lo] + (base[hi] - base[lo]) * (pos - lo);
-    out.push(Math.max(0.1, v));
+    const edge = Math.abs(i - rows / 2) / (rows / 2 || 1);
+    const value = profile.floor + Math.pow(edge, profile.power) * profile.peak;
+    raw.push(value);
+    expected += value * comb(rows, i) / Math.pow(2, rows);
   }
-  return out;
+  const scale = 0.96 / expected;
+  return raw.map(value => Math.max(0.03, Math.round(value * scale * 100) / 100));
 }
 function renderPlinkoOdds(rows, risk, buckets){
   plinkoOdds.innerHTML = '';
@@ -8368,8 +8586,9 @@ function animatePlinko(path, hit, done){
   }
   requestAnimationFrame(frame);
 }
-document.getElementById('plinko-rows').addEventListener('change', () => renderPlinko());
-document.getElementById('plinko-risk').addEventListener('change', () => renderPlinko());
+let plinkoRunning = false;
+document.getElementById('plinko-rows').addEventListener('change', () => { if(!plinkoRunning) renderPlinko(); });
+document.getElementById('plinko-risk').addEventListener('change', () => { if(!plinkoRunning) renderPlinko(); });
 document.getElementById('plinko-drop-btn').addEventListener('click', function(){
   const bet = getBet('plinko-bet', 'plinko-msg');
   if(bet === null) return;
@@ -8399,6 +8618,9 @@ document.getElementById('plinko-drop-btn').addEventListener('click', function(){
   const payout = bet * mult;
   setBalance(balance - bet);
   btn.disabled = true;
+  plinkoRunning = true;
+  document.getElementById('plinko-rows').disabled = true;
+  document.getElementById('plinko-risk').disabled = true;
   const msg = document.getElementById('plinko-msg');
   msg.textContent = 'Dropping...';
   msg.className = 'result-msg';
@@ -8414,6 +8636,9 @@ document.getElementById('plinko-drop-btn').addEventListener('click', function(){
       flashActiveGame('lose');
       jerryRoastLoss('plinko');
     }
+    plinkoRunning = false;
+    document.getElementById('plinko-rows').disabled = false;
+    document.getElementById('plinko-risk').disabled = false;
     btn.disabled = balance <= 0;
   });
 });
@@ -8768,6 +8993,400 @@ document.getElementById('poker-draw-btn').addEventListener('click', function(){
   this.disabled = true;
 });
 renderPoker();
+
+/* ---------- back-room games ---------- */
+/* Dead Man's Hand */
+const deadhand = { active:false, bet:0, mult:1, safe:0 };
+const deadhandCards = document.getElementById('deadhand-cards');
+function renderDeadhand(){
+  document.getElementById('deadhand-mult').textContent = deadhand.mult.toFixed(2) + 'x';
+  document.getElementById('deadhand-safe').textContent = deadhand.safe;
+}
+function deadhandEnd(payout, message, win){
+  deadhand.active = false;
+  document.getElementById('deadhand-draw').textContent = 'Deal first card';
+  document.getElementById('deadhand-bank').disabled = true;
+  const msg = document.getElementById('deadhand-msg');
+  msg.textContent = message;
+  msg.className = 'result-msg ' + (win ? 'win' : 'lose');
+  awardPayout(payout, "dead man's hand", win);
+  document.getElementById('deadhand-draw').disabled = balance <= 0;
+}
+function deadhandDraw(){
+  const cursed = Math.random() < 0.055;
+  const card = cursed ? null : drawCard('');
+  if(cursed || card.rank === 'A' || card.rank === 'J'){
+    const doom = document.createElement('div');
+    doom.className = 'playing-card cursed-card';
+    doom.textContent = cursed ? 'CURSED' : card.rank + ' OF DOOM';
+    deadhandCards.appendChild(doom);
+    playSound('mine');
+    deadhandEnd(0, cursed ? 'The cursed card took the whole pot.' : card.rank + ' is cursed here. The felt goes cold.', false);
+    return;
+  }
+  deadhandCards.appendChild(makeCardEl(card, { small:true }));
+  deadhand.safe++;
+  const gain = 0.13 + Math.min(11, card.value + 1) * 0.042;
+  deadhand.mult = Math.round((deadhand.mult + gain) * 100) / 100;
+  renderDeadhand();
+  document.getElementById('deadhand-msg').textContent = card.rank + ' is safe. Draw again or bank ' + fmt(deadhand.bet * deadhand.mult) + '.';
+  document.getElementById('deadhand-msg').className = 'result-msg';
+  playSound('card');
+}
+document.getElementById('deadhand-draw').addEventListener('click', function(){
+  if(!deadhand.active){
+    const bet = getBet('deadhand-bet', 'deadhand-msg');
+    if(bet === null) return;
+    deadhand.active = true; deadhand.bet = bet; deadhand.mult = 1; deadhand.safe = 0;
+    deadhandCards.innerHTML = '';
+    setBalance(balance - bet);
+    this.disabled = false;
+    this.textContent = 'Draw another';
+    document.getElementById('deadhand-bank').disabled = false;
+    renderDeadhand();
+  }
+  deadhandDraw();
+});
+document.getElementById('deadhand-bank').addEventListener('click', () => {
+  if(!deadhand.active) return;
+  const payout = deadhand.bet * deadhand.mult;
+  deadhandEnd(payout, 'You walked away with ' + fmt(payout) + '.', true);
+});
+renderDeadhand();
+
+/* Gridlock */
+const gridlock = { active:false, bet:0, mult:1, current:[3,0], lights:[], route:0, timer:null };
+function gridlockLight(){
+  const roll = Math.random();
+  return roll < 0.56 ? 'green' : roll < 0.79 ? 'yellow' : 'red';
+}
+function gridlockReachable(r, c){
+  const here = gridlock.current;
+  return (r === here[0] - 1 && c === here[1]) || (r === here[0] && c === here[1] + 1);
+}
+function renderGridlock(){
+  const board = document.getElementById('gridlock-board');
+  board.innerHTML = '';
+  for(let r=0; r<4; r++) for(let c=0; c<4; c++){
+    const cell = document.createElement('button');
+    const light = gridlock.lights[r * 4 + c] || 'green';
+    const current = gridlock.current[0] === r && gridlock.current[1] === c;
+    const reachable = gridlock.active && gridlockReachable(r,c);
+    cell.className = 'grid-cell ' + light + (current ? ' current' : '') + (reachable ? ' reachable' : '');
+    cell.disabled = !reachable;
+    cell.innerHTML = current ? '<span class="grid-car">🚗</span>' : '<span class="traffic-light"><i></i><i></i><i></i></span>' + (r === 0 && c === 3 ? '<span class="grid-finish">EXIT</span>' : '');
+    if(reachable) cell.addEventListener('click', () => gridlockDrive(r,c));
+    board.appendChild(cell);
+  }
+  document.getElementById('gridlock-route').textContent = gridlock.active ? gridlock.route + ' / 6' : 'Parked';
+  document.getElementById('gridlock-mult').textContent = gridlock.mult.toFixed(2) + 'x';
+}
+function gridlockStop(payout, text, win){
+  clearInterval(gridlock.timer); gridlock.timer = null; gridlock.active = false;
+  document.getElementById('gridlock-bank').disabled = true;
+  document.getElementById('gridlock-start').disabled = balance <= 0;
+  const msg = document.getElementById('gridlock-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose');
+  renderGridlock(); awardPayout(payout, 'gridlock', win);
+}
+function gridlockDrive(r,c){
+  if(!gridlock.active || !gridlockReachable(r,c)) return;
+  const light = gridlock.lights[r * 4 + c];
+  if(light === 'red'){
+    playSound('mine');
+    gridlockStop(0, 'Red light. A car comes through the intersection.', false);
+    return;
+  }
+  gridlock.current = [r,c]; gridlock.route++;
+  gridlock.mult = Math.round((gridlock.mult + (light === 'green' ? 0.42 : 0.16)) * 100) / 100;
+  playSound(light === 'green' ? 'gem' : 'tick');
+  if(r === 0 && c === 3){
+    gridlock.mult = Math.round((gridlock.mult + 0.8) * 100) / 100;
+    gridlockStop(gridlock.bet * gridlock.mult, 'You cleared the city grid. Paid ' + fmt(gridlock.bet * gridlock.mult) + '.', true);
+  } else renderGridlock();
+}
+document.getElementById('gridlock-start').addEventListener('click', function(){
+  if(gridlock.active) return;
+  const bet = getBet('gridlock-bet', 'gridlock-msg'); if(bet === null) return;
+  gridlock.active = true; gridlock.bet = bet; gridlock.mult = 1; gridlock.current = [3,0]; gridlock.route = 0;
+  gridlock.lights = Array.from({length:16}, gridlockLight); gridlock.lights[15] = 'green';
+  setBalance(balance - bet); this.disabled = true; document.getElementById('gridlock-bank').disabled = false;
+  document.getElementById('gridlock-msg').textContent = 'Pick an adjacent intersection before the lights change.';
+  document.getElementById('gridlock-msg').className = 'result-msg';
+  renderGridlock();
+  gridlock.timer = setInterval(() => { if(!gridlock.active) return; gridlock.lights = Array.from({length:16}, gridlockLight); gridlock.lights[3] = 'green'; renderGridlock(); }, 700);
+});
+document.getElementById('gridlock-bank').addEventListener('click', () => { if(gridlock.active) gridlockStop(gridlock.bet * gridlock.mult, 'You pulled over safely. Paid ' + fmt(gridlock.bet * gridlock.mult) + '.', true); });
+gridlock.lights = Array.from({length:16}, gridlockLight); gridlock.lights[3] = 'green'; renderGridlock();
+
+/* Chop */
+let chopActive = false, chopBet = 0, chopPosition = 0.5;
+function chopAnimate(ts){
+  chopPosition = (Math.sin(ts / 355) + 1) / 2;
+  document.getElementById('chop-needle').style.left = (chopPosition * 100).toFixed(2) + '%';
+  requestAnimationFrame(chopAnimate);
+}
+requestAnimationFrame(chopAnimate);
+document.getElementById('chop-btn').addEventListener('click', function(){
+  const msg = document.getElementById('chop-msg');
+  if(!chopActive){
+    const bet = getBet('chop-bet', 'chop-msg'); if(bet === null) return;
+    chopActive = true; chopBet = bet; setBalance(balance - bet);
+    this.disabled = false;
+    this.textContent = 'CHOP!'; msg.textContent = 'Axe is up. Hit the bright center.'; msg.className = 'result-msg';
+    return;
+  }
+  chopActive = false; this.textContent = 'Raise axe';
+  const error = Math.abs(chopPosition - 0.5);
+  const log = document.getElementById('chop-log'); log.classList.remove('chopped'); void log.offsetWidth; log.classList.add('chopped');
+  if(chopPosition < 0.15 || chopPosition > 0.85){
+    document.getElementById('chop-accuracy').textContent = Math.round((1-error) * 100) + '%';
+    msg.textContent = 'Knot hit. The axe head flies into the woods.'; msg.className = 'result-msg lose'; awardPayout(0, 'chop', false);
+  } else {
+    const mult = error <= 0.07 ? 4 + (1 - error / 0.07) * 6 : 1.15;
+    const payout = chopBet * mult;
+    document.getElementById('chop-accuracy').textContent = Math.round((1-error) * 100) + '%';
+    msg.textContent = error <= 0.07 ? 'Clean split! Paid ' + fmt(payout) + '.' : 'Glancing cut. Paid ' + fmt(payout) + '.';
+    msg.className = 'result-msg win'; awardPayout(payout, 'chop', true);
+  }
+  this.disabled = balance <= 0;
+});
+
+/* Overcooked */
+const overcook = { active:false, bet:0, started:0, flipped:false, raf:null };
+function overcookMultiplier(seconds){
+  if(!overcook.flipped) return 0;
+  if(seconds < 3) return 0.6;
+  if(seconds <= 7.4) return 1 + (seconds - 3) * 0.56;
+  if(seconds < 10.8) return Math.max(0.2, 3.46 - (seconds - 7.4) * 0.9);
+  return 0;
+}
+function overcookEnd(payout, text, win){
+  cancelAnimationFrame(overcook.raf); overcook.active = false;
+  document.getElementById('overcook-place').disabled = balance <= 0;
+  document.getElementById('overcook-place').textContent = 'Place steak';
+  document.getElementById('overcook-flip-btn').disabled = true;
+  document.getElementById('overcook-plate').disabled = true;
+  const msg = document.getElementById('overcook-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose');
+  awardPayout(payout, 'overcooked', win);
+}
+function overcookLoop(now){
+  if(!overcook.active) return;
+  const seconds = (now - overcook.started) / 1000;
+  const meat = document.getElementById('overcook-meat');
+  document.getElementById('overcook-time').textContent = seconds.toFixed(1) + 's';
+  const mult = overcookMultiplier(seconds);
+  document.getElementById('overcook-mult').textContent = overcook.flipped ? mult.toFixed(2) + 'x' : 'Flip first';
+  meat.style.background = seconds < 2.5 ? '#b54130' : seconds < 5.2 ? '#ae592a' : seconds < 7.5 ? '#8e5729' : '#55301d';
+  if(seconds >= 10.8){ meat.classList.add('burnt'); overcookEnd(0, 'Burnt to a crisp. The grill keeps the steak.', false); return; }
+  overcook.raf = requestAnimationFrame(overcookLoop);
+}
+document.getElementById('overcook-place').addEventListener('click', function(){
+  if(overcook.active) return;
+  const bet = getBet('overcook-bet', 'overcook-msg'); if(bet === null) return;
+  overcook.active = true; overcook.bet = bet; overcook.started = performance.now(); overcook.flipped = false;
+  setBalance(balance - bet); this.disabled = true; this.textContent = 'Cooking…';
+  const meat = document.getElementById('overcook-meat'); meat.className = 'grill-meat';
+  document.getElementById('overcook-flip').textContent = 'Waiting'; document.getElementById('overcook-flip-btn').disabled = false; document.getElementById('overcook-plate').disabled = false;
+  document.getElementById('overcook-msg').textContent = 'Flip once, then pull it before it burns.'; document.getElementById('overcook-msg').className = 'result-msg';
+  overcook.raf = requestAnimationFrame(overcookLoop);
+});
+document.getElementById('overcook-flip-btn').addEventListener('click', function(){
+  if(!overcook.active || overcook.flipped) return;
+  overcook.flipped = true; this.disabled = true; document.getElementById('overcook-flip').textContent = 'Done'; document.getElementById('overcook-meat').classList.add('flipped'); playSound('tick');
+});
+document.getElementById('overcook-plate').addEventListener('click', () => {
+  if(!overcook.active) return;
+  if(!overcook.flipped){ document.getElementById('overcook-msg').textContent = 'It needs one flip before it can be plated.'; document.getElementById('overcook-msg').className = 'result-msg lose'; return; }
+  const seconds = (performance.now() - overcook.started) / 1000, mult = overcookMultiplier(seconds), payout = overcook.bet * mult;
+  overcookEnd(payout, 'Plated at ' + seconds.toFixed(1) + 's. Paid ' + fmt(payout) + '.', payout > overcook.bet);
+});
+
+/* Heartbeat */
+const heartbeat = { active:false, bet:0, combo:0, mult:1, start:0, lastBeat:-1, hitBeat:-1, raf:null };
+const HEARTBEAT_MS = 920;
+function heartbeatEnd(payout, text, win){
+  cancelAnimationFrame(heartbeat.raf); heartbeat.active = false;
+  document.getElementById('heartbeat-btn').textContent = 'Start rhythm'; document.getElementById('heartbeat-btn').disabled = balance <= 0;
+  document.getElementById('heartbeat-bank').disabled = true;
+  const msg = document.getElementById('heartbeat-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose');
+  awardPayout(payout, 'heartbeat', win);
+}
+function heartbeatLoop(now){
+  if(!heartbeat.active) return;
+  const elapsed = now - heartbeat.start;
+  if(elapsed < 0){ heartbeat.raf = requestAnimationFrame(heartbeatLoop); return; }
+  const beat = Math.floor(elapsed / HEARTBEAT_MS), phase = (elapsed % HEARTBEAT_MS) / HEARTBEAT_MS;
+  document.getElementById('heartbeat-needle').style.left = (phase * 100).toFixed(2) + '%';
+  if(beat !== heartbeat.lastBeat){
+    if(heartbeat.lastBeat >= 0 && heartbeat.hitBeat !== heartbeat.lastBeat){ heartbeatEnd(0, 'Missed beat. The monitor flatlines.', false); return; }
+    heartbeat.lastBeat = beat;
+  }
+  heartbeat.raf = requestAnimationFrame(heartbeatLoop);
+}
+document.getElementById('heartbeat-btn').addEventListener('click', function(){
+  if(!heartbeat.active){
+    const bet = getBet('heartbeat-bet', 'heartbeat-msg'); if(bet === null) return;
+    heartbeat.active = true; heartbeat.bet = bet; heartbeat.combo = 0; heartbeat.mult = 1; heartbeat.start = performance.now() + 350; heartbeat.lastBeat = -1; heartbeat.hitBeat = -1;
+    setBalance(balance - bet); this.disabled = false; this.textContent = 'Hit beat'; document.getElementById('heartbeat-bank').disabled = false;
+    document.getElementById('heartbeat-msg').textContent = 'Wait for the needle to cross the gold lane.'; document.getElementById('heartbeat-msg').className = 'result-msg'; heartbeat.raf = requestAnimationFrame(heartbeatLoop); return;
+  }
+  const elapsed = performance.now() - heartbeat.start;
+  if(elapsed < 0) return;
+  const beat = Math.floor(elapsed / HEARTBEAT_MS), phase = (elapsed % HEARTBEAT_MS) / HEARTBEAT_MS;
+  if(beat !== heartbeat.hitBeat && Math.abs(phase - 0.5) <= 0.13){
+    heartbeat.hitBeat = beat; heartbeat.combo++; heartbeat.mult = Math.round((1 + heartbeat.combo * 0.31) * 100) / 100;
+    document.getElementById('heartbeat-combo').textContent = heartbeat.combo; document.getElementById('heartbeat-mult').textContent = heartbeat.mult.toFixed(2) + 'x';
+    const monitor = document.getElementById('heartbeat-monitor'); monitor.classList.remove('beat'); void monitor.offsetWidth; monitor.classList.add('beat');
+    document.getElementById('heartbeat-msg').textContent = heartbeat.combo > 1 ? 'Perfect. Keep the rhythm or bank it.' : 'Beat locked. Build the combo.'; document.getElementById('heartbeat-msg').className = 'result-msg win'; playSound('gem');
+  } else heartbeatEnd(0, 'Mistimed click. The monitor flatlines.', false);
+});
+document.getElementById('heartbeat-bank').addEventListener('click', () => {
+  if(!heartbeat.active) return;
+  if(heartbeat.combo < 1){ document.getElementById('heartbeat-msg').textContent = 'Bank after at least one clean beat.'; return; }
+  const payout = heartbeat.bet * heartbeat.mult; heartbeatEnd(payout, 'Combo banked. Paid ' + fmt(payout) + '.', true);
+});
+
+/* Leakage */
+const leakage = { active:false, releasing:false, bet:0, turns:0, joints:[] };
+const LEAK_PAYOUTS = [0.5,0.8,1.25,4,1.6,0.85], LEAK_ARROW = ['↙','↓','↘'];
+function leakageRoute(){
+  let col = 2, path = [];
+  for(let row=0; row<5; row++){
+    path.push([row,col]); col = Math.max(0, Math.min(5, col + leakage.joints[row][col] - 1));
+  }
+  return { path, bucket:col };
+}
+function renderLeakage(flow){
+  const pipes = document.getElementById('leakage-pipes'), buckets = document.getElementById('leakage-buckets'); pipes.innerHTML = ''; buckets.innerHTML = '';
+  const route = leakage.joints.length ? leakageRoute() : {path:[],bucket:2};
+  leakage.joints.forEach((row, r) => row.forEach((joint, c) => {
+    const btn = document.createElement('button'); const lit = flow && route.path.some(point => point[0] === r && point[1] === c);
+    btn.className = 'leak-joint' + (lit ? ' flow' : ''); btn.textContent = LEAK_ARROW[joint]; btn.disabled = !leakage.active || leakage.releasing || leakage.turns <= 0;
+    btn.addEventListener('click', () => { if(!leakage.active || leakage.turns <= 0) return; leakage.joints[r][c] = (leakage.joints[r][c] + 1) % 3; leakage.turns--; renderLeakage(false); }); pipes.appendChild(btn);
+  }));
+  LEAK_PAYOUTS.forEach((mult, i) => { const bucket = document.createElement('div'); bucket.className = 'leak-bucket' + (flow && i === route.bucket ? ' filled' : ''); bucket.textContent = mult.toFixed(2) + 'x'; buckets.appendChild(bucket); });
+  document.getElementById('leakage-turns').textContent = leakage.active ? leakage.turns : '—'; document.getElementById('leakage-target').textContent = leakage.active ? 'Bucket ' + (route.bucket + 1) : '—';
+}
+function leakageEnd(payout, text, win){
+  leakage.active = false; leakage.releasing = false; document.getElementById('leakage-prepare').disabled = balance <= 0; document.getElementById('leakage-release').disabled = true;
+  const msg = document.getElementById('leakage-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'leakage', win); renderLeakage(false);
+}
+document.getElementById('leakage-prepare').addEventListener('click', function(){
+  if(leakage.active) return;
+  const bet = getBet('leakage-bet', 'leakage-msg'); if(bet === null) return;
+  leakage.active = true; leakage.releasing = false; leakage.bet = bet; leakage.turns = 5; leakage.joints = Array.from({length:5}, () => Array.from({length:6}, () => Math.floor(Math.random()*3)));
+  setBalance(balance - bet); this.disabled = true; document.getElementById('leakage-release').disabled = false; document.getElementById('leakage-msg').textContent = 'You have five valve turns. Rotate the joints, then release.'; document.getElementById('leakage-msg').className = 'result-msg'; renderLeakage(false);
+});
+document.getElementById('leakage-release').addEventListener('click', function(){
+  if(!leakage.active || leakage.releasing) return; leakage.releasing = true; this.disabled = true;
+  const route = leakageRoute(); let step = 0; renderLeakage(false);
+  const timer = setInterval(() => {
+    const tile = document.getElementById('leakage-pipes').children[route.path[step][0] * 6 + route.path[step][1]]; if(tile) tile.classList.add('flow'); playSound('peg'); step++;
+    if(step >= route.path.length){ clearInterval(timer); setTimeout(() => { const mult = LEAK_PAYOUTS[route.bucket], payout = leakage.bet * mult; renderLeakage(true); leakageEnd(payout, 'Water reached bucket ' + (route.bucket + 1) + ' at ' + mult.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', payout > leakage.bet); }, 300); }
+  }, 420);
+});
+leakage.joints = Array.from({length:5}, () => Array.from({length:6}, () => Math.floor(Math.random()*3))); renderLeakage(false);
+
+/* Orbit */
+const orbit = { active:false, bet:0, pos:{x:0,y:-0.62}, vel:{x:1.55,y:0}, last:0, started:0, points:[], raf:null };
+function renderOrbit(){
+  const sat = document.getElementById('orbit-satellite'); sat.style.left = (50 + orbit.pos.x * 31).toFixed(2) + '%'; sat.style.top = (50 + orbit.pos.y * 31).toFixed(2) + '%';
+  document.getElementById('orbit-line').setAttribute('points', orbit.points.map(p => p.x.toFixed(2) + ',' + p.y.toFixed(2)).join(' '));
+}
+function orbitFinish(payout, text, win){
+  cancelAnimationFrame(orbit.raf); orbit.active = false; document.getElementById('orbit-launch').disabled = balance <= 0; document.getElementById('orbit-bank').disabled = true; document.getElementById('orbit-angle').disabled = false; document.getElementById('orbit-speed').disabled = false;
+  const msg = document.getElementById('orbit-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'orbit', win);
+}
+function orbitLoop(now){
+  if(!orbit.active) return;
+  const dt = Math.min(0.035, (now - orbit.last) / 1000 || 0.016); orbit.last = now;
+  const r = Math.hypot(orbit.pos.x, orbit.pos.y), gravity = 1.5 / Math.max(0.02, r * r * r);
+  orbit.vel.x += -orbit.pos.x * gravity * dt; orbit.vel.y += -orbit.pos.y * gravity * dt; orbit.pos.x += orbit.vel.x * dt; orbit.pos.y += orbit.vel.y * dt;
+  const nextR = Math.hypot(orbit.pos.x, orbit.pos.y), elapsed = (now - orbit.started) / 1000, mult = 1 + elapsed * 0.16;
+  if(nextR < 0.18){ document.getElementById('orbit-status').textContent = 'Burned'; orbitFinish(0, 'The satellite fell into the gravity well.', false); return; }
+  if(nextR > 1.48){ document.getElementById('orbit-status').textContent = 'Escaped'; orbitFinish(0, 'The satellite escaped the map boundary.', false); return; }
+  if(orbit.points.length === 0 || elapsed * 60 % 3 < 1){ orbit.points.push({x:50 + orbit.pos.x * 31,y:50 + orbit.pos.y * 31}); if(orbit.points.length > 110) orbit.points.shift(); }
+  document.getElementById('orbit-time').textContent = elapsed.toFixed(1) + 's'; document.getElementById('orbit-mult').textContent = mult.toFixed(2) + 'x'; document.getElementById('orbit-status').textContent = nextR < 0.38 ? 'Close' : nextR > 1.18 ? 'Wide' : 'Stable'; renderOrbit(); orbit.raf = requestAnimationFrame(orbitLoop);
+}
+function updateOrbitInputs(){ document.getElementById('orbit-angle-value').textContent = document.getElementById('orbit-angle').value + '°'; document.getElementById('orbit-speed-value').textContent = Number(document.getElementById('orbit-speed').value).toFixed(2); }
+document.getElementById('orbit-angle').addEventListener('input', updateOrbitInputs); document.getElementById('orbit-speed').addEventListener('input', updateOrbitInputs);
+document.getElementById('orbit-launch').addEventListener('click', function(){
+  if(orbit.active) return;
+  const bet = getBet('orbit-bet', 'orbit-msg'); if(bet === null) return;
+  const rad = Number(document.getElementById('orbit-angle').value) * Math.PI / 180, speed = Number(document.getElementById('orbit-speed').value);
+  orbit.active = true; orbit.bet = bet; orbit.pos = {x:0,y:-0.62}; orbit.vel = {x:Math.cos(rad)*speed,y:Math.sin(rad)*speed}; orbit.points = []; orbit.last = performance.now(); orbit.started = orbit.last;
+  setBalance(balance - bet); this.disabled = true; document.getElementById('orbit-bank').disabled = false; document.getElementById('orbit-angle').disabled = true; document.getElementById('orbit-speed').disabled = true; document.getElementById('orbit-msg').textContent = 'Satellite launched. A clean orbit builds every second.'; document.getElementById('orbit-msg').className = 'result-msg'; orbit.raf = requestAnimationFrame(orbitLoop);
+});
+document.getElementById('orbit-bank').addEventListener('click', () => { if(!orbit.active) return; const mult = 1 + ((performance.now() - orbit.started) / 1000) * 0.16, payout = orbit.bet * mult; orbitFinish(payout, 'Orbit banked at ' + mult.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', true); });
+updateOrbitInputs(); renderOrbit();
+
+/* Avalanche */
+const avalanche = { active:false, bet:0, mass:1, lane:2, step:0, terrain:[], timer:null };
+function avalancheBuild(){
+  avalanche.terrain = Array.from({length:8}, () => Array.from({length:5}, () => { const roll = Math.random(); return roll < .075 ? 'boulder' : roll < .29 ? 'tree' : 'powder'; }));
+  const field = document.getElementById('avalanche-obstacles'); field.innerHTML = '';
+  avalanche.terrain.forEach((row,r) => row.forEach((kind,c) => { if(kind === 'powder') return; const el = document.createElement('span'); el.className = 'avalanche-obstacle'; el.textContent = kind === 'tree' ? '🌲' : '🪨'; el.style.left = (10 + c * 20) + '%'; el.style.top = (8 + r * 11.2) + '%'; field.appendChild(el); }));
+}
+function renderAvalanche(){
+  const ball = document.getElementById('avalanche-snowball'); ball.style.left = (10 + avalanche.lane * 20) + '%'; ball.style.top = (5 + avalanche.step * 11.3) + '%'; ball.style.transform = 'scale(' + Math.max(.42, avalanche.mass) + ')';
+  document.getElementById('avalanche-size').textContent = avalanche.mass.toFixed(2) + 'x'; document.getElementById('avalanche-distance').textContent = avalanche.step + ' / 8';
+}
+function avalancheEnd(payout, text, win){ clearInterval(avalanche.timer); avalanche.active = false; const ball = document.getElementById('avalanche-snowball'); ball.classList.remove('rolling'); document.getElementById('avalanche-drop').disabled = balance <= 0; const msg = document.getElementById('avalanche-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'avalanche', win); }
+document.getElementById('avalanche-drop').addEventListener('click', function(){
+  if(avalanche.active) return; const bet = getBet('avalanche-bet', 'avalanche-msg'); if(bet === null) return;
+  avalanche.active = true; avalanche.bet = bet; avalanche.mass = 1; avalanche.step = 0; avalanche.lane = (Number(document.getElementById('avalanche-lane').value) - 1) * 2; avalancheBuild(); renderAvalanche(); setBalance(balance - bet); this.disabled = true; const ball = document.getElementById('avalanche-snowball'); ball.classList.add('rolling'); document.getElementById('avalanche-msg').textContent = 'Rolling…'; document.getElementById('avalanche-msg').className = 'result-msg';
+  avalanche.timer = setInterval(() => {
+    avalanche.step++; avalanche.lane = Math.max(0, Math.min(4, avalanche.lane + (Math.random() < .34 ? -1 : Math.random() > .66 ? 1 : 0))); const kind = avalanche.terrain[avalanche.step - 1][avalanche.lane];
+    if(kind === 'boulder'){ renderAvalanche(); avalancheEnd(0, 'Boulder strike. The snowball shattered.', false); return; }
+    if(kind === 'tree'){ avalanche.mass = Math.max(.15, avalanche.mass * .62); document.getElementById('avalanche-terrain').textContent = 'Tree impact'; playSound('lose'); }
+    else { avalanche.mass += .24; document.getElementById('avalanche-terrain').textContent = 'Fresh powder'; playSound('peg'); }
+    renderAvalanche();
+    if(avalanche.step >= 8){ const payout = avalanche.bet * avalanche.mass; avalancheEnd(payout, 'Snowball reached the base at ' + avalanche.mass.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', payout > avalanche.bet); }
+  }, 510);
+});
+avalancheBuild(); renderAvalanche();
+
+/* Black Market */
+const market = { active:false, bet:0, price:1, history:[1], up:0, timer:null };
+function renderMarket(){
+  const values = market.history, min = Math.min(0.45, ...values), max = Math.max(1.55, ...values), spread = max - min || 1;
+  const points = values.map((value,i) => (i / Math.max(1,values.length-1) * 100).toFixed(1) + ',' + (90 - (value-min)/spread*80).toFixed(1)).join(' ');
+  const line = document.getElementById('market-line'); line.setAttribute('points', points); line.classList.toggle('crash', market.price === 0);
+  const price = document.getElementById('market-price'); price.textContent = '$' + (market.price * 100).toFixed(2); price.classList.toggle('down', values.length > 1 && values[values.length-1] < values[values.length-2]);
+  document.getElementById('market-value').textContent = market.active ? fmt(market.bet * market.price) : '—'; document.getElementById('market-streak').textContent = market.up; document.getElementById('market-risk').textContent = market.up >= 3 ? '25% crash' : 'Base';
+}
+function marketEnd(payout, text, win){ clearInterval(market.timer); market.timer = null; market.active = false; document.getElementById('market-buy').disabled = balance <= 0; document.getElementById('market-sell').disabled = true; const msg = document.getElementById('market-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'black market', win); renderMarket(); }
+function marketTick(){
+  if(!market.active) return;
+  if(market.up >= 3 && Math.random() < .25){ market.price = 0; market.history.push(0); document.getElementById('market-tape').textContent = 'HOUSE CORRECTION: market cratered to zero.'; renderMarket(); marketEnd(0, 'The house correction erased the crate.', false); return; }
+  const before = market.price, drift = (1 - market.price) * .09, change = (Math.random() * .34 - .16) + drift; market.price = Math.max(.07, Math.round((market.price * (1 + change)) * 10000) / 10000); market.up = market.price > before ? market.up + 1 : 0; market.history.push(market.price); if(market.history.length > 25) market.history.shift();
+  document.getElementById('market-tape').textContent = market.price > before ? 'Green tick. House model is stretching.' : 'Red tick. The crate is getting cheaper.'; renderMarket(); playSound(market.price > before ? 'tick' : 'lose');
+}
+document.getElementById('market-buy').addEventListener('click', function(){
+  if(market.active) return; const bet = getBet('blackmarket-bet', 'market-msg'); if(bet === null) return;
+  market.active = true; market.bet = bet; market.price = 1; market.history = [1]; market.up = 0; setBalance(balance - bet); this.disabled = true; document.getElementById('market-sell').disabled = false; document.getElementById('market-msg').textContent = 'Crate acquired. Sell before the next correction.'; document.getElementById('market-msg').className = 'result-msg'; renderMarket(); market.timer = setInterval(marketTick, 2000);
+});
+document.getElementById('market-sell').addEventListener('click', () => { if(!market.active) return; const payout = market.bet * market.price; marketEnd(payout, 'Sold at ' + market.price.toFixed(2) + 'x. Paid ' + fmt(payout) + '.', payout > market.bet); });
+renderMarket();
+
+/* Siphon */
+const siphon = { active:false, bet:0, yours:100, house:100, streak:0 };
+function renderSiphon(){
+  document.getElementById('siphon-your-fill').style.height = siphon.yours + '%'; document.getElementById('siphon-house-fill').style.height = siphon.house + '%'; document.getElementById('siphon-your').textContent = siphon.yours.toFixed(0) + '%'; document.getElementById('siphon-house').textContent = siphon.house.toFixed(0) + '%'; document.getElementById('siphon-mult').textContent = (siphon.yours / 100).toFixed(2) + 'x'; document.getElementById('siphon-streak').textContent = siphon.streak; document.getElementById('siphon-risk').textContent = siphon.active ? Math.min(82, 8 + siphon.streak * 12).toFixed(0) + '%' : '—';
+}
+function siphonEnd(payout, text, win){ siphon.active = false; document.getElementById('siphon-start').disabled = balance <= 0; document.getElementById('siphon-btn').disabled = true; document.getElementById('siphon-bank').disabled = true; const msg = document.getElementById('siphon-msg'); msg.textContent = text; msg.className = 'result-msg ' + (win ? 'win' : 'lose'); awardPayout(payout, 'siphon', win); renderSiphon(); }
+document.getElementById('siphon-start').addEventListener('click', function(){
+  if(siphon.active) return; const bet = getBet('siphon-bet', 'siphon-msg'); if(bet === null) return;
+  siphon.active = true; siphon.bet = bet; siphon.yours = 100; siphon.house = 100; siphon.streak = 0; setBalance(balance - bet); this.disabled = true; document.getElementById('siphon-btn').disabled = false; document.getElementById('siphon-bank').disabled = false; document.getElementById('siphon-msg').textContent = 'Valve primed. First siphon has an 8% catch chance.'; document.getElementById('siphon-msg').className = 'result-msg'; renderSiphon();
+});
+document.getElementById('siphon-btn').addEventListener('click', function(){
+  if(!siphon.active) return; const chance = Math.min(.82, .08 + siphon.streak * .12); const valve = document.getElementById('siphon-valve'); valve.classList.remove('sucking'); void valve.offsetWidth; valve.classList.add('sucking');
+  if(Math.random() < chance){ siphonEnd(0, 'Caught at the valve. The house seizes your whole tank.', false); return; }
+  const transfer = Math.min(siphon.house, 8 + Math.random() * 14); siphon.house -= transfer; siphon.yours += transfer; siphon.streak++; document.getElementById('siphon-msg').textContent = 'Stole ' + transfer.toFixed(0) + '% fuel. Bank it or press your luck.'; document.getElementById('siphon-msg').className = 'result-msg win'; playSound('gem'); renderSiphon();
+  if(siphon.house <= .01){ const payout = siphon.bet * (siphon.yours / 100); siphonEnd(payout, 'House tank drained. Paid ' + fmt(payout) + '.', true); }
+});
+document.getElementById('siphon-bank').addEventListener('click', () => { if(!siphon.active) return; const payout = siphon.bet * (siphon.yours / 100); siphonEnd(payout, 'Valves locked. Paid ' + fmt(payout) + '.', payout > siphon.bet); });
+renderSiphon();
 </script>
 </body>
 </html>
