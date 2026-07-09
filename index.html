@@ -5200,6 +5200,7 @@ async function askJerry(message, showUser){
       body:JSON.stringify(payload)
     });
     if(!res.ok) throw new Error('Jerry API returned ' + res.status);
+    if(data == 'data: {"error":"WebSocket error"}'){throw new Error('returned a websocket error')};
     await readJerryStreamingResponse(res, appendDelta);
     reply = reply.trim() || npcFallbackReply(message);
     assistantLine.textContent = reply;
