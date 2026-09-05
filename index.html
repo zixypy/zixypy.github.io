@@ -3979,104 +3979,124 @@
 
   @media (max-width:560px){ .slot-lever{ margin-left:0; } #slots .reels{ gap:.25rem; padding:.65rem .3rem; } .pinball-controls{ gap:.35rem; }.pinball-flip-btn{ padding:.5rem .45rem; font-size:.68rem; } }
 
-/* Velvet lobby: slate surfaces, compact navigation, emerald actions.
-   Game-specific rendering above is preserved for all existing engines. */
+
+/* Reference-led Velvet lobby. Existing game engines/styles above stay intact. */
 :root{
-  --bg:#1a2c38;--card-bg:#213743;--card-border:#304754;
-  --text:#f3f6f8;--text-muted:#b1c1cc;--text-faint:#91a6b5;
-  --brass:#00e701;--brass-light:#62f36b;--burgundy:#2f4553;--burgundy-light:#405c6c;
-  --ink:#0f212e;--ink-text:#f3f6f8;--tile-bg:#2f4553;--tile-border:#496170;
-  --divider:#304754;--win:#62f36b;--loss:#ff8a98;--shell:#0f212e;--raised:#2f4553;
+  --bg:#1a2c38;--card-bg:#213743;--card-border:#304754;--text:#f3f6f8;--text-muted:#b1c1cc;--text-faint:#91a6b5;
+  --brass:#00e701;--brass-light:#62f36b;--burgundy:#2f4553;--burgundy-light:#405c6c;--ink:#0f212e;--ink-text:#f3f6f8;
+  --tile-bg:#2f4553;--tile-border:#496170;--divider:#304754;--win:#62f36b;--loss:#ff8a98;--shell:#0f212e;--raised:#2f4553;
+  --nav-width:200px;--header-height:56px;
 }
 html[data-theme="light"]{
-  --bg:#e9eff3;--card-bg:#fff;--card-border:#cbd7df;
-  --text:#142a38;--text-muted:#496170;--text-faint:#526b7b;
-  --brass:#008529;--brass-light:#006d23;--burgundy:#d4e0e8;--burgundy-light:#c1d3df;
-  --ink:#172f3e;--ink-text:#fff;--tile-bg:#e4edf3;--tile-border:#bdccd6;
-  --divider:#cbd7df;--win:#007c27;--loss:#b52946;--shell:#f7fafc;--raised:#dce6ed;
+  --bg:#e9eff3;--card-bg:#fff;--card-border:#cbd7df;--text:#142a38;--text-muted:#496170;--text-faint:#526b7b;
+  --brass:#008529;--brass-light:#006d23;--burgundy:#d4e0e8;--burgundy-light:#c1d3df;--ink:#172f3e;--ink-text:#fff;
+  --tile-bg:#e4edf3;--tile-border:#bdccd6;--divider:#cbd7df;--win:#007c27;--loss:#b52946;--shell:#f7fafc;--raised:#dce6ed;
 }
-html{scroll-padding-top:90px}
-body{padding:72px 0 0 224px;background:var(--bg);font-size:16px}
-body::before,.casino-ambient,.stage::before,.stage::after,
-.game-card::before,.game-card.active::after,.game-card.active h2::after{display:none!important}
+html{scroll-padding-top:76px}
+body{padding:var(--header-height) 0 0 var(--nav-width);background:var(--bg);font-size:16px}
+body::before,.casino-ambient,.stage::before,.stage::after,.game-card::before,.game-card.active::after,.game-card.active h2::after{display:none!important}
 button,input,select{font:inherit}
 button,a,input,select{touch-action:manipulation}
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
-  outline:3px solid var(--brass);outline-offset:4px;
-}
-button:disabled{cursor:not-allowed;opacity:.5}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[tabindex="-1"]:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
+button:disabled{cursor:not-allowed;opacity:.4}
 [hidden]{display:none!important}
 .vc-skip{position:fixed;top:-100px;left:1rem;z-index:1000;background:var(--brass);color:#09250c;padding:12px}
 .vc-skip:focus{top:8px}
-.vc-topbar{position:fixed;inset:0 0 auto;height:72px;z-index:30;display:flex;align-items:center;
-  gap:20px;padding:0 28px;background:var(--shell);box-shadow:0 3px 12px #0003}
-.vc-brand{border:0;background:none;color:var(--text);font-size:27px;font-weight:900;letter-spacing:-1.4px;
-  text-align:left;cursor:pointer;font-style:italic;white-space:nowrap}
-.vc-brand span{color:var(--brass-light)}
-.vc-topbar .vc-brand{width:172px;flex-shrink:0}
-.vc-icon-btn{min-width:42px;height:42px;border:0;border-radius:7px;background:var(--raised);color:var(--text);cursor:pointer}
-.vc-wallet{display:flex;align-items:center;gap:14px;margin:auto;padding:9px 16px;border-radius:7px;background:var(--bg)}
+.vc-topbar{position:fixed;inset:0 0 auto;z-index:30;height:var(--header-height);background:var(--bg);
+  box-shadow:0 3px 7px #0003;display:flex}
+.vc-topbar-start{display:flex;align-items:center;gap:10px;padding:0 14px;width:var(--nav-width);flex:none;background:var(--shell)}
+.vc-icon-btn{width:26px;height:36px;display:grid;place-items:center;flex:none;border:0;background:none;color:var(--text-muted);cursor:pointer}
+.vc-icon{width:18px;height:18px;display:inline-block;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.vc-mode{border:0;border-radius:4px;padding:10px 15px;background:linear-gradient(110deg,#139837,#00ad62);
+  color:#fff;box-shadow:inset 0 0 0 1px #ffffff10;font-size:12px;font-weight:850;white-space:nowrap;cursor:pointer}
+.vc-topbar-main{flex:1;min-width:0}
+.vc-topbar-inner{height:100%;max-width:1040px;padding:0 24px;margin:auto;display:flex;align-items:center;gap:14px}
+.vc-brand{border:0;background:none;color:var(--text);font:italic 32px/1 'DM Serif Display',Georgia,serif;letter-spacing:-1.8px;
+  text-align:left;cursor:pointer;white-space:nowrap;padding:0;margin-right:auto}
+.vc-brand span{color:var(--text)}
+.vc-wallet{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:5px;background:var(--shell)}
 .vc-wallet small{color:var(--text-muted);font-size:12px;display:block}
-.vc-wallet #balance{font-family:'JetBrains Mono',monospace;font-size:16px;white-space:nowrap;color:var(--text)}
-.vc-wallet-tag{background:var(--brass);color:#082c12;padding:9px 12px;border-radius:5px;font-size:12px;font-weight:800}
-html[data-theme="light"] .vc-wallet-tag{color:#fff}
-.vc-topbar .theme-toggle{position:static;border:0;background:var(--raised);color:var(--text);
-  animation:none;box-shadow:none;border-radius:6px;padding:12px;font-size:14px;white-space:nowrap}
+.vc-wallet #balance{font:700 14px/1.3 'JetBrains Mono',monospace;white-space:nowrap;color:var(--text)}
+.vc-topbar .theme-toggle{position:static;border:0;background:#1475e1;color:#fff;animation:none;box-shadow:none;
+  border-radius:4px;padding:12px 16px;font-size:14px;font-weight:700;white-space:nowrap}
 #theme-icon{display:none}
-.vc-sidebar{position:fixed;inset:72px auto 0 0;width:224px;padding:20px 14px;z-index:25;
+.vc-sidebar{position:fixed;inset:var(--header-height) auto 0 0;width:var(--nav-width);padding:12px;z-index:25;
   background:var(--shell);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--raised) transparent}
-.vc-side-label{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;color:var(--text-faint);margin:26px 14px 10px}
-.vc-nav-home,.vc-sidebar a,.vc-sidebar .casino3d-launch{display:flex;align-items:center;gap:10px;width:100%;margin:0;
-  padding:13px 14px;border:0;border-radius:6px;background:none;color:var(--text-muted);text-decoration:none;font-size:14px;
-  text-align:left;font-weight:600;cursor:pointer;box-shadow:none}
-.vc-nav-home[aria-current="page"]{background:var(--raised);color:var(--text)}
-.vc-sidebar a:hover,.vc-nav-home:hover,.vc-sidebar .casino3d-launch:hover{background:var(--raised);color:var(--text);transform:none}
-.vc-sidebar .tabs{display:flex;flex-direction:column;gap:3px;padding:0;margin:0;max-width:none;flex-wrap:nowrap}
-.vc-sidebar .tab-btn,.vc-sidebar .tabs.tabs-ready .tab-btn{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;
-  padding:10px 14px;border:0;border-radius:6px;background:none;color:var(--text-muted);font-size:14px;text-align:left;
-  font-weight:600;letter-spacing:0;text-transform:none;box-shadow:none;animation:none!important;transform:none!important;opacity:1}
+.vc-side-group{background:var(--bg);border-radius:5px;padding:5px 0;margin:0 0 9px}
+.vc-side-label{font-size:14px;color:var(--text);margin:0;padding:12px 13px;border-bottom:1px solid var(--divider);font-weight:700}
+.vc-nav-home,.vc-sidebar a,.vc-sidebar .casino3d-launch,.vc-sidebar [data-vc-filter]{
+  display:flex;align-items:center;gap:9px;width:100%;margin:0;padding:11px 13px;min-height:40px;border:0;border-radius:3px;
+  background:none;color:var(--text-muted);text-decoration:none;font-size:14px;text-align:left;font-weight:650;cursor:pointer;box-shadow:none}
+.vc-sidebar button:hover,.vc-sidebar a:hover{background:var(--raised);color:var(--text);transform:none}
+.vc-nav-home[aria-current="page"],.vc-sidebar [data-vc-filter][aria-current="page"]{color:var(--text);background:var(--raised)}
+.vc-sidebar .tabs{display:flex;flex-direction:column;gap:0;padding:5px 0;margin:0;max-width:none;flex-wrap:nowrap}
+.vc-sidebar .tab-btn,.vc-sidebar .tabs.tabs-ready .tab-btn{display:flex;align-items:center;gap:9px;width:100%;min-height:40px;
+  padding:10px 13px;border:0;border-radius:3px;background:none;color:var(--text-muted);font-size:14px;text-align:left;font-weight:650;
+  letter-spacing:0;text-transform:none;box-shadow:none;animation:none!important;transform:none!important;opacity:1}
 .vc-sidebar .tab-btn::after,.vc-sidebar .tab-btn::before{display:none}
 .vc-sidebar .tab-btn:hover{background:var(--raised);color:var(--text)}
 .vc-sidebar .tab-btn.active{background:var(--raised);color:var(--text);box-shadow:inset 3px 0 var(--brass)}
-.vc-nav-symbol{width:19px;text-align:center;color:var(--text-faint);flex:none}
-.vc-main{max-width:1440px;margin:0 auto;padding:28px 32px 42px;min-width:0}
-.vc-lobby-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
-.vc-lobby-head h1{font:800 26px/1.2 'Inter',sans-serif;animation:none;text-shadow:none;color:var(--text);margin:0;letter-spacing:-.7px}
-.vc-caption{font-size:14px;color:var(--text-muted);margin:7px 0 0;line-height:1.5}
-.vc-count{color:var(--text-muted);font-size:14px;white-space:nowrap}
-.vc-featured{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;margin-bottom:30px}
-.vc-feature{position:relative;min-height:182px;padding:26px;border:1px solid #ffffff0d;border-radius:10px;
-  background:linear-gradient(110deg,#14403f,#17333e);color:#fff;overflow:hidden;display:flex;align-items:center}
-.vc-feature:nth-child(2){background:linear-gradient(115deg,#252c57,#1c374b)}
-.vc-feature-content{position:relative;z-index:1;max-width:70%}
-.vc-feature small{display:block;font-size:12px;font-weight:800;letter-spacing:1.5px;color:#83e8ba;margin-bottom:12px}
-.vc-feature h2{font-size:26px;letter-spacing:-.6px;margin:0 0 10px;color:#fff}
-.vc-feature p{font-size:14px;color:#cfdae1;line-height:1.5;margin:0 0 20px}
-.vc-feature img{position:absolute;right:12px;width:130px;height:130px;object-fit:contain;opacity:.85}
-.vc-feature button{border:0;border-radius:5px;padding:11px 18px;background:#00e701;color:#06230b;font-weight:750;font-size:14px;cursor:pointer}
-.vc-feature:nth-child(2) button{background:#e7efff;color:#173048}
-.vc-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px}
-.vc-section-title h2{font-size:18px;margin:0;font-weight:750}
-.vc-section-title span{font-size:12px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
-.vc-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
-.vc-tile{display:flex;flex-direction:column;padding:0;text-align:left;border:0;background:none;color:var(--text);
-  cursor:pointer;min-width:0;transition:transform .18s}
-.vc-tile:hover{transform:translateY(-5px)}
-.vc-tile-face{width:100%;aspect-ratio:4/4.6;border-radius:9px;display:flex;flex-direction:column;
-  justify-content:space-between;padding:16px;background:linear-gradient(150deg,var(--tile-color),#102332);overflow:hidden;border:1px solid #ffffff17}
-.vc-tile-kicker{font-size:10px;font-weight:800;letter-spacing:1.8px;color:#fff9}
-.vc-tile-mark{font:900 clamp(34px,4vw,62px)/1 'Inter',sans-serif;color:#fff;letter-spacing:-3px;
-  align-self:center;text-align:center;max-width:100%;text-shadow:0 6px 0 #0002}
-.vc-tile-title{font-size:16px;font-weight:800;color:#fff;line-height:1.25}
-.vc-tile-meta{display:flex;justify-content:space-between;gap:5px;width:100%;font-size:12px;color:var(--text-muted);padding:9px 1px}
-.vc-playbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
-.vc-playbar button{border:0;background:var(--raised);color:var(--text);border-radius:6px;padding:11px 15px;font-size:14px;cursor:pointer}
+.vc-main{max-width:1040px;margin:0 auto;padding:16px 24px 72px;min-width:0}
+.vc-main h1.vc-sr-only,.vc-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.vc-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.vc-feature{position:relative;min-height:176px;padding:16px 14px;border:1px solid #ffffff02;border-radius:6px;background:var(--card-bg);
+  color:var(--text);overflow:hidden;display:flex;align-items:stretch}
+.vc-feature-content{position:relative;z-index:1;width:57%;display:flex;flex-direction:column;align-items:flex-start}
+.vc-feature small{display:inline-block;font-size:12px;line-height:1.3;font-weight:650;color:#243745;background:#f4f7f8;padding:2px 4px;border-radius:2px;margin-bottom:8px}
+.vc-feature h2{font-size:16px;line-height:1.35;margin:0 0 5px;font-weight:800;color:var(--text);letter-spacing:0}
+.vc-feature p{font-size:14px;color:var(--text);line-height:1.4;margin:0 0 14px}
+.vc-feature button,.vc-feature a{margin-top:auto;border:1px solid #b1c1cc;border-radius:3px;padding:9px 13px;background:transparent;
+  color:var(--text);font-size:12px;font-weight:750;text-decoration:none;cursor:pointer}
+.vc-feature button:hover,.vc-feature a:hover{background:var(--raised)}
+.vc-promo-art{position:absolute;right:10px;top:16px;bottom:16px;width:39%;border-radius:3px;background:var(--shell);display:grid;place-items:center;overflow:hidden}
+.vc-promo-art img{width:112%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 6px #0003)}
+.vc-promo-art.vc-atlas{background-image:url('assets/velvet-game-atlas.png');background-size:400% 196.923077%;background-position:0% 100%}
+.vc-search{display:flex;align-items:center;gap:10px;width:100%;height:38px;padding:0 13px;border:2px solid var(--raised);
+  border-radius:999px;background:var(--shell);color:var(--text-faint);margin-bottom:20px}
+.vc-search:focus-within{border-color:#7093a8}
+.vc-search input{width:100%;min-width:0;padding:0;border:0;outline:0;background:none;color:var(--text);font-size:14px}
+.vc-search input::placeholder{color:var(--text-faint)}
+.vc-search input::-webkit-search-cancel-button{-webkit-appearance:none}
+.vc-search button{flex:none;border:0;background:none;color:var(--text-muted);padding:4px;cursor:pointer;font-size:18px}
+.vc-categories{display:flex;align-items:center;gap:4px;background:var(--shell);padding:5px;border-radius:999px;width:max-content;max-width:100%;
+  overflow-x:auto;scrollbar-width:none;margin-bottom:24px}
+.vc-categories button{display:flex;align-items:center;gap:9px;flex:none;white-space:nowrap;border:0;border-radius:999px;
+  background:none;padding:11px 15px;color:var(--text);font-size:14px;font-weight:750;cursor:pointer}
+.vc-categories button[aria-pressed="true"],.vc-categories button:hover{background:var(--raised)}
+.vc-game-section{margin-bottom:26px;min-width:0}
+.vc-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
+.vc-section-title h2{display:flex;align-items:center;gap:8px;font-size:16px;margin:0;font-weight:750;color:var(--text)}
+.vc-row-controls{display:flex;border:1px solid var(--card-border);border-radius:999px;overflow:hidden}
+.vc-row-controls button{display:grid;place-items:center;width:37px;height:29px;background:none;color:var(--text-muted);border:0;cursor:pointer}
+.vc-row-controls button+button{border-left:1px solid var(--card-border)}
+.vc-row-controls button:hover{background:var(--raised)}
+.vc-game-rail{display:flex;gap:10px;overflow-x:auto;padding:0 0 5px;scroll-snap-type:x proximity;scrollbar-width:none}
+.vc-game-rail::-webkit-scrollbar,.vc-categories::-webkit-scrollbar{display:none}
+.vc-tile{flex:0 0 calc((100% - 60px)/7.25);display:flex;flex-direction:column;padding:0;text-align:left;border:0;background:none;
+  color:var(--text);cursor:pointer;min-width:0;scroll-snap-align:start}
+.vc-tile-face{position:relative;width:100%;aspect-ratio:3/4;border-radius:6px;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:12px 7px;overflow:hidden;isolation:isolate;box-shadow:0 1px 2px #0004;background:#496170;transition:transform .18s}
+.vc-tile:hover .vc-tile-face{transform:translateY(-3px)}
+.vc-tile-art{position:absolute;inset:0;z-index:-2;background-image:url('assets/velvet-game-atlas.png');
+  background-size:400% var(--art-height);background-position:var(--art-x) var(--art-y);filter:hue-rotate(var(--art-hue,0deg))}
+.vc-tile-face::after{content:"";position:absolute;inset:45% 0 0;background:linear-gradient(transparent,#08172999);z-index:-1}
+.vc-tile-title{font:900 clamp(14px,1.25vw,20px)/1.05 'Inter',sans-serif;text-transform:uppercase;text-align:center;letter-spacing:-.6px;
+  color:#fff;text-shadow:0 2px 5px #0004;overflow-wrap:anywhere;margin-bottom:12px}
+.vc-tile-kicker{font-size:12px;line-height:1.1;text-align:center;color:#ffffffd9;font-weight:500}
+.vc-tile-meta{font-size:12px;color:var(--text-muted);padding:6px 1px 0;line-height:1.2}
+.vc-empty{border:1px dashed var(--divider);padding:38px 20px;text-align:center;border-radius:8px}
+.vc-empty h2{font-size:20px;color:var(--text)}
+.vc-empty p{font-size:14px;color:var(--text-muted)}
+.vc-empty button{border:0;border-radius:5px;background:var(--raised);color:var(--text);padding:12px 18px;cursor:pointer}
+.vc-results-info{font-size:14px;color:var(--text-muted);margin:-10px 0 20px}
+.vc-playbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 16px}
+.vc-playbar button{border:0;background:var(--raised);color:var(--text);border-radius:5px;padding:11px 15px;font-size:14px;cursor:pointer}
 .vc-playbar span{color:var(--text-muted);font-size:14px}
 .vc-main .stage{padding:0;margin:0;max-width:none;width:100%}
-.vc-main .game-card{border:1px solid var(--card-border);border-radius:10px;background:var(--shell);padding:28px;box-shadow:none}
-.vc-main .game-card h2{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;color:var(--text)}
+.vc-main .game-card{border:1px solid var(--card-border);border-radius:8px;background:var(--shell);padding:24px;box-shadow:none}
+.vc-main .game-card h2{font:800 24px/1.3 'Inter',sans-serif;color:var(--text)}
 .game-sub{font-size:16px;line-height:1.6}
-.bet-row{padding:16px;border-radius:8px;background:var(--card-bg);gap:10px}
+.bet-row{padding:16px;border-radius:6px;background:var(--card-bg);gap:10px}
 .bet-row input,.bet-row select{min-height:42px;border:2px solid var(--raised);border-radius:5px;background:var(--ink);color:var(--ink-text);font-size:16px}
 .bet-row label,.game-readout,.payout-table,.result-msg,.metric-strip{font-size:14px}
 .chip-btn{border-radius:5px;background:var(--raised);color:var(--text);font-size:14px;min-height:40px;box-shadow:none}
@@ -4084,66 +4104,65 @@ html[data-theme="light"] .vc-wallet-tag{color:#fff}
 .action-btn:hover{background:var(--brass-light)}
 html[data-theme="light"] .action-btn{color:#fff}
 .game-card.active .metric-strip span,.game-card.active .challenge-actions .action-btn,.challenge-panel{animation:none!important}
-.vc-main footer{max-width:none;margin:34px 0 0;padding:24px 0 0;border-top:1px solid var(--divider);
-  text-align:left;color:var(--text-muted);font-size:13px;line-height:1.8}
+.vc-main footer{max-width:none;margin:28px 0 0;padding:22px 0 0;border-top:1px solid var(--divider);text-align:left;color:var(--text-muted);font-size:13px;line-height:1.8}
 .vc-main footer strong{color:var(--text);font-size:16px}
 .vc-menu-scrim{display:none}
 #side-npc{position:fixed;right:18px;bottom:72px;top:auto;width:min(340px,calc(100vw - 32px));max-height:70vh;overflow:auto;
-  background:var(--shell);border:1px solid var(--card-border);border-radius:12px;z-index:35}
-#side-npc.hidden{display:none}
+  background:var(--shell);border:1px solid var(--card-border);border-radius:10px;z-index:35}
+#side-npc.hidden,#cheat-panel.hidden{display:none}
 #npc-peek-btn{right:18px;bottom:18px;z-index:35;border:1px solid var(--card-border);background:var(--raised);color:var(--text);font-size:14px}
 #cheat-panel{left:auto;right:18px;bottom:72px;max-width:calc(100vw - 32px);max-height:70vh;overflow:auto;background:var(--shell);z-index:36}
-#cheat-panel.hidden{display:none}
-#cheat-peek-btn{left:240px;font-size:12px;background:var(--raised);color:var(--text);border:0;border-radius:5px}
+#cheat-peek-btn{left:214px;font-size:12px;background:var(--raised);color:var(--text);border:0;border-radius:5px}
 #donation-widget{right:132px;bottom:18px}
 .donation-toggle{font-size:12px;background:var(--raised);color:var(--text);border-color:var(--card-border)}
-#vc-menu{display:none}
-@media(min-width:1600px){.vc-grid{grid-template-columns:repeat(7,minmax(0,1fr))}}
-@media(max-width:1180px){.vc-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.vc-feature img{width:100px;height:100px;right:6px}.vc-feature h2{font-size:22px}}
+body.vc-sidebar-collapsed{padding-left:0}
+body.vc-sidebar-collapsed .vc-sidebar{display:none}
+body.vc-sidebar-collapsed #cheat-peek-btn{left:18px}
+@media(max-width:1100px){.vc-main,.vc-topbar-inner{padding-left:20px;padding-right:20px}.vc-feature{padding:13px 11px}.vc-feature-content{width:60%}.vc-feature p{font-size:13px}.vc-game-rail .vc-tile{flex-basis:calc((100% - 40px)/5.2)}}
 @media(max-width:900px){
   body{padding-left:0}.vc-sidebar{transform:translateX(-100%);transition:transform .2s}.vc-sidebar:not(.vc-open){visibility:hidden}
-  .vc-sidebar.vc-open{transform:none}#vc-menu{display:block}.vc-topbar{padding:0 18px;gap:14px}
-  .vc-topbar .vc-brand{width:auto}.vc-main{padding:24px 22px 70px}
-  .vc-menu-scrim.vc-open{display:block;position:fixed;inset:72px 0 0;background:#0008;z-index:24;border:0}
-  #cheat-peek-btn{left:18px}.vc-wallet-tag{display:none}
+  .vc-sidebar.vc-open{transform:none;visibility:visible}.vc-topbar-start{width:auto;background:none;padding-right:0}
+  .vc-mode{display:none}.vc-topbar-inner{padding-left:12px}.vc-main{padding-bottom:80px}
+  .vc-menu-scrim.vc-open{display:block;position:fixed;inset:var(--header-height) 0 0;background:#0008;z-index:24;border:0}
+  #cheat-peek-btn{left:18px}.vc-featured{gap:10px}.vc-feature h2{font-size:15px}.vc-feature p{font-size:13px}
 }
-@media(max-width:600px){
-  body{padding-top:64px}.vc-topbar{height:64px;gap:8px;padding:0 12px}.vc-sidebar{top:64px}
-  .vc-brand{font-size:22px}.vc-wallet{gap:0;padding:8px 10px;margin-left:auto;margin-right:0}
-  .vc-wallet small{font-size:10px}.vc-wallet #balance{font-size:13px}
-  .vc-topbar .theme-toggle{font-size:12px;padding:10px 8px}.vc-main{padding:22px 14px 76px}
-  .vc-lobby-head h1{font-size:23px}.vc-count{display:none}.vc-featured{grid-template-columns:1fr;gap:12px;margin-bottom:26px}
-  .vc-feature{min-height:154px;padding:20px}.vc-feature:nth-child(2){display:none}
-  .vc-feature p{margin-bottom:16px}.vc-feature img{width:120px;height:120px;right:12px}
-  .vc-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}
-  .vc-tile-face{padding:12px 10px;aspect-ratio:3/4}.vc-tile-mark{font-size:36px;letter-spacing:-2px}
-  .vc-tile-title{font-size:14px}.vc-tile-kicker{font-size:9px;letter-spacing:1px}.vc-tile-meta{font-size:11px}
-  .vc-main .game-card{padding:16px 10px}.vc-main .game-card h2{font-size:22px}
-  .bet-row{padding:10px}.vc-playbar span{font-size:12px}.vc-menu-scrim.vc-open{top:64px}
+@media(max-width:650px){
+  .vc-main{padding:14px 14px 80px}.vc-topbar-start{padding-left:10px}.vc-topbar-inner{gap:9px;padding-right:12px}
+  .vc-brand{font-size:28px}.vc-wallet{padding:6px 8px}.vc-wallet small{font-size:12px}.vc-wallet #balance{font-size:12px}
+  .vc-topbar .theme-toggle{font-size:12px;padding:10px}.vc-featured{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-bottom:16px}
+  .vc-feature{flex:0 0 88%;min-height:168px;padding:15px;scroll-snap-align:start}
+  .vc-feature-content{width:60%}.vc-feature h2{font-size:16px}.vc-feature p{font-size:14px}
+  .vc-promo-art{width:36%}.vc-search{margin-bottom:16px;height:42px}.vc-categories{margin-bottom:20px;width:100%}
+  .vc-categories button{padding:11px 14px}.vc-game-rail .vc-tile{flex-basis:calc((100% - 20px)/2.7)}
+  .vc-tile-title{font-size:18px}.vc-tile-kicker{font-size:12px}.vc-tile-meta{font-size:12px}
+  .vc-main .game-card{padding:16px 10px}.vc-main .game-card h2{font-size:22px}.bet-row{padding:10px}.vc-playbar span{font-size:12px}
   #slots .reel{width:calc((100vw - 85px)/5);min-width:0;font-size:clamp(18px,6vw,32px)}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important;scroll-behavior:auto!important}}
-
 </style>
 </head>
 <body>
 <a href="#vc-content" class="vc-skip">Skip to games</a>
 <div class="vc-topbar" role="banner">
-  <button id="vc-menu" class="vc-icon-btn" aria-label="Open navigation" aria-controls="vc-sidebar" aria-expanded="false">☰</button>
-  <button class="vc-brand" data-vc-home aria-label="Velvet Chip lobby">velvet<span>.</span></button>
-  <div class="vc-wallet" aria-label="Fictional chip balance">
-    <div><small>PLAY CHIPS</small><span id="balance">$10.00</span></div>
-    <span class="vc-wallet-tag">NO REAL MONEY</span>
+  <div class="vc-topbar-start">
+    <button id="vc-menu" class="vc-icon-btn" aria-label="Toggle game navigation" aria-controls="vc-sidebar" aria-expanded="true"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <button class="vc-mode" data-vc-home>PLAY MONEY</button>
   </div>
-  <button class="theme-toggle" id="theme-toggle"><span id="theme-icon">SUN</span><span id="theme-label">Light room</span></button>
+  <div class="vc-topbar-main"><div class="vc-topbar-inner">
+    <button class="vc-brand" data-vc-home aria-label="Velvet Chip lobby">Velvet<span>.</span></button>
+    <div class="vc-wallet" aria-label="Fictional chip balance"><div><small>Play chips</small><span id="balance">$10.00</span></div></div>
+    <button class="theme-toggle" id="theme-toggle"><span id="theme-icon">SUN</span><span id="theme-label">Light room</span></button>
+  </div></div>
 </div>
 <button class="vc-menu-scrim" id="vc-scrim" tabindex="-1" aria-label="Close navigation"></button>
 <aside class="vc-sidebar" id="vc-sidebar" aria-label="Game navigation">
-  <button class="vc-nav-home" data-vc-home aria-current="page"><span aria-hidden="true">▦</span> Lobby</button>
-  <button class="casino3d-launch" id="casino3d-launch"><span aria-hidden="true">◈</span> 3D room</button>
-  <a href="tips.html"><span aria-hidden="true">♡</span> Jerry’s tip jar</a>
-  <p class="vc-side-label">All games</p>
-  <nav aria-label="Choose a game"><div class="tabs">
+  <div class="vc-side-group">
+    <button class="vc-nav-home" data-vc-home aria-current="page"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Lobby</button>
+    <button data-vc-filter="originals"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 8 4-5h10l4 5-9 13L3 8Z M3 8h18M7 3l5 18 5-18"/></svg>Velvet Originals</button>
+    <button data-vc-filter="arcade"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M6 13h6m-3-3v6m7-5h.01m3 4h.01"/></svg>Arcade Games</button>
+    <button data-vc-filter="table"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="m12 8 3 4-3 4-3-4 3-4Z"/></svg>Table Games</button>
+  </div>
+  <div class="vc-side-group"><p class="vc-side-label">Our games</p><nav aria-label="Choose a game"><div class="tabs">
   <button class="tab-btn" data-tab="slots">Slots</button>
   <button class="tab-btn" data-tab="dice">Dice</button>
   <button class="tab-btn" data-tab="cards">High card</button>
@@ -4172,19 +4191,38 @@ html[data-theme="light"] .action-btn{color:#fff}
   <button class="tab-btn" data-tab="avalanche">Avalanche</button>
   <button class="tab-btn" data-tab="blackmarket">Black market</button>
   <button class="tab-btn" data-tab="siphon">Siphon</button>
-</div></nav>
+</div></nav></div>
+  <div class="vc-side-group">
+    <button class="casino3d-launch" id="casino3d-launch"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5m-9 5v10"/></svg>Enter 3D room</button>
+    <a href="tips.html"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21 3 12a5 5 0 0 1 9-6 5 5 0 0 1 9 6l-9 9Z"/></svg>Jerry’s tip jar</a>
+  </div>
 </aside>
 <main class="vc-main" id="vc-content" tabindex="-1">
   <div id="vc-lobby">
-    <div class="vc-lobby-head"><div><h1>Your next game starts here.</h1><p class="vc-caption">The Velvet Chip. All play, no real stakes.</p></div><span class="vc-count">28 original games</span></div>
-    <div class="vc-featured">
-      <article class="vc-feature"><div class="vc-feature-content"><small>THE VELVET COLLECTION</small><h2>One lobby. Endless variety.</h2><p>Classic tables and original arcade games.</p><button data-vc-game="slots">Play Slots</button></div><img src="assets/chip.webp" alt="" width="130" height="130"></article>
-      <article class="vc-feature"><div class="vc-feature-content"><small>ARCADE ORIGINAL</small><h2>Meet Sky Pilot.</h2><p>A different kind of flight simulator.</p><button data-vc-game="skypilot">Play Sky Pilot</button></div><img src="assets/plane.png" alt="" width="130" height="130"></article>
+    <h1 class="vc-sr-only">The Velvet Chip game lobby</h1>
+    <div class="vc-featured" id="vc-featured">
+      <article class="vc-feature"><div class="vc-feature-content"><small>Velvet Originals</small><h2>Your games.<br>Your playground.</h2><p>Explore 28 games with fictional chips.</p><button data-vc-filter="all">Explore games</button></div><div class="vc-promo-art vc-atlas" aria-hidden="true"></div></article>
+      <article class="vc-feature"><div class="vc-feature-content"><small>Play money</small><h2>No purchases.<br>No real stakes.</h2><p>Every chip is imaginary. Just pick a game.</p><button data-vc-game="slots">Play Slots</button></div><div class="vc-promo-art"><img src="assets/chip.webp" alt="" width="130" height="130"></div></article>
+      <article class="vc-feature"><div class="vc-feature-content"><small>Arcade</small><h2>Take flight<br>with Sky Pilot.</h2><p>A new perspective on your next game.</p><button data-vc-game="skypilot">Play Sky Pilot</button></div><div class="vc-promo-art"><img src="assets/plane.png" alt="" width="130" height="130"></div></article>
     </div>
-    <div class="vc-section-title"><h2>Explore the collection</h2><span>Play-money originals</span></div>
-    <div class="vc-grid" id="vc-grid" aria-label="Game collection"></div>
+    <form class="vc-search" role="search" id="vc-search-form">
+      <svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><label for="vc-search" class="vc-sr-only">Search your games</label>
+      <input id="vc-search" type="search" placeholder="Search your game" autocomplete="off" spellcheck="false">
+      <button id="vc-clear-search" type="button" aria-label="Clear search" hidden>×</button>
+    </form>
+    <nav class="vc-categories" aria-label="Game categories">
+      <button data-vc-filter="lobby" aria-pressed="true"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Lobby</button>
+      <button data-vc-filter="originals" aria-pressed="false"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 8 4-5h10l4 5-9 13L3 8Z M3 8h18M7 3l5 18 5-18"/></svg>Velvet Originals</button>
+      <button data-vc-filter="slots" aria-pressed="false"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M8 5v14m8-14v14M4 10h2m4 0h4m4 0h2"/></svg>Slots</button>
+      <button data-vc-filter="table" aria-pressed="false"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="m12 8 3 4-3 4-3-4 3-4Z"/></svg>Table Games</button>
+      <button data-vc-filter="arcade" aria-pressed="false"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="12" rx="4"/><path d="M6 13h6m-3-3v6m7-5h.01m3 4h.01"/></svg>Arcade Games</button>
+      <button data-vc-filter="all" aria-pressed="false"><svg class="vc-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>All Games</button>
+    </nav>
+    <p id="vc-results-info" class="vc-results-info" role="status" hidden></p>
+    <div id="vc-game-rows"></div>
+    <div id="vc-empty" class="vc-empty" hidden><h2>No games found</h2><p>Try another name or browse the full collection.</p><button id="vc-reset-search">Show all games</button></div>
   </div>
-  <div class="vc-playbar" id="vc-playbar" hidden><button data-vc-home>← Back to lobby</button><span id="vc-game-label">Play chips only · no purchases or withdrawals</span></div>
+  <div class="vc-playbar" id="vc-playbar" hidden><button data-vc-home>← Back to lobby</button><span>Play chips only · no purchases or withdrawals</span></div>
 <div class="stage" id="vc-game-stage" hidden>
 
   <div class="game-card active" id="slots">
@@ -10288,106 +10326,182 @@ document.getElementById('siphon-mode').addEventListener('change', function(){ if
 renderSiphon();
 </script>
 
-<script>
-/* Presentation adapter: delegates play to the existing game controls. */
-(() => {
-  const sidebar = document.getElementById('vc-sidebar');
-  const menu = document.getElementById('vc-menu');
-  const scrim = document.getElementById('vc-scrim');
-  const lobby = document.getElementById('vc-lobby');
-  const stage = document.getElementById('vc-game-stage');
-  const playbar = document.getElementById('vc-playbar');
-  const tabs = Array.from(document.querySelectorAll('.tab-btn'));
-  const colors = ['#387465','#4a50a0','#985442','#31759b','#5b4385','#856031','#316a63'];
-  const marks = ['777','0–100','A K','21','↗','×','00','●','A 9','⚄','↑','✈','◆','BEEF','40','∴','J Q','◷','A ♠','▦','/','°C','♥','%','◎','≋','↗↘','⇄'];
 
-  function setMenu(open) {
-    sidebar.classList.toggle('vc-open', open);
-    scrim.classList.toggle('vc-open', open);
-    menu.setAttribute('aria-expanded', String(open));
-    menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
-    if(open) sidebar.querySelector('button').focus();
+<script>
+/* Reference lobby adapter: search, categories and rails delegate to existing games. */
+(() => {
+  'use strict';
+  const iconPaths = {"menu":"<path d=\"M4 6h16M4 12h16M4 18h16\"/>","grid":"<rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/>","search":"<circle cx=\"10\" cy=\"10\" r=\"6\"/><path d=\"m15 15 6 6\"/>","gem":"<path d=\"m3 8 4-5h10l4 5-9 13L3 8Z M3 8h18M7 3l5 18 5-18\"/>","card":"<rect x=\"5\" y=\"2\" width=\"14\" height=\"20\" rx=\"2\"/><path d=\"m12 8 3 4-3 4-3-4 3-4Z\"/>","arcade":"<rect x=\"2\" y=\"7\" width=\"20\" height=\"12\" rx=\"4\"/><path d=\"M6 13h6m-3-3v6m7-5h.01m3 4h.01\"/>","slots":"<rect x=\"2\" y=\"5\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M8 5v14m8-14v14M4 10h2m4 0h4m4 0h2\"/>","left":"<path d=\"m14 7-5 5 5 5M9 12h11\"/>","right":"<path d=\"m10 7 5 5-5 5M4 12h11\"/>","room":"<path d=\"m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5m-9 5v10\"/>","heart":"<path d=\"M12 21 3 12a5 5 0 0 1 9-6 5 5 0 0 1 9 6l-9 9Z\"/>"};
+  function icon(name){
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('class','vc-icon');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');
+    svg.innerHTML = iconPaths[name] || iconPaths.gem;
+    return svg;
   }
-  function showGame(id, moveFocus) {
-    const tab = tabs.find(button => button.dataset.tab === id);
-    if(!tab) return;
-    lobby.hidden = true;
-    stage.hidden = false;
-    playbar.hidden = false;
-    document.querySelectorAll('[data-vc-home]').forEach(button => button.removeAttribute('aria-current'));
-    tabs.forEach(button => {
-      if(button === tab) button.setAttribute('aria-current', 'page');
-      else button.removeAttribute('aria-current');
+  const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+  const sidebar = document.getElementById('vc-sidebar'), menu = document.getElementById('vc-menu'), scrim = document.getElementById('vc-scrim');
+  const lobby = document.getElementById('vc-lobby'), stage = document.getElementById('vc-game-stage'), playbar = document.getElementById('vc-playbar');
+  const search = document.getElementById('vc-search'), rows = document.getElementById('vc-game-rows'), empty = document.getElementById('vc-empty');
+  const mobile = window.matchMedia('(max-width:900px)'), reduced = window.matchMedia('(prefers-reduced-motion:reduce)');
+  const groups = [
+    {id:'originals',name:'Velvet Originals',icon:'gem',games:['dice','crash','plinko','mines','dragontower','skypilot','beef','keno','moneywheel']},
+    {id:'arcade',name:'Arcade Games',icon:'arcade',games:['pinball','poplock','gridlock','chop','overcooked','heartbeat','leakage','orbit','avalanche','blackmarket','siphon','deadhand']},
+    {id:'table',name:'Table Games',icon:'card',games:['blackjack','cards','roulette','baccarat','craps','poker']},
+    {id:'slots',name:'Slots',icon:'slots',games:['slots']}
+  ];
+  const arts = {dice:0,crash:1,plinko:2,mines:3,blackjack:4,cards:4,poker:4,baccarat:4,slots:5,
+    pinball:6,dragontower:7,skypilot:1,beef:6,keno:2,moneywheel:5,roulette:5,craps:0,
+    poplock:6,deadhand:4,gridlock:3,chop:7,overcooked:6,heartbeat:6,leakage:2,orbit:1,avalanche:7,blackmarket:3,siphon:6};
+  const names = Object.fromEntries(tabs.map(tab => [tab.dataset.tab,tab.textContent.trim()]));
+  let category = 'lobby';
+  function closeMenu(restore){
+    sidebar.classList.remove('vc-open');scrim.classList.remove('vc-open');
+    menu.setAttribute('aria-expanded',String(!mobile.matches && !document.body.classList.contains('vc-sidebar-collapsed')));
+    if(restore) menu.focus();
+  }
+  function showGame(id,focus){
+    if(!names[id]) return;
+    lobby.hidden = true;stage.hidden = false;playbar.hidden = false;
+    document.querySelectorAll('[data-vc-home],[data-vc-filter]').forEach(button => button.removeAttribute('aria-current'));
+    tabs.forEach(tab => {
+      if(tab.dataset.tab === id)tab.setAttribute('aria-current','page');else tab.removeAttribute('aria-current');
     });
-    setMenu(false);
-    if(moveFocus) {
+    closeMenu(false);
+    if(focus){
       const heading = document.getElementById(id).querySelector('h2');
-      heading.tabIndex = -1;
-      heading.focus({preventScroll:true});
+      heading.tabIndex = -1;heading.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});
+    }
+  }
+  function openGame(id){const tab=tabs.find(tab=>tab.dataset.tab===id);if(tab)tab.click();}
+  function updateCategoryUI(){
+    document.querySelectorAll('[data-vc-filter]').forEach(button=>{
+      const selected=button.dataset.vcFilter===category;
+      if(button.closest('.vc-categories'))button.setAttribute('aria-pressed',String(selected));
+      if(selected)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+    });
+    document.querySelectorAll('[data-vc-home]').forEach(button=>{
+      if(category==='lobby')button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+    });
+  }
+  function showLobby(focus=false){
+    lobby.hidden=false;stage.hidden=true;playbar.hidden=true;
+    tabs.forEach(tab=>{tab.classList.remove('active');tab.removeAttribute('aria-current');});
+    closeMenu(false);updateCategoryUI();
+    if(focus){document.getElementById('vc-content').focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});}
+  }
+  function tile(id){
+    const button=document.createElement('button');button.type='button';button.className='vc-tile';
+    button.setAttribute('aria-label','Play '+names[id]);
+    const face=document.createElement('span');face.className='vc-tile-face';
+    const art=document.createElement('span');art.className='vc-tile-art';art.setAttribute('aria-hidden','true');
+    const index=arts[id] ?? 6;
+    art.style.setProperty('--art-x',(index%4)/3*100+'%');art.style.setProperty('--art-y',Math.floor(index/4)*100+'%');
+    // The original atlas has a 504px top row and 520px bottom row.
+    art.style.setProperty('--art-height',(1024/(index<4?504:520)*100)+'%');
+    const specialHue={gridlock:25,chop:-20,overcooked:140,heartbeat:170,leakage:60,orbit:35,avalanche:210,blackmarket:40,siphon:45,deadhand:250,beef:85,keno:25,moneywheel:40,roulette:10,baccarat:300,poker:35,craps:45,skypilot:20,poplock:270};
+    art.style.setProperty('--art-hue',(specialHue[id] || 0)+'deg');
+    const title=document.createElement('span');title.className='vc-tile-title';title.textContent=names[id];
+    const kicker=document.createElement('span');kicker.className='vc-tile-kicker';kicker.textContent='Velvet Original';
+    face.append(art,title,kicker);
+    const meta=document.createElement('span');meta.className='vc-tile-meta';meta.textContent='Play chips only';
+    button.append(face,meta);button.addEventListener('click',()=>openGame(id));return button;
+  }
+  function createSection(group,gameIds){
+    const section=document.createElement('section');section.className='vc-game-section';
+    const bar=document.createElement('div');bar.className='vc-section-title';
+    const heading=document.createElement('h2');heading.id='vc-row-title-'+group.id;heading.append(icon(group.icon),document.createTextNode(group.name));
+    section.setAttribute('aria-labelledby',heading.id);
+    const controls=document.createElement('div');controls.className='vc-row-controls';
+    const rail=document.createElement('div');rail.className='vc-game-rail';rail.id='vc-rail-'+group.id;
+    rail.setAttribute('aria-label',group.name);rail.tabIndex=0;
+    const buttons=[];
+    for(const direction of [-1,1]){
+      const button=document.createElement('button');button.type='button';button.append(icon(direction===-1?'left':'right'));
+      button.setAttribute('aria-label',(direction===-1?'Previous ':'Next ')+group.name);button.setAttribute('aria-controls',rail.id);
+      button.addEventListener('click',()=>rail.scrollBy({left:direction*rail.clientWidth*.8,behavior:reduced.matches?'auto':'smooth'}));
+      controls.append(button);buttons.push(button);
+    }
+    function updateArrows(){
+      buttons[0].disabled=rail.scrollLeft<=1;
+      buttons[1].disabled=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-2;
+    }
+    rail.addEventListener('scroll',updateArrows,{passive:true});
+    rail.addEventListener('keydown',event=>{
+      if(event.target===rail && (event.key==='ArrowRight'||event.key==='ArrowLeft')){
+        event.preventDefault();rail.scrollBy({left:(event.key==='ArrowRight'?1:-1)*rail.clientWidth*.8,behavior:'auto'});
+      }
+    });
+    gameIds.forEach(id=>rail.append(tile(id)));
+    bar.append(heading,controls);section.append(bar,rail);rows.append(section);
+    requestAnimationFrame(updateArrows);
+    return updateArrows;
+  }
+  let updateRails=[];
+  function render(){
+    const query=search.value.trim().toLowerCase();
+    rows.replaceChildren();updateRails=[];
+    const list=category==='all'?[{id:'all',name:'All Games',icon:'grid',games:tabs.map(tab=>tab.dataset.tab)}]:
+      groups.filter(group=>category==='lobby'||group.id===category);
+    let count=0;
+    for(const group of list){
+      const matches=group.games.filter(id=>names[id] && names[id].toLowerCase().includes(query));
+      if(matches.length){count+=matches.length;updateRails.push(createSection(group,matches));}
+    }
+    empty.hidden=count>0;
+    document.getElementById('vc-clear-search').hidden=!query;
+    document.getElementById('vc-featured').hidden=!!query || category!=='lobby';
+    const status=document.getElementById('vc-results-info');
+    status.hidden=!query;status.textContent=query?count+' '+(count===1?'game':'games')+' matching “'+search.value.trim()+'”':'';
+    updateCategoryUI();
+  }
+  tabs.forEach(tab=>{
+    const group=groups.find(group=>group.games.includes(tab.dataset.tab));
+    tab.prepend(icon(group?.icon || 'gem'));
+    tab.addEventListener('click',()=>showGame(tab.dataset.tab,true));
+  });
+  document.querySelectorAll('[data-vc-home]').forEach(button=>button.addEventListener('click',()=>{
+    category='lobby';search.value='';showLobby(true);render();
+  }));
+  document.querySelectorAll('[data-vc-filter]').forEach(button=>button.addEventListener('click',()=>{
+    category=button.dataset.vcFilter;search.value='';showLobby(false);render();
+    if(!button.closest('.vc-categories')){
+      document.querySelector('.vc-categories [aria-pressed="true"]')?.focus({preventScroll:true});
       window.scrollTo({top:0,behavior:'auto'});
     }
-  }
-  function showLobby() {
-    lobby.hidden = false;
-    stage.hidden = true;
-    playbar.hidden = true;
-    tabs.forEach(button => {button.classList.remove('active');button.removeAttribute('aria-current');});
-    document.querySelectorAll('[data-vc-home]').forEach(button => button.setAttribute('aria-current','page'));
-    setMenu(false);
-    lobby.querySelector('h1').tabIndex = -1;
-    lobby.querySelector('h1').focus({preventScroll:true});
-    window.scrollTo({top:0,behavior:'auto'});
-  }
-  function openGame(id) {
-    const tab = tabs.find(button => button.dataset.tab === id);
-    if(tab) tab.click();
-  }
-
-  tabs.forEach((tab,index) => {
-    const title = tab.textContent.trim();
-    const tile = document.createElement('button');
-    tile.type = 'button';
-    tile.className = 'vc-tile';
-    tile.setAttribute('aria-label', 'Play ' + title);
-    const face = document.createElement('span');
-    face.className = 'vc-tile-face';
-    face.style.setProperty('--tile-color',colors[index % colors.length]);
-    const kicker = document.createElement('span');
-    kicker.className = 'vc-tile-kicker';kicker.textContent = 'VELVET ORIGINAL';
-    const mark = document.createElement('span');
-    mark.className = 'vc-tile-mark';mark.textContent = marks[index] || 'VC';mark.setAttribute('aria-hidden','true');
-    const name = document.createElement('span');
-    name.className = 'vc-tile-title';name.textContent = title;
-    face.append(kicker,mark,name);
-    const meta = document.createElement('span');
-    meta.className = 'vc-tile-meta';meta.textContent = 'Play chips only';
-    tile.append(face,meta);
-    tile.addEventListener('click',() => openGame(tab.dataset.tab));
-    document.getElementById('vc-grid').append(tile);
-    const symbol = document.createElement('span');
-    symbol.className = 'vc-nav-symbol';symbol.textContent = '◇';symbol.setAttribute('aria-hidden','true');
-    tab.prepend(symbol);
-    tab.addEventListener('click',() => showGame(tab.dataset.tab,true));
-  });
-  document.querySelectorAll('[data-vc-game]').forEach(button => button.addEventListener('click',() => openGame(button.dataset.vcGame)));
-  document.querySelectorAll('[data-vc-home]').forEach(button => button.addEventListener('click',showLobby));
-  menu.addEventListener('click',() => setMenu(!sidebar.classList.contains('vc-open')));
-  scrim.addEventListener('click',() => {setMenu(false);menu.focus();});
-  document.addEventListener('keydown',event => {
-    if(event.key === 'Escape' && sidebar.classList.contains('vc-open')){setMenu(false);menu.focus();}
-    if(event.key === 'Tab' && sidebar.classList.contains('vc-open')) {
-      const controls = [menu,...sidebar.querySelectorAll('button,a[href]')];
-      if(event.shiftKey && document.activeElement === controls[0]){event.preventDefault();controls.at(-1).focus();}
-      else if(!event.shiftKey && document.activeElement === controls.at(-1)){event.preventDefault();controls[0].focus();}
+  }));
+  document.querySelectorAll('[data-vc-game]').forEach(button=>button.addEventListener('click',()=>openGame(button.dataset.vcGame)));
+  search.addEventListener('input',render);
+  document.getElementById('vc-search-form').addEventListener('submit',event=>event.preventDefault());
+  document.getElementById('vc-clear-search').addEventListener('click',()=>{search.value='';render();search.focus();});
+  document.getElementById('vc-reset-search').addEventListener('click',()=>{category='all';search.value='';render();search.focus();});
+  menu.addEventListener('click',()=>{
+    if(mobile.matches){
+      const open=!sidebar.classList.contains('vc-open');sidebar.classList.toggle('vc-open',open);scrim.classList.toggle('vc-open',open);
+      menu.setAttribute('aria-expanded',String(open));if(open)sidebar.querySelector('button').focus();
+    } else {
+      const collapsed=document.body.classList.toggle('vc-sidebar-collapsed');
+      menu.setAttribute('aria-expanded',String(!collapsed));requestAnimationFrame(()=>updateRails.forEach(update=>update()));
     }
   });
-  // Keep lobby state coherent when the 3D room selects a machine.
-  if(typeof activateGameById === 'function'){
-    const originalActivate = activateGameById;
-    activateGameById = function(id){originalActivate(id);showGame(id,false);};
+  scrim.addEventListener('click',()=>closeMenu(true));
+  document.addEventListener('keydown',event=>{
+    if(!sidebar.classList.contains('vc-open'))return;
+    if(event.key==='Escape')closeMenu(true);
+    if(event.key==='Tab'){
+      const controls=[menu,...sidebar.querySelectorAll('button,a[href]')];
+      if(event.shiftKey && document.activeElement===controls[0]){event.preventDefault();controls.at(-1).focus();}
+      else if(!event.shiftKey && document.activeElement===controls.at(-1)){event.preventDefault();controls[0].focus();}
+    }
+  });
+  window.addEventListener('resize',()=>updateRails.forEach(update=>update()),{passive:true});
+  mobile.addEventListener('change',()=>{document.body.classList.remove('vc-sidebar-collapsed');closeMenu(false);});
+  if(typeof activateGameById==='function'){
+    const originalActivate=activateGameById;activateGameById=function(id){originalActivate(id);showGame(id,false);};
   }
+  closeMenu(false);render();
 })();
 </script>
+
 
 </body>
 </html>
