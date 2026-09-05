@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>The Velvet Chip - play money only</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Velvet Chip: 28 browser games with fictional chips. No real-money deposits, purchases, or withdrawals.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -3977,48 +3978,173 @@
   .sky-token{ position:absolute; width:34px; height:34px; border-radius:9px; display:grid; place-items:center; color:#fff5bf; background:linear-gradient(135deg,#8d6bdf,#493071); border:1px solid #d2c6ff; box-shadow:0 0 15px rgba(157,124,255,.72); font:900 1rem Georgia,serif; animation:sky-token-spin 1.2s linear infinite; }.sky-token::before{ content:'✦'; }.sky-token.fatal{ color:#fff; background:linear-gradient(135deg,#ff7a68,#6f1f35); border-color:#ffc5bd; box-shadow:0 0 18px rgba(239,106,98,.8); animation-duration:.52s; }.sky-token.fatal::before{ content:'✕'; }@keyframes sky-token-spin{ to{ transform:rotate(1turn); } }
 
   @media (max-width:560px){ .slot-lever{ margin-left:0; } #slots .reels{ gap:.25rem; padding:.65rem .3rem; } .pinball-controls{ gap:.35rem; }.pinball-flip-btn{ padding:.5rem .45rem; font-size:.68rem; } }
+
+/* Velvet lobby: slate surfaces, compact navigation, emerald actions.
+   Game-specific rendering above is preserved for all existing engines. */
+:root{
+  --bg:#1a2c38;--card-bg:#213743;--card-border:#304754;
+  --text:#f3f6f8;--text-muted:#b1c1cc;--text-faint:#91a6b5;
+  --brass:#00e701;--brass-light:#62f36b;--burgundy:#2f4553;--burgundy-light:#405c6c;
+  --ink:#0f212e;--ink-text:#f3f6f8;--tile-bg:#2f4553;--tile-border:#496170;
+  --divider:#304754;--win:#62f36b;--loss:#ff8a98;--shell:#0f212e;--raised:#2f4553;
+}
+html[data-theme="light"]{
+  --bg:#e9eff3;--card-bg:#fff;--card-border:#cbd7df;
+  --text:#142a38;--text-muted:#496170;--text-faint:#526b7b;
+  --brass:#008529;--brass-light:#006d23;--burgundy:#d4e0e8;--burgundy-light:#c1d3df;
+  --ink:#172f3e;--ink-text:#fff;--tile-bg:#e4edf3;--tile-border:#bdccd6;
+  --divider:#cbd7df;--win:#007c27;--loss:#b52946;--shell:#f7fafc;--raised:#dce6ed;
+}
+html{scroll-padding-top:90px}
+body{padding:72px 0 0 224px;background:var(--bg);font-size:16px}
+body::before,.casino-ambient,.stage::before,.stage::after,
+.game-card::before,.game-card.active::after,.game-card.active h2::after{display:none!important}
+button,input,select{font:inherit}
+button,a,input,select{touch-action:manipulation}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{
+  outline:3px solid var(--brass);outline-offset:4px;
+}
+button:disabled{cursor:not-allowed;opacity:.5}
+[hidden]{display:none!important}
+.vc-skip{position:fixed;top:-100px;left:1rem;z-index:1000;background:var(--brass);color:#09250c;padding:12px}
+.vc-skip:focus{top:8px}
+.vc-topbar{position:fixed;inset:0 0 auto;height:72px;z-index:30;display:flex;align-items:center;
+  gap:20px;padding:0 28px;background:var(--shell);box-shadow:0 3px 12px #0003}
+.vc-brand{border:0;background:none;color:var(--text);font-size:27px;font-weight:900;letter-spacing:-1.4px;
+  text-align:left;cursor:pointer;font-style:italic;white-space:nowrap}
+.vc-brand span{color:var(--brass-light)}
+.vc-topbar .vc-brand{width:172px;flex-shrink:0}
+.vc-icon-btn{min-width:42px;height:42px;border:0;border-radius:7px;background:var(--raised);color:var(--text);cursor:pointer}
+.vc-wallet{display:flex;align-items:center;gap:14px;margin:auto;padding:9px 16px;border-radius:7px;background:var(--bg)}
+.vc-wallet small{color:var(--text-muted);font-size:12px;display:block}
+.vc-wallet #balance{font-family:'JetBrains Mono',monospace;font-size:16px;white-space:nowrap;color:var(--text)}
+.vc-wallet-tag{background:var(--brass);color:#082c12;padding:9px 12px;border-radius:5px;font-size:12px;font-weight:800}
+html[data-theme="light"] .vc-wallet-tag{color:#fff}
+.vc-topbar .theme-toggle{position:static;border:0;background:var(--raised);color:var(--text);
+  animation:none;box-shadow:none;border-radius:6px;padding:12px;font-size:14px;white-space:nowrap}
+#theme-icon{display:none}
+.vc-sidebar{position:fixed;inset:72px auto 0 0;width:224px;padding:20px 14px;z-index:25;
+  background:var(--shell);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--raised) transparent}
+.vc-side-label{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;color:var(--text-faint);margin:26px 14px 10px}
+.vc-nav-home,.vc-sidebar a,.vc-sidebar .casino3d-launch{display:flex;align-items:center;gap:10px;width:100%;margin:0;
+  padding:13px 14px;border:0;border-radius:6px;background:none;color:var(--text-muted);text-decoration:none;font-size:14px;
+  text-align:left;font-weight:600;cursor:pointer;box-shadow:none}
+.vc-nav-home[aria-current="page"]{background:var(--raised);color:var(--text)}
+.vc-sidebar a:hover,.vc-nav-home:hover,.vc-sidebar .casino3d-launch:hover{background:var(--raised);color:var(--text);transform:none}
+.vc-sidebar .tabs{display:flex;flex-direction:column;gap:3px;padding:0;margin:0;max-width:none;flex-wrap:nowrap}
+.vc-sidebar .tab-btn,.vc-sidebar .tabs.tabs-ready .tab-btn{display:flex;align-items:center;gap:12px;width:100%;min-height:42px;
+  padding:10px 14px;border:0;border-radius:6px;background:none;color:var(--text-muted);font-size:14px;text-align:left;
+  font-weight:600;letter-spacing:0;text-transform:none;box-shadow:none;animation:none!important;transform:none!important;opacity:1}
+.vc-sidebar .tab-btn::after,.vc-sidebar .tab-btn::before{display:none}
+.vc-sidebar .tab-btn:hover{background:var(--raised);color:var(--text)}
+.vc-sidebar .tab-btn.active{background:var(--raised);color:var(--text);box-shadow:inset 3px 0 var(--brass)}
+.vc-nav-symbol{width:19px;text-align:center;color:var(--text-faint);flex:none}
+.vc-main{max-width:1440px;margin:0 auto;padding:28px 32px 42px;min-width:0}
+.vc-lobby-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.vc-lobby-head h1{font:800 26px/1.2 'Inter',sans-serif;animation:none;text-shadow:none;color:var(--text);margin:0;letter-spacing:-.7px}
+.vc-caption{font-size:14px;color:var(--text-muted);margin:7px 0 0;line-height:1.5}
+.vc-count{color:var(--text-muted);font-size:14px;white-space:nowrap}
+.vc-featured{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;margin-bottom:30px}
+.vc-feature{position:relative;min-height:182px;padding:26px;border:1px solid #ffffff0d;border-radius:10px;
+  background:linear-gradient(110deg,#14403f,#17333e);color:#fff;overflow:hidden;display:flex;align-items:center}
+.vc-feature:nth-child(2){background:linear-gradient(115deg,#252c57,#1c374b)}
+.vc-feature-content{position:relative;z-index:1;max-width:70%}
+.vc-feature small{display:block;font-size:12px;font-weight:800;letter-spacing:1.5px;color:#83e8ba;margin-bottom:12px}
+.vc-feature h2{font-size:26px;letter-spacing:-.6px;margin:0 0 10px;color:#fff}
+.vc-feature p{font-size:14px;color:#cfdae1;line-height:1.5;margin:0 0 20px}
+.vc-feature img{position:absolute;right:12px;width:130px;height:130px;object-fit:contain;opacity:.85}
+.vc-feature button{border:0;border-radius:5px;padding:11px 18px;background:#00e701;color:#06230b;font-weight:750;font-size:14px;cursor:pointer}
+.vc-feature:nth-child(2) button{background:#e7efff;color:#173048}
+.vc-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px}
+.vc-section-title h2{font-size:18px;margin:0;font-weight:750}
+.vc-section-title span{font-size:12px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
+.vc-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.vc-tile{display:flex;flex-direction:column;padding:0;text-align:left;border:0;background:none;color:var(--text);
+  cursor:pointer;min-width:0;transition:transform .18s}
+.vc-tile:hover{transform:translateY(-5px)}
+.vc-tile-face{width:100%;aspect-ratio:4/4.6;border-radius:9px;display:flex;flex-direction:column;
+  justify-content:space-between;padding:16px;background:linear-gradient(150deg,var(--tile-color),#102332);overflow:hidden;border:1px solid #ffffff17}
+.vc-tile-kicker{font-size:10px;font-weight:800;letter-spacing:1.8px;color:#fff9}
+.vc-tile-mark{font:900 clamp(34px,4vw,62px)/1 'Inter',sans-serif;color:#fff;letter-spacing:-3px;
+  align-self:center;text-align:center;max-width:100%;text-shadow:0 6px 0 #0002}
+.vc-tile-title{font-size:16px;font-weight:800;color:#fff;line-height:1.25}
+.vc-tile-meta{display:flex;justify-content:space-between;gap:5px;width:100%;font-size:12px;color:var(--text-muted);padding:9px 1px}
+.vc-playbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.vc-playbar button{border:0;background:var(--raised);color:var(--text);border-radius:6px;padding:11px 15px;font-size:14px;cursor:pointer}
+.vc-playbar span{color:var(--text-muted);font-size:14px}
+.vc-main .stage{padding:0;margin:0;max-width:none;width:100%}
+.vc-main .game-card{border:1px solid var(--card-border);border-radius:10px;background:var(--shell);padding:28px;box-shadow:none}
+.vc-main .game-card h2{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;color:var(--text)}
+.game-sub{font-size:16px;line-height:1.6}
+.bet-row{padding:16px;border-radius:8px;background:var(--card-bg);gap:10px}
+.bet-row input,.bet-row select{min-height:42px;border:2px solid var(--raised);border-radius:5px;background:var(--ink);color:var(--ink-text);font-size:16px}
+.bet-row label,.game-readout,.payout-table,.result-msg,.metric-strip{font-size:14px}
+.chip-btn{border-radius:5px;background:var(--raised);color:var(--text);font-size:14px;min-height:40px;box-shadow:none}
+.action-btn{background:var(--brass);color:#09270b;border-radius:5px;box-shadow:none;min-height:44px;font-size:16px}
+.action-btn:hover{background:var(--brass-light)}
+html[data-theme="light"] .action-btn{color:#fff}
+.game-card.active .metric-strip span,.game-card.active .challenge-actions .action-btn,.challenge-panel{animation:none!important}
+.vc-main footer{max-width:none;margin:34px 0 0;padding:24px 0 0;border-top:1px solid var(--divider);
+  text-align:left;color:var(--text-muted);font-size:13px;line-height:1.8}
+.vc-main footer strong{color:var(--text);font-size:16px}
+.vc-menu-scrim{display:none}
+#side-npc{position:fixed;right:18px;bottom:72px;top:auto;width:min(340px,calc(100vw - 32px));max-height:70vh;overflow:auto;
+  background:var(--shell);border:1px solid var(--card-border);border-radius:12px;z-index:35}
+#side-npc.hidden{display:none}
+#npc-peek-btn{right:18px;bottom:18px;z-index:35;border:1px solid var(--card-border);background:var(--raised);color:var(--text);font-size:14px}
+#cheat-panel{left:auto;right:18px;bottom:72px;max-width:calc(100vw - 32px);max-height:70vh;overflow:auto;background:var(--shell);z-index:36}
+#cheat-panel.hidden{display:none}
+#cheat-peek-btn{left:240px;font-size:12px;background:var(--raised);color:var(--text);border:0;border-radius:5px}
+#donation-widget{right:132px;bottom:18px}
+.donation-toggle{font-size:12px;background:var(--raised);color:var(--text);border-color:var(--card-border)}
+#vc-menu{display:none}
+@media(min-width:1600px){.vc-grid{grid-template-columns:repeat(7,minmax(0,1fr))}}
+@media(max-width:1180px){.vc-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.vc-feature img{width:100px;height:100px;right:6px}.vc-feature h2{font-size:22px}}
+@media(max-width:900px){
+  body{padding-left:0}.vc-sidebar{transform:translateX(-100%);transition:transform .2s}.vc-sidebar:not(.vc-open){visibility:hidden}
+  .vc-sidebar.vc-open{transform:none}#vc-menu{display:block}.vc-topbar{padding:0 18px;gap:14px}
+  .vc-topbar .vc-brand{width:auto}.vc-main{padding:24px 22px 70px}
+  .vc-menu-scrim.vc-open{display:block;position:fixed;inset:72px 0 0;background:#0008;z-index:24;border:0}
+  #cheat-peek-btn{left:18px}.vc-wallet-tag{display:none}
+}
+@media(max-width:600px){
+  body{padding-top:64px}.vc-topbar{height:64px;gap:8px;padding:0 12px}.vc-sidebar{top:64px}
+  .vc-brand{font-size:22px}.vc-wallet{gap:0;padding:8px 10px;margin-left:auto;margin-right:0}
+  .vc-wallet small{font-size:10px}.vc-wallet #balance{font-size:13px}
+  .vc-topbar .theme-toggle{font-size:12px;padding:10px 8px}.vc-main{padding:22px 14px 76px}
+  .vc-lobby-head h1{font-size:23px}.vc-count{display:none}.vc-featured{grid-template-columns:1fr;gap:12px;margin-bottom:26px}
+  .vc-feature{min-height:154px;padding:20px}.vc-feature:nth-child(2){display:none}
+  .vc-feature p{margin-bottom:16px}.vc-feature img{width:120px;height:120px;right:12px}
+  .vc-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}
+  .vc-tile-face{padding:12px 10px;aspect-ratio:3/4}.vc-tile-mark{font-size:36px;letter-spacing:-2px}
+  .vc-tile-title{font-size:14px}.vc-tile-kicker{font-size:9px;letter-spacing:1px}.vc-tile-meta{font-size:11px}
+  .vc-main .game-card{padding:16px 10px}.vc-main .game-card h2{font-size:22px}
+  .bet-row{padding:10px}.vc-playbar span{font-size:12px}.vc-menu-scrim.vc-open{top:64px}
+  #slots .reel{width:calc((100vw - 85px)/5);min-width:0;font-size:clamp(18px,6vw,32px)}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important;scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body>
-<div class="casino-ambient" aria-hidden="true">
-  <span class="ambient-aurora a"></span>
-  <span class="ambient-aurora b"></span>
-  <span class="ambient-spotlight left"></span>
-  <span class="ambient-spotlight right"></span>
-  <span class="ambient-scanline"></span>
-  <span class="ambient-chip" style="--x:6%;--s:34px;--d:18s;--delay:-1s;--drift:34vw;--rot:720deg;"></span>
-  <span class="ambient-chip" style="--x:19%;--s:22px;--d:15s;--delay:-8s;--drift:-18vw;--rot:-620deg;"></span>
-  <span class="ambient-chip" style="--x:39%;--s:30px;--d:21s;--delay:-4s;--drift:22vw;--rot:840deg;"></span>
-  <span class="ambient-chip" style="--x:62%;--s:24px;--d:17s;--delay:-10s;--drift:-28vw;--rot:-760deg;"></span>
-  <span class="ambient-chip" style="--x:84%;--s:38px;--d:24s;--delay:-13s;--drift:12vw;--rot:920deg;"></span>
-  <span class="ambient-card" style="--x:12%;--d:26s;--delay:-12s;--drift:24vw;--r0:-12deg;--r1:420deg;"></span>
-  <span class="ambient-card" style="--x:53%;--d:22s;--delay:-5s;--drift:-20vw;--r0:8deg;--r1:-390deg;"></span>
-  <span class="ambient-card" style="--x:76%;--d:28s;--delay:-18s;--drift:18vw;--r0:16deg;--r1:510deg;"></span>
-</div>
-
-<div class="marquee-frame">
-  <button class="theme-toggle" id="theme-toggle">
-    <span id="theme-icon">SUN</span><span id="theme-label">Light room</span>
-  </button>
-  <header>
-    <div class="lights">
-      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <h1>The Velvet Chip</h1>
-    <p class="tagline">all the thrill, none of the stakes</p>
-    <div class="fake-badge">play money only - resets any time</div>
-  </header>
-</div>
-
-<div class="counter-wrap">
-  <div class="odometer">
-    <span class="label">chips</span>
-    <span class="value" id="balance">$10.00</span>
+<a href="#vc-content" class="vc-skip">Skip to games</a>
+<div class="vc-topbar" role="banner">
+  <button id="vc-menu" class="vc-icon-btn" aria-label="Open navigation" aria-controls="vc-sidebar" aria-expanded="false">☰</button>
+  <button class="vc-brand" data-vc-home aria-label="Velvet Chip lobby">velvet<span>.</span></button>
+  <div class="vc-wallet" aria-label="Fictional chip balance">
+    <div><small>PLAY CHIPS</small><span id="balance">$10.00</span></div>
+    <span class="vc-wallet-tag">NO REAL MONEY</span>
   </div>
+  <button class="theme-toggle" id="theme-toggle"><span id="theme-icon">SUN</span><span id="theme-label">Light room</span></button>
 </div>
-
-<div class="tabs">
-  <button class="tab-btn active" data-tab="slots">Slots</button>
+<button class="vc-menu-scrim" id="vc-scrim" tabindex="-1" aria-label="Close navigation"></button>
+<aside class="vc-sidebar" id="vc-sidebar" aria-label="Game navigation">
+  <button class="vc-nav-home" data-vc-home aria-current="page"><span aria-hidden="true">▦</span> Lobby</button>
+  <button class="casino3d-launch" id="casino3d-launch"><span aria-hidden="true">◈</span> 3D room</button>
+  <a href="tips.html"><span aria-hidden="true">♡</span> Jerry’s tip jar</a>
+  <p class="vc-side-label">All games</p>
+  <nav aria-label="Choose a game"><div class="tabs">
+  <button class="tab-btn" data-tab="slots">Slots</button>
   <button class="tab-btn" data-tab="dice">Dice</button>
   <button class="tab-btn" data-tab="cards">High card</button>
   <button class="tab-btn" data-tab="blackjack">Blackjack</button>
@@ -4046,10 +4172,20 @@
   <button class="tab-btn" data-tab="avalanche">Avalanche</button>
   <button class="tab-btn" data-tab="blackmarket">Black market</button>
   <button class="tab-btn" data-tab="siphon">Siphon</button>
-</div>
-<button class="casino3d-launch" id="casino3d-launch">Enter 3D Casino</button>
-
-<div class="stage">
+</div></nav>
+</aside>
+<main class="vc-main" id="vc-content" tabindex="-1">
+  <div id="vc-lobby">
+    <div class="vc-lobby-head"><div><h1>Your next game starts here.</h1><p class="vc-caption">The Velvet Chip. All play, no real stakes.</p></div><span class="vc-count">28 original games</span></div>
+    <div class="vc-featured">
+      <article class="vc-feature"><div class="vc-feature-content"><small>THE VELVET COLLECTION</small><h2>One lobby. Endless variety.</h2><p>Classic tables and original arcade games.</p><button data-vc-game="slots">Play Slots</button></div><img src="assets/chip.webp" alt="" width="130" height="130"></article>
+      <article class="vc-feature"><div class="vc-feature-content"><small>ARCADE ORIGINAL</small><h2>Meet Sky Pilot.</h2><p>A different kind of flight simulator.</p><button data-vc-game="skypilot">Play Sky Pilot</button></div><img src="assets/plane.png" alt="" width="130" height="130"></article>
+    </div>
+    <div class="vc-section-title"><h2>Explore the collection</h2><span>Play-money originals</span></div>
+    <div class="vc-grid" id="vc-grid" aria-label="Game collection"></div>
+  </div>
+  <div class="vc-playbar" id="vc-playbar" hidden><button data-vc-home>← Back to lobby</button><span id="vc-game-label">Play chips only · no purchases or withdrawals</span></div>
+<div class="stage" id="vc-game-stage" hidden>
 
   <div class="game-card active" id="slots">
     <h2>Five reel fever</h2>
@@ -4760,7 +4896,7 @@
   </div>
 </div>
 
-<aside class="side-npc" id="side-npc" aria-live="polite">
+<aside class="side-npc hidden" id="side-npc" aria-live="polite">
   <div class="npc-header">
     <div class="npc-face" id="npc-face">:D</div>
     <div class="npc-name">Tip Jar Jerry</div>
@@ -4780,7 +4916,7 @@
     <button class="no-tip" id="npc-no-tip-btn">No</button>
   </div>
 </aside>
-<button class="npc-peek" id="npc-peek-btn">Jerry :D</button>
+<button class="npc-peek show" id="npc-peek-btn">Jerry :D</button>
 
 <div class="donation-widget" id="donation-widget">
   <div class="donation-panel" id="donation-panel" aria-hidden="true">
@@ -4808,7 +4944,7 @@
   </button>
 </div>
 
-<aside class="cheat-panel" id="cheat-panel">
+<aside class="cheat-panel hidden" id="cheat-panel">
   <div class="cheat-top">
     <div class="cheat-title">Cheat mode</div>
     <div class="cheat-header-actions">
@@ -4900,7 +5036,7 @@
     </div>
   </div>  <div class="cheat-readout" id="cheat-readout">Enable cheats to peek and force the next outcomes.</div>
 </aside>
-<button class="cheat-peek-btn" id="cheat-peek-btn">Show cheats</button>
+<button class="cheat-peek-btn show" id="cheat-peek-btn">Show cheats</button>
 
 <div class="broke-banner" id="broke-banner">
   <div class="broke-inner">
@@ -4910,9 +5046,11 @@
 </div>
 
 <footer>
-  Every dollar here is imaginary. Nothing can be won, lost, deposited, withdrawn, or cashed out.<br>
-  Refreshing the page also resets your balance to $10.
+  <strong>The Velvet Chip</strong><br>
+  Every dollar here is imaginary. No real-money deposits, purchases, withdrawals, or prizes.<br>
+  Your fictional chip balance is saved in this browser. This site is not affiliated with Stake.
 </footer>
+</main>
 
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <script src="https://unpkg.com/box2d-wasm@5.0.1/build/flavour/standard/umd/Box2D.js"></script>
@@ -10149,5 +10287,107 @@ document.getElementById('siphon-mode').addEventListener('change', function(){ if
 ['deadhand-msg','gridlock-msg','chop-msg','overcook-msg','heartbeat-msg','leakage-msg','orbit-msg','avalanche-msg','market-msg','siphon-msg'].forEach(id => document.getElementById(id).setAttribute('aria-live','polite'));
 renderSiphon();
 </script>
+
+<script>
+/* Presentation adapter: delegates play to the existing game controls. */
+(() => {
+  const sidebar = document.getElementById('vc-sidebar');
+  const menu = document.getElementById('vc-menu');
+  const scrim = document.getElementById('vc-scrim');
+  const lobby = document.getElementById('vc-lobby');
+  const stage = document.getElementById('vc-game-stage');
+  const playbar = document.getElementById('vc-playbar');
+  const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+  const colors = ['#387465','#4a50a0','#985442','#31759b','#5b4385','#856031','#316a63'];
+  const marks = ['777','0–100','A K','21','↗','×','00','●','A 9','⚄','↑','✈','◆','BEEF','40','∴','J Q','◷','A ♠','▦','/','°C','♥','%','◎','≋','↗↘','⇄'];
+
+  function setMenu(open) {
+    sidebar.classList.toggle('vc-open', open);
+    scrim.classList.toggle('vc-open', open);
+    menu.setAttribute('aria-expanded', String(open));
+    menu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+    if(open) sidebar.querySelector('button').focus();
+  }
+  function showGame(id, moveFocus) {
+    const tab = tabs.find(button => button.dataset.tab === id);
+    if(!tab) return;
+    lobby.hidden = true;
+    stage.hidden = false;
+    playbar.hidden = false;
+    document.querySelectorAll('[data-vc-home]').forEach(button => button.removeAttribute('aria-current'));
+    tabs.forEach(button => {
+      if(button === tab) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
+    });
+    setMenu(false);
+    if(moveFocus) {
+      const heading = document.getElementById(id).querySelector('h2');
+      heading.tabIndex = -1;
+      heading.focus({preventScroll:true});
+      window.scrollTo({top:0,behavior:'auto'});
+    }
+  }
+  function showLobby() {
+    lobby.hidden = false;
+    stage.hidden = true;
+    playbar.hidden = true;
+    tabs.forEach(button => {button.classList.remove('active');button.removeAttribute('aria-current');});
+    document.querySelectorAll('[data-vc-home]').forEach(button => button.setAttribute('aria-current','page'));
+    setMenu(false);
+    lobby.querySelector('h1').tabIndex = -1;
+    lobby.querySelector('h1').focus({preventScroll:true});
+    window.scrollTo({top:0,behavior:'auto'});
+  }
+  function openGame(id) {
+    const tab = tabs.find(button => button.dataset.tab === id);
+    if(tab) tab.click();
+  }
+
+  tabs.forEach((tab,index) => {
+    const title = tab.textContent.trim();
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = 'vc-tile';
+    tile.setAttribute('aria-label', 'Play ' + title);
+    const face = document.createElement('span');
+    face.className = 'vc-tile-face';
+    face.style.setProperty('--tile-color',colors[index % colors.length]);
+    const kicker = document.createElement('span');
+    kicker.className = 'vc-tile-kicker';kicker.textContent = 'VELVET ORIGINAL';
+    const mark = document.createElement('span');
+    mark.className = 'vc-tile-mark';mark.textContent = marks[index] || 'VC';mark.setAttribute('aria-hidden','true');
+    const name = document.createElement('span');
+    name.className = 'vc-tile-title';name.textContent = title;
+    face.append(kicker,mark,name);
+    const meta = document.createElement('span');
+    meta.className = 'vc-tile-meta';meta.textContent = 'Play chips only';
+    tile.append(face,meta);
+    tile.addEventListener('click',() => openGame(tab.dataset.tab));
+    document.getElementById('vc-grid').append(tile);
+    const symbol = document.createElement('span');
+    symbol.className = 'vc-nav-symbol';symbol.textContent = '◇';symbol.setAttribute('aria-hidden','true');
+    tab.prepend(symbol);
+    tab.addEventListener('click',() => showGame(tab.dataset.tab,true));
+  });
+  document.querySelectorAll('[data-vc-game]').forEach(button => button.addEventListener('click',() => openGame(button.dataset.vcGame)));
+  document.querySelectorAll('[data-vc-home]').forEach(button => button.addEventListener('click',showLobby));
+  menu.addEventListener('click',() => setMenu(!sidebar.classList.contains('vc-open')));
+  scrim.addEventListener('click',() => {setMenu(false);menu.focus();});
+  document.addEventListener('keydown',event => {
+    if(event.key === 'Escape' && sidebar.classList.contains('vc-open')){setMenu(false);menu.focus();}
+    if(event.key === 'Tab' && sidebar.classList.contains('vc-open')) {
+      const controls = [menu,...sidebar.querySelectorAll('button,a[href]')];
+      if(event.shiftKey && document.activeElement === controls[0]){event.preventDefault();controls.at(-1).focus();}
+      else if(!event.shiftKey && document.activeElement === controls.at(-1)){event.preventDefault();controls[0].focus();}
+    }
+  });
+  // Keep lobby state coherent when the 3D room selects a machine.
+  if(typeof activateGameById === 'function'){
+    const originalActivate = activateGameById;
+    activateGameById = function(id){originalActivate(id);showGame(id,false);};
+  }
+})();
+</script>
+
 </body>
 </html>
